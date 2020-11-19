@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">DaCooker</string>
+
+    <!--Activity Labels-->
+    <string name="recipes_label">Recipes</string>
+    <string name="custom_recipes_label">Custom Recipes</string>
+    <string name="most_used_recipes_label">Most Used Recipes</string>
+
+    <!--Bottom Navigation Menu Titles-->
+    <string name="bottom_navigation_title_frequently">Most Used</string>
+    <string name="bottom_navigation_title_recipes">Recipes</string>
+    <string name="bottom_navigation_title_custom">Custom</string>
 </resources>

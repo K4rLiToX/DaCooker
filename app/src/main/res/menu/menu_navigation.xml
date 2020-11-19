@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_most_used"
+        android:title="@string/bottom_navigation_title_frequently"
+        android:icon="@drawable/ic_most_used"/>
+
+    <item
+        android:id="@+id/menu_recipes"
+        android:title="@string/bottom_navigation_title_recipes"
+        android:icon="@drawable/ic_home"/>
+
+    <item
+        android:id="@+id/menu_custom"
+        android:title="@string/bottom_navigation_title_custom"
+        android:icon="@drawable/ic_custom"/>
+</menu>
