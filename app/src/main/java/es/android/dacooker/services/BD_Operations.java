@@ -1,38 +1,55 @@
 package es.android.dacooker.services;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import es.android.dacooker.models.MealType;
+import es.android.dacooker.models.RecipeModel;
+import es.android.dacooker.models.StepModel;
 
 /*
     IMPLEMENTED METHODS
+    * All Methods Require BBDD_Helper instance as their last parameter
 
     > RECIPES
-     - addRecipe: Add a recipe with all their attributes
-     - updateRecipe: Update the values from a recipe
-     - deleteRecipe: Delete a recipe. His ingredients and steps, too
-     - getRecipeById: Get a Recipe Through It ID
-     - getRecipesByMealType: Get a List based on it mealType
-     - getRecipesByExecutionTime: Get a List based on Execution Time (less than introduced)
-     - getRecipesOrderByExecutionTime: Get a List of All Recipes Order By ExecutionTime
-     - getRecipesOrderByTimesCooked: Get a List With 5 Most Cooked Recipes
+     - addRecipe: Add Recipe
+     - updateRecipe: Update Recipe
+     - deleteRecipe: Delete Recipe. His ingredients and steps, too
+     - deleteRecipe: Delete Recipe by its ID. His ingredients and steps, too
+     - getRecipeById: Get Recipe By ID
+     - getRecipesByMealType: Get Recipes with Same MealType
+     - getRecipesOrderByExecutionTime: Get Recipes Ordered By Execution
+     - getRecipesOrderByLessExecutionTime: Get Recipes With Less Execution Time Than Introduced
+     - getRecipesOrderByTimesCooked: Get 5 or Less Recipes Most Cooked
 
-    > STEPS
-     - addStep: Add a Step Into a Recipe
-     - updateStep: Updated a Step Into a Recipe
-     - deleteStep: Delete a Step Into a Recipe. Order the steps that remains
-     - getStepById: Get a Step By Id
-     - getStepsByIdRecipe: Get a Step List Based on a Recipe ID
-     - getStepsOrderByStepOrder: Get a Step List from a Same Recipe Order by stepOrder
-     - getStepsWithRequiredTimer: Get a List of Steps That Require Timer
+        > STEPS
+     - addStep: Add Step
+     - updateStep: Updated Step
+     - updateStepOrdersPlus: Re-order steps from a Recipe
+     - updateStepOrdersLess: Re-order steps from a Recipe
+     - deleteStep: Delete Step
+     - deleteStepsFromRecipe: Delete Steps From Recipe
+     - deleteStepsFromRecipeId: Delete Steps From Recipe ID
+     - getStepById: Get Step (ID)
+     - getStepsFromRecipeOrdered: Get Ordered Steps From Recipe
+     - getStepsFromRecipeIdOrdered: Get Ordered Steps From Recipe ID
+     - getStepsLookingRequiredTimer: Get Steps That Require (or No) Timer
 
     > INGREDIENT
-     - addIngredient: Add an Ingredient Into a Recipe
-     - updateIngredient: Update an Ingredient In The Recipe
+     - addIngredient: Add Ingredient
+     - updateIngredient: Update Ingredient
      - deleteIngredient: Delete Ingredient
-     - getIngredientById: get an Ingredient By Its ID
-     - getIngredientsByIdRecipe: get Ingredients Based on a recipe ID
-
+     - deleteIngredientsFromRecipe: Delete Ingredients From Recipe
+     - deleteIngredientsFromRecipeId: Delete Ingredients From Recipe ID
+     - getIngredientById: Get Ingredient By ID
+     - getIngredientsByIdRecipe: Get Ingredients By Recipe
+     - getIngredientsByIdRecipe: Get Ingredients By Recipe ID
 
     > EXTRAS
      - bitmapToArray: transform BitMap to Array -> To Save in DB
@@ -42,15 +59,912 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class BD_Operations {
-
     //
     // RECIPES METHODS
     //
 
+    public static void addRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
+
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
+        values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
+        values.put(Struct_BD.RECIPE_EXEC_TIME, r.getExecutionTime());
+        values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
+        values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
+
+        // Insert the new row, returning the primary key value of the new row
+        long row = db.insert(Struct_BD.RECIPE_TABLE, null, values);
+
+        if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
+
+    }
+
+    public static void updateRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
+        values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
+        values.put(Struct_BD.RECIPE_EXEC_TIME, r.getExecutionTime());
+        values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
+        values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
+
+        // Which row to update, based on the title
+        String selection = Struct_BD.RECIPE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(r.getId()) };
+
+        int row = db.update(
+                Struct_BD.RECIPE_TABLE,
+                values,
+                selection,
+                selectionArgs);
+
+        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+
+    }
+
+    public static void deleteRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
+
+        deleteStepsFromRecipe(r, dbHelper);
+        deleteIngredientsFromRecipe(r, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.RECIPE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(r.getId()) };
+
+        int deletedRows = db.delete(Struct_BD.RECIPE_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Recipe couldn't be deleted. Try later");
+
+    }
+
+    public static void deleteRecipe(int id_recipe, BBDD_Helper dbHelper) throws Exception {
+
+        deleteStepsFromRecipe(id_recipe, dbHelper);
+        deleteIngredientsFromRecipe(id_recipe, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.RECIPE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        int deletedRows = db.delete(Struct_BD.RECIPE_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Recipe couldn't be deleted. Try later");
+
+    }
+
+    public static RecipeModel getRecipeById(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Le decimos que queremos obtener de la BD; es decir, qué columnas
+        String[] projection = {
+            Struct_BD.RECIPE_NAME,
+            Struct_BD.RECIPE_IMAGE,
+            Struct_BD.RECIPE_MEALTYPE,
+            Struct_BD.RECIPE_EXEC_TIME,
+            Struct_BD.RECIPE_TIMES_COOKED,
+            Struct_BD.RECIPE_IMAGE
+        };
+
+        String selection = Struct_BD.RECIPE_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        if(cursor.moveToFirst()) {  //Si obtenemos resultados
+
+            //Tratamos la imagen
+            byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+            Bitmap imageSaved;
+            if(imageBD == null || imageBD.length == 0) imageSaved = null;
+            else imageSaved = ArrayToBitmap(imageBD);
+
+            //Tratamos el MealType
+            MealType mt = null;
+            String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+            for(MealType e : MealType.values()){
+                if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+            }
+
+            //Creamos la Receta
+            RecipeModel r = new RecipeModel(
+                    id_recipe,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                    mt,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                    imageSaved
+            );
+
+            cursor.close();
+            db.close();
+            return r;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipe not Found");
+        }
+
+    }
+
+    public static List<RecipeModel> getRecipesByMealType(MealType mealType, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.RECIPE_ID,
+                Struct_BD.RECIPE_NAME,
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_MEALTYPE,
+                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_TIMES_COOKED,
+                Struct_BD.RECIPE_IMAGE
+        };
+
+        String selection = Struct_BD.RECIPE_MEALTYPE + " = ?";
+        String[] selectionArgs = { mealType.name() };
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+
+        List<RecipeModel> recipes = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mealType,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved
+                );
+                recipes.add(r);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return recipes;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipes Not Found");
+        }
+
+    }
+
+    //NO SE SI FUNCIONARÁ, LA VERDAD
+    public static List<RecipeModel> getRecipesByLessExecutionTime(String executionTime, BBDD_Helper dbHelper) throws Exception{
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.RECIPE_ID,
+                Struct_BD.RECIPE_NAME,
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_MEALTYPE,
+                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_TIMES_COOKED,
+                Struct_BD.RECIPE_IMAGE
+        };
+
+        String selection = Struct_BD.RECIPE_EXEC_TIME + " <= ?";
+        String[] selectionArgs = { executionTime };
+
+        // How you want the results sorted in the resulting Cursor
+        //String sortOrder = Struct_BBDD.NOMBRE_COLUMNA_2 + " DESC";
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null //sortOrder   // The sort order
+        );
+
+
+        List<RecipeModel> recipes = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                //Tratamos el MealType
+                MealType mt = null;
+                String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+                for(MealType e : MealType.values()){
+                    if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+                }
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mt,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved
+                );
+                recipes.add(r);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return recipes;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipes Not Found");
+        }
+
+    }
+
+    public static List<RecipeModel> getRecipesOrderByExecutionTime(BBDD_Helper dbHelper) throws Exception{
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.RECIPE_ID,
+                Struct_BD.RECIPE_NAME,
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_MEALTYPE,
+                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_TIMES_COOKED,
+                Struct_BD.RECIPE_IMAGE
+        };
+
+        // How you want the results sorted in the resulting Cursor
+        String sortOrder = Struct_BD.RECIPE_EXEC_TIME + " DESC";
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder
+        );
+
+
+        List<RecipeModel> recipes = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                //Tratamos el MealType
+                MealType mt = null;
+                String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+                for(MealType e : MealType.values()){
+                    if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+                }
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mt,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved
+                );
+                recipes.add(r);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return recipes;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipes Not Found");
+        }
+
+    }
+
+    public static List<RecipeModel> getRecipesOrderByTimesCooked(BBDD_Helper dbHelper) throws Exception{
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.RECIPE_ID,
+                Struct_BD.RECIPE_NAME,
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_MEALTYPE,
+                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_TIMES_COOKED,
+                Struct_BD.RECIPE_IMAGE
+        };
+
+        String sortOrder = Struct_BD.RECIPE_TIMES_COOKED + " DESC";
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,
+                null,
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                sortOrder     // The sort order
+        );
+
+
+        List<RecipeModel> recipes = new ArrayList<>();
+        int untilFive = 0;
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext() && untilFive > 0) {
+
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                //Tratamos el MealType
+                MealType mt = null;
+                String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+                for(MealType e : MealType.values()){
+                    if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+                }
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mt,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved
+                );
+                recipes.add(r);
+                untilFive--;
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return recipes;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipes Not Found");
+        }
+
+    }
 
     //
     // STEPS METHODS
     //
+
+    public static void addStep(StepModel s, int id_recipe, BBDD_Helper dbHelper) throws Exception {
+
+        updateStepOrdersPlus(s, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.STEP_DESCRIPTION, s.getDescription());
+        values.put(Struct_BD.STEP_REQUIRED_TIMER, BooleanToInt(s.isRequiredTimer()));
+        values.put(Struct_BD.STEP_TIMER_TIME, s.getTimerTime());
+        values.put(Struct_BD.STEP_ORDER, s.getStepOrder());
+        values.put(Struct_BD.STEP_RECIPE, id_recipe);
+
+        // Insert the new row, returning the primary key value of the new row
+        long row = db.insert(Struct_BD.STEP_TABLE, null, values);
+
+        if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
+
+    }
+
+    public static void updateStep(StepModel s, BBDD_Helper dbHelper) throws Exception {
+
+        updateStepOrdersPlus(s, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.STEP_DESCRIPTION, s.getDescription());
+        values.put(Struct_BD.STEP_REQUIRED_TIMER, s.isRequiredTimer());
+        values.put(Struct_BD.STEP_TIMER_TIME, s.getTimerTime());
+        values.put(Struct_BD.STEP_ORDER, s.getStepOrder());
+
+        // Which row to update, based on the title
+        String selection = Struct_BD.STEP_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(s.getId()) };
+
+        int row = db.update(
+                Struct_BD.STEP_TABLE,
+                values,
+                selection,
+                selectionArgs);
+
+        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+
+    }
+
+    public static void updateStepOrdersPlus(StepModel s, BBDD_Helper dbHelper) {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] param = { String.valueOf(s.getId()),
+                            String.valueOf(s.getStepOrder()) };
+        Cursor cursor = db.rawQuery("SELECT order_s FROM STEPS" +
+                " WHERE id = ? and order_s >= ?  ", param);
+
+        if(cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()) {
+
+                boolean boolSaved = IntToBoolean(cursor.getInt(
+                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                StepModel sn = new StepModel(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                    boolSaved,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+
+                );
+
+                ContentValues values = new ContentValues();
+                values.put(Struct_BD.STEP_ORDER, sn.getStepOrder()+1);
+
+                // Which row to update, based on the title
+                String selection = Struct_BD.STEP_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(sn.getId()) };
+
+                db.update(
+                        Struct_BD.STEP_TABLE,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                cursor.moveToNext();
+            }
+        }
+    }
+
+    public static void updateStepOrdersLess(StepModel s, BBDD_Helper dbHelper) {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] param = { String.valueOf(s.getId()),
+                String.valueOf(s.getStepOrder()) };
+        Cursor cursor = db.rawQuery("SELECT order_s FROM STEPS" +
+                " WHERE id = ? and order_s >= ?  ", param);
+
+        if(cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()) {
+
+                boolean boolSaved = IntToBoolean(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                StepModel sn = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        boolSaved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+
+                );
+
+                ContentValues values = new ContentValues();
+                values.put(Struct_BD.STEP_ORDER, sn.getStepOrder()-1);
+
+                // Which row to update, based on the title
+                String selection = Struct_BD.STEP_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(sn.getId()) };
+
+                db.update(
+                        Struct_BD.STEP_TABLE,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                cursor.moveToNext();
+            }
+        }
+    }
+
+    public static void deleteStep(StepModel s, BBDD_Helper dbHelper) throws Exception {
+
+        updateStepOrdersLess(s, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.STEP_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(s.getId()) };
+
+        int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
+
+    }
+
+    public static void deleteStep(int id_step, BBDD_Helper dbHelper) throws Exception {
+
+        updateStepOrdersLess(getStepById(id_step, dbHelper), dbHelper);
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.STEP_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(id_step) };
+
+        int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
+
+    }
+
+    public static void deleteStepsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] param = { String.valueOf(r.getId()) };
+        Cursor cursor = db.rawQuery("SELECT * FROM STEPS" +
+                " WHERE id_recipe = ? ;", param);
+
+        if(cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()) {
+
+                boolean boolSaved = IntToBoolean(cursor.getInt(
+                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                StepModel sn = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        boolSaved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+
+                );
+
+                // Which row to update, based on the title
+                String selection = Struct_BD.STEP_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(sn.getId()) };
+
+                db.delete(
+                        Struct_BD.STEP_TABLE,
+                        selection,
+                        selectionArgs);
+
+                cursor.moveToNext();
+            }
+        }
+
+    }
+
+    public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] param = { String.valueOf(id_recipe) };
+        Cursor cursor = db.rawQuery("SELECT * FROM STEPS" +
+                " WHERE id_recipe = ? ;", param);
+
+        if(cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()) {
+
+                boolean boolSaved = IntToBoolean(cursor.getInt(
+                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                StepModel sn = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        boolSaved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+
+                );
+
+                // Which row to update, based on the title
+                String selection = Struct_BD.STEP_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(sn.getId()) };
+
+                db.delete(
+                        Struct_BD.STEP_TABLE,
+                        selection,
+                        selectionArgs);
+
+                cursor.moveToNext();
+            }
+        }
+
+    }
+
+    public static StepModel getStepById(int id_step, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Le decimos que queremos obtener de la BD; es decir, qué columnas
+        String[] projection = {
+                Struct_BD.STEP_ID,
+                Struct_BD.STEP_DESCRIPTION,
+                Struct_BD.STEP_REQUIRED_TIMER,
+                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_ORDER,
+                Struct_BD.STEP_RECIPE
+        };
+
+        String selection = Struct_BD.STEP_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id_step) };
+
+        Cursor cursor = db.query(
+                Struct_BD.STEP_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        if(cursor.moveToFirst()) {  //Si obtenemos resultados
+
+            //Tratamos el booleano
+            boolean saved = IntToBoolean(cursor.getInt(
+                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+            //Creamos el Step
+            StepModel s = new StepModel(
+                    id_step,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                    saved,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+            );
+
+            cursor.close();
+            db.close();
+            return s;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Step not Found");
+        }
+
+    }
+
+    public static List<StepModel> getStepsFromRecipeOrdered(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.STEP_ID,
+                Struct_BD.STEP_DESCRIPTION,
+                Struct_BD.STEP_REQUIRED_TIMER,
+                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_ORDER,
+                Struct_BD.STEP_RECIPE
+        };
+
+        String selection = Struct_BD.STEP_RECIPE + " = ?";
+        String[] selectionArgs = { String.valueOf(r.getId()) };
+
+        String sortOrder = Struct_BD.STEP_ORDER + " ASC";
+
+        Cursor cursor = db.query(
+                Struct_BD.STEP_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                sortOrder     // The sort order
+        );
+
+
+        List<StepModel> steps = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Tratamos el booleano
+                boolean saved = IntToBoolean(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                //Creamos el Step
+                StepModel s = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        saved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+                );
+                steps.add(s);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return steps;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Steps Not Found");
+        }
+
+    }
+
+    public static List<StepModel> getStepsFromRecipeIdOrdered(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.STEP_ID,
+                Struct_BD.STEP_DESCRIPTION,
+                Struct_BD.STEP_REQUIRED_TIMER,
+                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_ORDER,
+                Struct_BD.STEP_RECIPE
+        };
+
+        String selection = Struct_BD.STEP_RECIPE + " = ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        String sortOrder = Struct_BD.STEP_ORDER + " ASC";
+
+        Cursor cursor = db.query(
+                Struct_BD.STEP_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                sortOrder     // The sort order
+        );
+
+
+        List<StepModel> steps = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Tratamos el booleano
+                boolean saved = IntToBoolean(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                //Creamos el Step
+                StepModel s = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        saved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+                );
+                steps.add(s);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return steps;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Steps Not Found");
+        }
+
+    }
+
+    public static List<StepModel> getStepsLookingRequiredTimer(boolean req_timer, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.STEP_ID,
+                Struct_BD.STEP_DESCRIPTION,
+                Struct_BD.STEP_REQUIRED_TIMER,
+                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_ORDER,
+                Struct_BD.STEP_RECIPE
+        };
+
+        int boolBD = BooleanToInt(req_timer);
+
+        String selection = Struct_BD.STEP_RECIPE + " = ?";
+        String[] selectionArgs = { String.valueOf(boolBD) };
+
+        Cursor cursor = db.query(
+                Struct_BD.STEP_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,
+                null,
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null
+        );
+
+
+        List<StepModel> steps = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                StepModel s = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        req_timer,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+                );
+                steps.add(s);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return steps;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Steps Not Found");
+        }
+
+    }
 
 
     //
@@ -63,7 +977,7 @@ public class BD_Operations {
     //
 
     // Transform Array to Bitmap -> To Show In App
-    public Bitmap ArrayToBitmap(byte [] bitmapData){
+    public static Bitmap ArrayToBitmap(byte [] bitmapData){
         if(bitmapData == null){
             Bitmap solved = null;
             return solved;
@@ -71,7 +985,7 @@ public class BD_Operations {
     }
 
     // Transform BitMap to Array -> To Save In BD
-    public byte[] BitmapToArray(Bitmap bmp){
+    public static byte[] BitmapToArray(Bitmap bmp){
         if(bmp == null){
             byte[] solved = null;
             return solved;
@@ -83,13 +997,13 @@ public class BD_Operations {
     }
 
     //Transform Value From DB to Boolean
-    private boolean IntToBoolean(int i){
+    private static  boolean IntToBoolean(int i){
         if(i == 1) return true;
         else return false;
     }
 
     //Transform Value From Boolean to DB
-    private int BooleanToInt(Boolean b){
+    private static int BooleanToInt(Boolean b){
         if(b) return 1;
         else return 0;
     }

@@ -4,10 +4,11 @@ public class StepModel {
 
     /*Attributes*/
     private int id;
-    private int stepOrder;
     private String description;
     private boolean requiredTimer;
-    private int timerTime;
+    private String timerTime;
+    private int stepOrder;
+    private int recipe_id;
 
     /*Constructors*/
 
@@ -15,15 +16,18 @@ public class StepModel {
     public StepModel() {}
 
     //All Attributes Constructor
-    public StepModel(int id, int stepOrder, String description, boolean requiredTimer, int timerTime) {
+    public StepModel(int id, String description, boolean requiredTimer, String timerTime, int stepOrder, int recipe_id) {
         this.id = id;
         this.stepOrder = stepOrder;
         this.description = description;
         this.requiredTimer = requiredTimer;
         this.timerTime = timerTime;
+        this.recipe_id = recipe_id;
     }
 
     /*Getters and Setters*/
+
+    public int getId(){ return this.id; }
 
     public int getStepOrder() {
         return this.stepOrder;
@@ -49,11 +53,29 @@ public class StepModel {
         this.requiredTimer = requiredTimer;
     }
 
-    public int getTimerTime() {
+    public String getTimerTime() {
         return this.timerTime;
     }
 
-    public void setTimerTime(int timerTime) {
+    public void setTimerTime(String timerTime) {
         this.timerTime = timerTime;
     }
+
+    public int getRecipe_Id() {
+        return this.recipe_id;
+    }
+
+    public void setRecipe_ID(int recipe_id) {
+        this.recipe_id = recipe_id;
+    }
+
+    /* EQUALS */
+    public boolean equals(Object obj){
+        if(obj instanceof StepModel) {
+            StepModel s = (StepModel) obj;
+            return this.getId() == s.getId();
+        }
+        return false;
+    }
+
 }
