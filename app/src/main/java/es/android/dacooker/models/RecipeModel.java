@@ -3,6 +3,7 @@ package es.android.dacooker.models;
 import android.graphics.Bitmap;
 
 import java.util.List;
+import java.util.Objects;
 
 public class RecipeModel {
 
@@ -90,12 +91,17 @@ public class RecipeModel {
         this.stepsList = stepsList;
     }
 
-    /* Equals */
+    /* Equals / Hascode */
     public boolean equals(Object obj){
         if(obj instanceof RecipeModel) {
             RecipeModel r = (RecipeModel) obj;
             return r.getId() == this.getId();
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

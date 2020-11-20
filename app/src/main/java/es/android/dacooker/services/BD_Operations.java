@@ -9,13 +9,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.MealType;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.models.StepModel;
 
 /*
     IMPLEMENTED METHODS
-    * All Methods Require BBDD_Helper instance as their last parameter
+    * Almost All Methods Require BBDD_Helper instance as their last parameter
 
     > RECIPES
      - addRecipe: Add Recipe
@@ -126,8 +127,8 @@ public class BD_Operations {
 
     public static void deleteRecipe(int id_recipe, BBDD_Helper dbHelper) throws Exception {
 
-        deleteStepsFromRecipe(id_recipe, dbHelper);
-        deleteIngredientsFromRecipe(id_recipe, dbHelper);
+        deleteStepsFromRecipeId(id_recipe, dbHelper);
+        deleteIngredientsFromRecipeId(id_recipe, dbHelper);
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -966,11 +967,267 @@ public class BD_Operations {
 
     }
 
-
     //
     // INGREDIENTS METHODS
     //
 
+    public static void addIngredient(IngredientModel i, int id_recipe, BBDD_Helper dbHelper) throws Exception {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.INGREDIENT_NAME, i.getIngredientName());
+        values.put(Struct_BD.INGREDIENT_QUANTITY, i.getQuantity());
+        values.put(Struct_BD.INGREDIENT_RECIPE, id_recipe);
+
+        // Insert the new row, returning the primary key value of the new row
+        long row = db.insert(Struct_BD.INGREDIENT_TABLE, null, values);
+
+        if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
+
+    }
+
+    public static void updateIngredient(IngredientModel i, BBDD_Helper dbHelper) throws Exception {
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.INGREDIENT_NAME, i.getIngredientName());
+        values.put(Struct_BD.INGREDIENT_QUANTITY, i.getQuantity());
+        values.put(Struct_BD.INGREDIENT_RECIPE, i.getIdRecipe());
+
+        // Which row to update, based on the title
+        String selection = Struct_BD.INGREDIENT_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(i.getId()) };
+
+        int row = db.update(
+                Struct_BD.INGREDIENT_TABLE,
+                values,
+                selection,
+                selectionArgs);
+
+        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+
+    }
+
+    public static void deleteIngredient(IngredientModel i, BBDD_Helper dbHelper) throws Exception {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.INGREDIENT_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(i.getId()) };
+
+        int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Ingredient couldn't be deleted. Try later");
+
+    }
+
+    public static void deleteIngredientsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = Struct_BD.INGREDIENT_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(r.getId()) };
+
+        int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
+
+        if(deletedRows <= 0) throw new Exception("Ingredient(s) couldn't be deleted. Try later");
+
+    }
+
+    public static void deleteIngredientsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] param = { String.valueOf(id_recipe) };
+        Cursor cursor = db.rawQuery("SELECT * FROM STEPS" +
+                " WHERE id_recipe = ? ;", param);
+
+        if(cursor.moveToFirst()) {
+
+            while(cursor.moveToNext()) {
+
+                boolean boolSaved = IntToBoolean(cursor.getInt(
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+
+                StepModel sn = new StepModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        boolSaved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+
+                );
+
+                // Which row to update, based on the title
+                String selection = Struct_BD.STEP_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(sn.getId()) };
+
+                db.delete(
+                        Struct_BD.STEP_TABLE,
+                        selection,
+                        selectionArgs);
+
+                cursor.moveToNext();
+            }
+        }
+
+    }
+
+    public static IngredientModel getIngredientById(int id_ingredient, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Le decimos que queremos obtener de la BD; es decir, qué columnas
+        String[] projection = {
+                Struct_BD.INGREDIENT_ID,
+                Struct_BD.INGREDIENT_NAME,
+                Struct_BD.INGREDIENT_QUANTITY,
+                Struct_BD.INGREDIENT_RECIPE
+        };
+
+        String selection = Struct_BD.INGREDIENT_ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id_ingredient) };
+
+        Cursor cursor = db.query(
+                Struct_BD.INGREDIENT_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        if(cursor.moveToFirst()) {  //Si obtenemos resultados
+
+            //Creamos el Ingredient
+            IngredientModel i = new IngredientModel(
+                    id_ingredient,
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_QUANTITY)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
+            );
+
+            cursor.close();
+            db.close();
+            return i;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Ingredient not Found");
+        }
+
+    }
+
+    public static List<IngredientModel> getIngredientsByRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.INGREDIENT_ID,
+                Struct_BD.INGREDIENT_NAME,
+                Struct_BD.INGREDIENT_QUANTITY,
+                Struct_BD.INGREDIENT_RECIPE
+        };
+
+        String selection = Struct_BD.INGREDIENT_RECIPE + " = ?";
+        String[] selectionArgs = { String.valueOf(r.getId()) };
+
+        Cursor cursor = db.query(
+                Struct_BD.INGREDIENT_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null     // The sort order
+        );
+
+
+        List<IngredientModel> ingredients = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Creamos el Ingredient
+                IngredientModel i = new IngredientModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_QUANTITY)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
+                );
+                ingredients.add(i);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return ingredients;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Ingredients Not Found");
+        }
+
+    }
+
+    public static List<IngredientModel> getIngredientsByIdRecipe(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.INGREDIENT_ID,
+                Struct_BD.INGREDIENT_NAME,
+                Struct_BD.INGREDIENT_QUANTITY,
+                Struct_BD.INGREDIENT_RECIPE
+        };
+
+        String selection = Struct_BD.INGREDIENT_RECIPE + " = ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        Cursor cursor = db.query(
+                Struct_BD.INGREDIENT_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null     // The sort order
+        );
+
+
+        List<IngredientModel> ingredients = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            while(cursor.moveToNext()) {
+
+                //Creamos el Ingredient
+                IngredientModel i = new IngredientModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_QUANTITY)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
+                );
+                ingredients.add(i);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return ingredients;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Ingredients Not Found");
+        }
+
+    }
 
     //
     // EXTRAS
@@ -997,7 +1254,7 @@ public class BD_Operations {
     }
 
     //Transform Value From DB to Boolean
-    private static  boolean IntToBoolean(int i){
+    private static boolean IntToBoolean(int i){
         if(i == 1) return true;
         else return false;
     }

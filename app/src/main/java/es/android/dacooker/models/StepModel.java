@@ -1,5 +1,7 @@
 package es.android.dacooker.models;
 
+import java.util.Objects;
+
 public class StepModel {
 
     /*Attributes*/
@@ -69,13 +71,18 @@ public class StepModel {
         this.recipe_id = recipe_id;
     }
 
-    /* EQUALS */
+    /* Equals / Hashcode */
     public boolean equals(Object obj){
         if(obj instanceof StepModel) {
             StepModel s = (StepModel) obj;
             return this.getId() == s.getId();
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

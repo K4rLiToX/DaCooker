@@ -50,7 +50,7 @@ public class Struct_BD {
     protected static final String SQL_CREATE_INGREDIENT = "CREATE TABLE " + INGREDIENT_TABLE + " ("
             + INGREDIENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + INGREDIENT_NAME + " TEXT,"
-            + INGREDIENT_QUANTITY + " REAL,"
+            + INGREDIENT_QUANTITY + " TEXT,"
             + INGREDIENT_RECIPE + " INTEGER )";
 
     protected static final String SQL_DELETE_INGREDIENT = "DROP TABLE IF EXISTS " + INGREDIENT_TABLE;
