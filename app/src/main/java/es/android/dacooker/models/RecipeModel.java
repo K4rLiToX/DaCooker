@@ -2,10 +2,11 @@ package es.android.dacooker.models;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class RecipeModel {
+public class RecipeModel implements Serializable {
 
     /*Attributes*/
     private int id;

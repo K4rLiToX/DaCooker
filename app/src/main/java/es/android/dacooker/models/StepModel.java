@@ -1,8 +1,9 @@
 package es.android.dacooker.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class StepModel {
+public class StepModel implements Serializable {
 
     /*Attributes*/
     private int id;

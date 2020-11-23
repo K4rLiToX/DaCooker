@@ -12,4 +12,8 @@
     <color name="medium_blue">#17a2b8</color>
     <color name="dark_blue">#013a85</color>
     <color name="activity_background">#f8f9fa</color>
+
+    <color name="red">#f94c4c</color>
+    <color name="dark_red">#88001b</color>
+    <color name="medium_red">#FF5722</color>
 </resources>
