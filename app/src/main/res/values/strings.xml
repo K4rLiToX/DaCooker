@@ -47,4 +47,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Add Recipe Inputs -->
+    <string name="add_recipe_name_hint">Recipe Name</string>
+    <string name="add_recipe_hours_hint">Execution Time</string>
+    <string name="add_recipe_minutes_hint">Execution Time</string>
+    <string name="add_recipe_description_hint">Description</string>
+
 </resources>

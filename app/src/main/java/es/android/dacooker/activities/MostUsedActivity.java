@@ -11,6 +11,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import es.android.dacooker.R;
 
 public class MostUsedActivity extends AppCompatActivity {
+
+    @Override
+    public void onBackPressed(){
+
+    }
+
     /*Constants*/
     private final Context activityContext = MostUsedActivity.this;
 

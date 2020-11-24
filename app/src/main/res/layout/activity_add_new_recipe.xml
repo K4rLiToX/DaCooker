@@ -14,32 +14,12 @@
             android:background="@color/red"
             app:tabTextColor="@color/white"
             app:tabIndicatorColor="@color/white"
-            app:tabSelectedTextColor="@color/white">
-<!--
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/add_tab_recipe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_tab_recipe" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/add_tab_ingredients"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_tab_ingredient"/>
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/add_tab_steps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_tab_step"/>
-
- -->
-        </com.google.android.material.tabs.TabLayout>
+            app:tabSelectedTextColor="@color/white"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/add_recipe_viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_below="@id/add_recipe_tab_layout"/>
 
 </RelativeLayout>

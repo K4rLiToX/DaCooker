@@ -22,6 +22,12 @@ import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 
 public class MainActivity extends AppCompatActivity implements RecipeClickListener{
+
+    @Override
+    public void onBackPressed(){
+
+    }
+
     /*Constants*/
     private final Context activityContext = MainActivity.this;
 
@@ -36,9 +42,6 @@ public class MainActivity extends AppCompatActivity implements RecipeClickListen
 
     /*Parameters*/
     private List<RecipeModel> recipeList;
-
-    public MainActivity() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
