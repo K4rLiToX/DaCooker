@@ -11,10 +11,10 @@
         android:theme="@style/Theme.DaCooker">
         <activity
             android:name=".activities.AddNewRecipeActivity"
-            android:label="@string/add_new_recipe_label"/>
+            android:label="@string/add_new_recipe_label" />
         <activity
             android:name=".activities.RecipeDetails"
-            android:label="@string/recipe_detail_label"/>
+            android:label="@string/recipe_detail_label" />
         <activity
             android:name=".activities.CustomActivity"
             android:label="@string/custom_recipes_label" />
