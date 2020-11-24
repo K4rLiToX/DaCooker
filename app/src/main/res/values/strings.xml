@@ -5,6 +5,8 @@
     <string name="recipes_label">Recipes</string>
     <string name="custom_recipes_label">Custom Recipes</string>
     <string name="most_used_recipes_label">Most Used Recipes</string>
+    <string name="recipe_detail_label">Recipe Details</string>
+    <string name="add_new_recipe_label">Add Recipe</string>
 
     <!--Bottom Navigation Menu Titles-->
     <string name="bottom_navigation_title_frequently">Most Used</string>
@@ -30,5 +32,9 @@
 
     <!--Buttons-->
     <string name="btn_recipe_detail_start">Start Cooking</string>
+
+    <!-- Text Views -->
+    <string name="tv_main_no_recipes">No Recipes Yet!</string>
+    <string name="tv_custom_coming_next">Coming Next!</string>
 
 </resources>

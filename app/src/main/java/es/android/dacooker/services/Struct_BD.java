@@ -9,6 +9,7 @@ public class Struct_BD {
     protected static final String RECIPE_IMAGE = "IMAGE";
     protected static final String RECIPE_MEALTYPE = "MEAL_TYPE";
     protected static final String RECIPE_EXEC_TIME = "EXECUTION_TIME";
+    protected static final String RECIPE_DESCRIPTION = "RECIPE_DESCRIPTION";
     protected static final String RECIPE_TIMES_COOKED = "TIMES_COOKED";
 
     protected static final String SQL_CREATE_RECIPE = "CREATE TABLE " + RECIPE_TABLE + " ("
@@ -16,6 +17,7 @@ public class Struct_BD {
             + RECIPE_NAME + " TEXT,"
             + RECIPE_MEALTYPE + " TEXT,"
             + RECIPE_EXEC_TIME + " TEXT,"
+            + RECIPE_DESCRIPTION + " TEXT,"
             + RECIPE_TIMES_COOKED + " INTEGER,"
             + RECIPE_IMAGE + " BLOB )";
 

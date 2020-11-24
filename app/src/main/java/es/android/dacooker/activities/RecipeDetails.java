@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,12 +25,14 @@ public class RecipeDetails extends AppCompatActivity {
     private TextView tvRecipeTitleDetail, tvRecipeTimeDetail, tvRecipeMealType, tvRecipeDescription;
     private RecyclerView ingredientRecyclerView;
     private Button btnStartRecipe;
+    private LinearLayout expandableLayout;
 
-    //Adapters
+    //Utilities
     private IngredientRecyclerAdapter ingredientAdapter;
+    private boolean isExpanded;
 
     //Recipe to Show
-    private RecipeModel recipe;
+    private RecipeModel recipeSelected;
 
     //Ingredient's List to Show
     private List<IngredientModel> ingredientList;
@@ -41,6 +45,7 @@ public class RecipeDetails extends AppCompatActivity {
 
         initViews();
         initParameters();
+        setViews();
         initIngredientRecyclerView();
     }
 
@@ -53,17 +58,34 @@ public class RecipeDetails extends AppCompatActivity {
         this.tvRecipeDescription = findViewById(R.id.recipe_detail_description);
         this.ingredientRecyclerView = findViewById(R.id.recipe_detail_ingredient_recyclerView);
         this.btnStartRecipe = findViewById(R.id.btn_start_recipe);
+        this.expandableLayout = findViewById(R.id.expandableLayout);
+
+        this.expandableLayout.setOnClickListener(view -> {
+            ingredientRecyclerView.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
+            isExpanded = !isExpanded;
+        });
     }
 
     private void initParameters(){
-        //Recibir la receta por intent
+        this.recipeSelected = (RecipeModel) getIntent().getSerializableExtra("recipeSelected");
+        this.ingredientList = recipeSelected.getIngredientsList();
 
-        //Inicializar lista de ingredientes
+        isExpanded = false;
+        this.ingredientRecyclerView.setVisibility(View.GONE);
+    }
 
+    private void setViews(){
+        this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
+        this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
+        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTime());
+        this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));
+        this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
     }
 
     private void initIngredientRecyclerView(){
         this.ingredientAdapter = new IngredientRecyclerAdapter(this.ingredientList);
         ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
+
+
 }

@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DaCooker">
-        <activity android:name=".activities.RecipeDetails"></activity>
+        <activity
+            android:name=".activities.AddNewRecipeActivity"
+            android:label="@string/add_new_recipe_label"/>
+        <activity
+            android:name=".activities.RecipeDetails"
+            android:label="@string/recipe_detail_label"/>
         <activity
             android:name=".activities.CustomActivity"
             android:label="@string/custom_recipes_label" />

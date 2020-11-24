@@ -8,6 +8,7 @@
     android:background="@color/activity_background">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/recipe_card_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"

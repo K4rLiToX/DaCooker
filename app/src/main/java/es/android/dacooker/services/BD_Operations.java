@@ -19,6 +19,7 @@ import es.android.dacooker.models.StepModel;
     * Almost All Methods Require BBDD_Helper instance as their last parameter
 
     > RECIPES
+     - getRecipes : Get All Recipes
      - addRecipe: Add Recipe
      - updateRecipe: Update Recipe
      - deleteRecipe: Delete Recipe. His ingredients and steps, too
@@ -92,6 +93,7 @@ public class BD_Operations {
         values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
         values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
         values.put(Struct_BD.RECIPE_EXEC_TIME, r.getExecutionTime());
+        values.put(Struct_BD.RECIPE_DESCRIPTION, r.getRecipeDescription());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
         values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
 
@@ -141,6 +143,72 @@ public class BD_Operations {
 
     }
 
+    public static List<RecipeModel> getRecipes(BBDD_Helper dbHelper) {
+        //Gets the data repository in read mode
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Obtener la tabla recetas
+        String[] projection = {
+            Struct_BD.RECIPE_NAME,
+            Struct_BD.RECIPE_IMAGE,
+            Struct_BD.RECIPE_MEALTYPE,
+            Struct_BD.RECIPE_EXEC_TIME,
+            Struct_BD.RECIPE_DESCRIPTION,
+            Struct_BD.RECIPE_TIMES_COOKED,
+            Struct_BD.RECIPE_IMAGE
+        };
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,                  // The columns for the WHERE clause
+                null,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        List<RecipeModel> recipes = new ArrayList<>();
+
+        if(cursor.moveToFirst()){
+            while(cursor.moveToNext()){
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                //Tratamos el MealType
+                MealType mt = null;
+                String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+                for(MealType e : MealType.values()){
+                    if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+                }
+
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mt,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved
+                );
+                recipes.add(r);
+                cursor.moveToNext();    //Pasamos a la siguiente posición
+            }
+
+            cursor.close();
+            db.close();
+            return recipes;
+        } else {
+            cursor.close();
+            db.close();
+            return recipes;
+        }
+    }
+
     public static RecipeModel getRecipeById(int id_recipe, BBDD_Helper dbHelper) throws Exception{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -151,6 +219,7 @@ public class BD_Operations {
             Struct_BD.RECIPE_IMAGE,
             Struct_BD.RECIPE_MEALTYPE,
             Struct_BD.RECIPE_EXEC_TIME,
+            Struct_BD.RECIPE_DESCRIPTION,
             Struct_BD.RECIPE_TIMES_COOKED,
             Struct_BD.RECIPE_IMAGE
         };
@@ -189,6 +258,7 @@ public class BD_Operations {
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                     mt,
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                     imageSaved
             );
@@ -215,6 +285,7 @@ public class BD_Operations {
                 Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
@@ -249,6 +320,7 @@ public class BD_Operations {
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mealType,
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
                 );
@@ -278,6 +350,7 @@ public class BD_Operations {
                 Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
@@ -322,6 +395,7 @@ public class BD_Operations {
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
                 );
@@ -350,6 +424,7 @@ public class BD_Operations {
                 Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
@@ -391,6 +466,7 @@ public class BD_Operations {
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
                 );
@@ -419,6 +495,7 @@ public class BD_Operations {
                 Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
@@ -460,6 +537,7 @@ public class BD_Operations {
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
                 );

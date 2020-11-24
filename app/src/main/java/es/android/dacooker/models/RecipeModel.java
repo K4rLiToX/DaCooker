@@ -13,6 +13,7 @@ public class RecipeModel implements Serializable {
     private String recipeName;
     private MealType mealType;
     private String executionTime;
+    private String recipeDescription;
     private int timesCooked;
     private Bitmap image;
     private List<IngredientModel> ingredientsList;
@@ -24,11 +25,12 @@ public class RecipeModel implements Serializable {
     public RecipeModel(){}
 
     //All Attributes Constructor
-    public RecipeModel(int id, String recipeName, MealType mealType, String executionTime, int timesCooked, Bitmap image){
+    public RecipeModel(int id, String recipeName, MealType mealType, String executionTime, String recipeDescription, int timesCooked, Bitmap image){
         this.id = id;
         this.recipeName = recipeName;
         this.mealType = mealType;
         this.executionTime = executionTime;
+        this.recipeDescription = recipeDescription;
         this.timesCooked = timesCooked;
         this.image = image;
     }
@@ -59,6 +61,14 @@ public class RecipeModel implements Serializable {
 
     public void setExecutionTime(String executionTime) {
         this.executionTime = executionTime;
+    }
+
+    public String getRecipeDescription(){
+        return this.recipeDescription;
+    }
+
+    public void setRecipeDescription(String recipeDescription){
+        this.recipeDescription = recipeDescription;
     }
 
     public int getTimesCooked() {

@@ -3,6 +3,8 @@ package es.android.dacooker.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +38,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
-
+        RecipeModel recipe = recipeList.get(position);
+        holder.imgRecipeCard.setImageBitmap(recipe.getImage());
+        holder.titleRecipeCard.setText(recipe.getRecipeName());
+        holder.timeRecipeCard.setText(recipe.getExecutionTime());
     }
 
     @Override
@@ -46,9 +51,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //Intern Class
     class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgRecipeCard;
+        TextView titleRecipeCard, timeRecipeCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.imgRecipeCard = itemView.findViewById(R.id.img_card_recipe);
+            this.titleRecipeCard = itemView.findViewById(R.id.recipe_card_title);
+            this.timeRecipeCard = itemView.findViewById(R.id.recipe_card_time);
+
+            itemView.setOnClickListener( view -> {
+                recipeClickListener.onRecipeClick(getAdapterPosition());
+            });
         }
     }
 }

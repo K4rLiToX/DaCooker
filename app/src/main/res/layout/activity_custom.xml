@@ -8,16 +8,16 @@
     tools:context=".activities.CustomActivity"
     android:background="@color/activity_background">
 
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:itemBackground="@color/blue"
-        app:itemTextColor="@drawable/selector"
-        app:itemIconTint="@drawable/selector"
-        app:menu="@menu/menu_navigation"
-        android:layout_alignParentBottom="true"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:text="@string/tv_custom_coming_next"
+        android:layout_centerInParent="true"
+        android:gravity="center"/>
+
+
+
+    <include layout="@layout/bottom_navigation" />
 
 </RelativeLayout>
