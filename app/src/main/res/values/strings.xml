@@ -48,7 +48,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <!-- Add Recipe Inputs -->
+    <!-- Add Recipe - Recipe Inputs -->
     <string name="add_recipe_name_hint">Recipe Name</string>
     <string name="add_recipe_hours_hint">Hours</string>
     <string name="add_recipe_minutes_hint">Minutes</string>
@@ -57,5 +57,29 @@
     <string name="add_recipe_btnCancel">Cancel</string>
     <string name="add_recipe_btnNext">Next</string>
     <string name="add_recipe_execTime">Execution Time</string>
+
+    <!-- Add Recipe - Ingredient Inputs -->
+    <string name="add_ingredient_text">Required Ingredients</string>
+    <string name="add_ingredient_text2">Ingredients Added</string>
+    <string name="add_ingredient_name_hint">Ingredient Name</string>
+    <string name="add_ingredient_quantity_hint">Quantity</string>
+    <string name="add_ingredient_btnAdd">Add Ingredient</string>
+    <string name="add_ingredient_listView_name">ListView Ingredient Name</string>
+    <string name="add_ingredient_listView_quantity">ListView Quantity</string>
+
+    <!-- Add Recipe - Step Inputs -->
+    <string name="add_step_text">Steps To Follow</string>
+    <string name="add_step_text2">Steps Added</string>
+    <string name="add_step_description_hint">Description</string>
+    <string name="add_step_requiredTimer_hint">Require Time?</string>
+    <string name="add_step_timerTime_hours_hint">Hours</string>
+    <string name="add_step_timerTime_minutes_hint">Minutes</string>
+    <string name="add_step_order_hint">Order</string>
+    <string name="add_step_btnAdd">Add Step</string>
+    <string name="add_step_listView_description">ListView Step Description</string>
+    <string name="add_step_listView_timerTime">ListView Timer</string>
+    <string name="add_step_listView_order">LV Order</string>
+    <string name="add_step_listView_hours">LV Hours</string>
+    <string name="add_step_listView_minutes">LV Minutes</string>
 
 </resources>

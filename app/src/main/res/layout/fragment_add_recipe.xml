@@ -20,7 +20,7 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilName"
+                android:id="@+id/til_recipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -46,7 +46,7 @@
                 android:layout_marginTop="15dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilHour"
+                    android:id="@+id/til_recipeHour"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_recipe_execTime"
@@ -68,7 +68,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilMinutes"
+                    android:id="@+id/til_recipeMinutes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -89,7 +89,7 @@
             </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilMealType"
+            android:id="@+id/til_recipeMealType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -107,7 +107,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilDescription"
+                android:id="@+id/til_recipeDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
