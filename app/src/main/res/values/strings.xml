@@ -49,8 +49,12 @@
 
     <!-- Add Recipe Inputs -->
     <string name="add_recipe_name_hint">Recipe Name</string>
-    <string name="add_recipe_hours_hint">Execution Time</string>
-    <string name="add_recipe_minutes_hint">Execution Time</string>
+    <string name="add_recipe_execTime">Execution Time</string>
+    <string name="add_recipe_hours_hint">Hours</string>
+    <string name="add_recipe_minutes_hint">Minutes</string>
     <string name="add_recipe_description_hint">Description</string>
+
+    <string name="add_recipe_btnCancel">Cancel</string>
+    <string name="add_recipe_btnNext">Next</string>
 
 </resources>
