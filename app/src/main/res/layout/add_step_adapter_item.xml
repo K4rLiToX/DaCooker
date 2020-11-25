@@ -10,9 +10,10 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/step_order_add_listView"
@@ -40,16 +41,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:text="@string/add_step_listView_hours"
-                    android:layout_weight="1"/>
+                    android:text="@string/add_step_listView_hours"/>
 
                 <TextView
                     android:id="@+id/step_minutes_add_listView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:text="@string/add_step_listView_minutes"
-                    android:layout_weight="1"/>
+                    android:text="@string/add_step_listView_minutes"/>
 
             </LinearLayout>
 
@@ -57,9 +56,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
             android:orientation="horizontal">
 
             <Button
@@ -69,17 +68,16 @@
                 android:layout_weight="1"
                 app:icon="@android:drawable/ic_delete"
                 app:iconGravity="textEnd"
-                app:iconPadding="2sp"
-                />
+                app:iconPadding="2sp" />
 
             <Button
                 android:id="@+id/add_step_listView_btnUpdate"
                 android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="3dp"
-                android:background="@color/teal_700"
                 app:icon="@android:drawable/ic_menu_edit"
+                android:backgroundTint="@color/teal_700"
                 app:iconGravity="textEnd"
                 app:iconPadding="2sp"/>
 

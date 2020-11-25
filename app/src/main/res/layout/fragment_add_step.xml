@@ -67,8 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_step_requiredTimer_hint"
-                android:textColor="#2B2B2B"
-                android:layout_weight="2"/>
+                android:textColor="#777676"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_stepTimer_hours"
