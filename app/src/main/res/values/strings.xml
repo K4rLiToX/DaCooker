@@ -54,5 +54,8 @@
     <string name="add_recipe_minutes_hint">Minutes</string>
     <string name="add_recipe_description_hint">Description</string>
     <string name="add_recipe_mealType_hint">Meal Type</string>
+    <string name="add_recipe_btnCancel">Cancel</string>
+    <string name="add_recipe_btnNext">Next</string>
+    <string name="add_recipe_execTime">Execution Time</string>
 
 </resources>
