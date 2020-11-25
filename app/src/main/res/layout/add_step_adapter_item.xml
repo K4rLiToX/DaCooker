@@ -77,7 +77,7 @@
                 android:layout_weight="1"
                 android:layout_marginStart="3dp"
                 app:icon="@android:drawable/ic_menu_edit"
-                android:backgroundTint="@color/teal_700"
+                android:backgroundTint="#4185EF"
                 app:iconGravity="textEnd"
                 app:iconPadding="2sp"/>
 

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.AddStepFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -18,7 +18,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:text="@string/add_step_text"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_stepOrder"
@@ -27,6 +28,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/add_step_order_hint"
+            android:layout_below="@id/add_step_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <EditText
@@ -46,6 +48,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/add_step_description_hint"
+            android:layout_below="@id/til_stepOrder"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <EditText
@@ -59,9 +62,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
+            android:id="@+id/add_step_layout_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_below="@id/til_stepDescription">
 
             <CheckBox android:id="@+id/checkbox_requiredTimer"
                 android:layout_width="wrap_content"
@@ -119,7 +124,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/add_step_btnAdd"/>
+            android:text="@string/add_step_btnAdd"
+            android:layout_below="@id/add_step_layout_time"/>
 
         <TextView
             android:id="@+id/add_step_text2"
@@ -128,14 +134,26 @@
             android:text="@string/add_step_text2"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:layout_below="@id/add_step_btnAdd"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_above="@id/btn_finish_recipe"
+            android:layout_below="@+id/add_step_text2"/>
+
+        <Button
+            android:id="@+id/btn_finish_recipe"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:text="@string/add_recipe_btnFinish"
+            android:layout_alignParentBottom="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>
