@@ -28,14 +28,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginEnd="8dp"
+                android:hint="@string/add_recipe_name_hint"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
                     android:id="@+id/recipe_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/add_recipe_name_hint"
                     android:inputType="text"
                     android:singleLine="true" />
 
@@ -45,90 +46,91 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="#DFDFDF">
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp">
 
-                <TextView
-                    android:id="@+id/txtView_ExecTime"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilHour"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_recipe_execTime"
                     android:textColor="#DC1BBB"
                     android:textSize="17sp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_horizontal"/>
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/add_recipe_hours_hint"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/recipe_hour_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:singleLine="true"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilMinutes"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:hint="@string/add_recipe_minutes_hint"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilHours"
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/recipe_minute_input"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1">
+                        android:ems="10"
+                        android:inputType="number"
+                        android:singleLine="true" />
 
-                        <EditText
-                            android:id="@+id/recipe_hours_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/add_recipe_hours_hint"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:layout_weight="1"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilMinutes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1">
-
-                        <EditText
-                            android:id="@+id/recipe_minutes_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="@string/add_recipe_minutes_hint"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:layout_weight="1"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilMealType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="15dp"
+            android:hint="@string/add_recipe_mealType_hint"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+            <AutoCompleteTextView
+                android:id="@+id/recipe_mealType_dropdown_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp">
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="8dp"
+                android:hint="@string/add_recipe_description_hint"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <EditText
                     android:id="@+id/recipe_description_input"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="150dp"
+                    android:padding="2dp"
                     android:ems="10"
-                    android:hint="@string/add_recipe_description_hint"
-                    android:inputType="text"
-                    android:singleLine="false" />
+                    android:inputType="textMultiLine"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
