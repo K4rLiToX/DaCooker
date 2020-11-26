@@ -80,47 +80,44 @@ public class AddStepFragment extends Fragment {
             til_minute.setEnabled(timerOn);
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnAdd.setOnClickListener(view -> {
 
-                boolean timerOn = cb_timer.isChecked();
+            boolean timerOn = cb_timer.isChecked();
 
-                if(validFields(timerOn)) {
-                    StepModel step = new StepModel();
-                    step.setStepOrder(Integer.valueOf(til_order.getText().toString()));
-                    step.setDescription(til_description.getText().toString());
-                    step.setRequiredTimer(timerOn);
+            if(validFields(timerOn)) {
+                StepModel step = new StepModel();
+                step.setStepOrder(Integer.parseInt(til_order.getText().toString()));
+                step.setDescription(til_description.getText().toString());
+                step.setRequiredTimer(timerOn);
 
-                    String timer = null;
-                    if(timerOn) timer = input_hours.getText().toString().trim() + ":" + input_minute.getText().toString().trim();
-                    step.setTimerTime(timer);
+                String timer = null;
+                if(timerOn) timer = input_hours.getText().toString().trim() + ":" + input_minute.getText().toString().trim();
+                step.setTimerTime(timer);
 
 
-                    stepsList.add(step);
+                stepsList.add(step);
 
-                    //Eliminar cuando funcione
-                    Toast.makeText(getActivity().getApplicationContext(), stepsList.size()+"", Toast.LENGTH_SHORT).show();
+                //Eliminar cuando funcione
+                Toast.makeText(getActivity().getApplicationContext(), stepsList.size()+"", Toast.LENGTH_SHORT).show();
 
-                    rwAdapter.notifyItemInserted(stepsList.size()-1);
-                    til_order.setText("");
-                    til_description.setText("");
+                rwAdapter.notifyItemInserted(stepsList.size()-1);
+                til_order.setText("");
+                til_description.setText("");
 
-                    if(timerOn){
-                        cb_timer.setChecked(false);
-                        input_hours.setText("");
-                        input_minute.setText("");
-                        til_hours.setEnabled(false);
-                        til_minute.setEnabled(false);
-                    }
-
-
-                } else {
-                    //Errores
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                if(timerOn){
+                    cb_timer.setChecked(false);
+                    input_hours.setText("");
+                    input_minute.setText("");
+                    til_hours.setEnabled(false);
+                    til_minute.setEnabled(false);
                 }
 
+
+            } else {
+                //Errores
+                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         return v;
@@ -135,7 +132,7 @@ public class AddStepFragment extends Fragment {
         String minute = input_minute.getText().toString().trim();
         if(timerOn && (hour.equalsIgnoreCase("") || hour == null) ) return false;
         if(timerOn && (minute.equalsIgnoreCase("") || minute == null ||
-                (Integer.valueOf(hour) != 0 && Integer.valueOf(minute) > 59))) return false;
+                (Integer.parseInt(hour) != 0 && Integer.parseInt(minute) > 59))) return false;
 
         return true;
     }

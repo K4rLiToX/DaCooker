@@ -57,29 +57,26 @@ public class AddIngredientFragment extends Fragment {
         rw = v.findViewById(R.id.add_ingredient_recycler);
         rw.setAdapter(rwAdapter);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnAdd.setOnClickListener(view -> {
 
-                if(validFields()) {
-                    IngredientModel ing = new IngredientModel();
-                    ing.setIngredientName(til_name.getText().toString());
-                    ing.setQuantity(til_quantity.getText().toString());
-                    ingredientList.add(ing);
+            if(validFields()) {
+                IngredientModel ing = new IngredientModel();
+                ing.setIngredientName(til_name.getText().toString());
+                ing.setQuantity(til_quantity.getText().toString());
+                ingredientList.add(ing);
 
-                    //Eliminar cuando funcione
-                    Toast.makeText(getActivity().getApplicationContext(), ingredientList.size()+"", Toast.LENGTH_SHORT).show();
+                //Eliminar cuando funcione
+                Toast.makeText(getActivity().getApplicationContext(), ingredientList.size()+"", Toast.LENGTH_SHORT).show();
 
-                    rwAdapter.notifyItemInserted(ingredientList.size()-1);
-                    til_name.setText("");
-                    til_quantity.setText("");
+                rwAdapter.notifyItemInserted(ingredientList.size()-1);
+                til_name.setText("");
+                til_quantity.setText("");
 
-                } else {
-                    //Errores
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                }
-
+            } else {
+                //Errores
+                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         return v;

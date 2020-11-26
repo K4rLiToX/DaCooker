@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.AddRecipePagerAdapter;
@@ -29,7 +30,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_recipe);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
         // Initialize Adapter With Tabs

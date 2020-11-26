@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.IngredientRecyclerAdapter;
@@ -42,7 +43,7 @@ public class RecipeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         initViews();
         initParameters();

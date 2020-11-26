@@ -1,14 +1,25 @@
 package es.android.dacooker.fragments;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -24,6 +35,10 @@ public class AddRecipeFragment extends Fragment {
     ArrayAdapter<MealType> adapter;
     AutoCompleteTextView mealTypeDropdown;
 
+    EditText recipeName, recipeHours, recipeMinutes, recipeDescription;
+    ImageView recipePhoto;
+
+
     public AddRecipeFragment() {
         // Required empty public constructor
     }
@@ -38,15 +53,42 @@ public class AddRecipeFragment extends Fragment {
         mealTypeDropdown = v.findViewById(R.id.recipe_mealType_dropdown_select);
         mealTypeDropdown.setAdapter(adapter);
 
-        FloatingActionButton fabChangePhoto = v.findViewById(R.id.fabAddRecipeImage);
-        fabChangePhoto.setOnClickListener(click ->{
-            addOrChangeRecipePhoto();
+        recipePhoto = v.findViewById(R.id.recipe_img_input);
+        recipeName = v.findViewById(R.id.recipe_name_input);
+        recipeHours = v.findViewById(R.id.recipe_hour_input);
+        recipeMinutes = v.findViewById(R.id.recipe_minute_input);
+        recipeDescription = v.findViewById(R.id.recipe_description_input);
+
+
+        FloatingActionButton fabTakePhoto = v.findViewById(R.id.fabTakeRecipePhoto);
+        fabTakePhoto.setOnClickListener(click ->{
+            takeRecipePhoto();
+        });
+
+        FloatingActionButton fabSelectPhoto = v.findViewById(R.id.fabSelectRecipePhoto);
+        fabSelectPhoto.setOnClickListener(click ->{
+            selectRecipePhoto();
         });
 
         return v;
     }
 
-    private void addOrChangeRecipePhoto() {
+    private void takeRecipePhoto() {
 
+    }
+
+    private void selectRecipePhoto(){
+        Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intentGallery.setType("images/");
+        startActivityForResult(intentGallery.createChooser(intentGallery, "Seleccione la Aplicación"), 10);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK){
+            Uri path = data.getData();
+            recipePhoto.setImageURI(path);
+        }
     }
 }
