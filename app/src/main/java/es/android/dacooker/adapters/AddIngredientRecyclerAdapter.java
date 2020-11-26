@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -61,7 +62,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
 
     //Intern Class
     class MyViewHolder extends RecyclerView.ViewHolder {
-        Button btnDelete;
+        ImageButton btnDelete;
         TextView nameIngredient, quantityIngredient;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -70,5 +71,71 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
             this.nameIngredient = itemView.findViewById(R.id.ingredient_name_add_listView);
             this.quantityIngredient = itemView.findViewById(R.id.ingredient_quantity_add_listView);
         }
+    }
+
+    public void setItems(List<IngredientModel> newItems)
+    {
+        clearItems();
+        addItems(newItems);
+    }
+
+    public void addItem(IngredientModel item, int position)
+    {
+        if (position > ingredientList.size()) return;
+
+        ingredientList.add(item);
+        notifyItemInserted(position);
+    }
+
+    public void addMoreItems(List<IngredientModel> newItems)
+    {
+        int position = ingredientList.size() + 1;
+        newItems.addAll(newItems);
+        notifyItemChanged(position, newItems);
+    }
+
+    public void addItems(List<IngredientModel> newItems)
+    {
+        ingredientList.addAll(newItems);
+        notifyDataSetChanged();
+    }
+
+    public void clearItems()
+    {
+        ingredientList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addLoader()
+    {
+        ingredientList.add(null);
+        notifyItemInserted(ingredientList.size() - 1);
+    }
+
+    public void removeLoader()
+    {
+        ingredientList.remove(ingredientList.size() - 1);
+        notifyItemRemoved(ingredientList.size());
+    }
+
+    public void removeItem(int position)
+    {
+        if (position >= ingredientList.size()) return;
+
+        ingredientList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void swapItems(int positionA, int positionB)
+    {
+        if (positionA > ingredientList.size()) return;
+        if (positionB > ingredientList.size()) return;
+
+        IngredientModel firstItem = ingredientList.get(positionA);
+
+        ingredientList.set(positionA, ingredientList.get(positionB));
+        ingredientList.set(positionB, firstItem);
+
+        notifyDataSetChanged();
     }
 }

@@ -9,15 +9,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.AddIngredientRecyclerAdapter;
+import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.models.IngredientModel;
 
 /**
@@ -37,13 +41,14 @@ public class AddIngredientFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /*
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        ingredientList = new ArrayList<>();
-        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(),
-                ingredientList);
+        //rw = getView().findViewById(R.id.add_ingredient_recycler);
+        //rw.setAdapter(rwAdapter);
     }
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +61,9 @@ public class AddIngredientFragment extends Fragment {
         til_quantity = v.findViewById(R.id.ingredient_quantity_input);
         btnAdd = v.findViewById(R.id.add_ingredient_btnAdd);
         rw = v.findViewById(R.id.add_ingredient_recycler);
+
+        ingredientList = new ArrayList<>();
+        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
         rw.setAdapter(rwAdapter);
 
         btnAdd.setOnClickListener(view -> {

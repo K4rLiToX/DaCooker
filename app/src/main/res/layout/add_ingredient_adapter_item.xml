@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,15 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="40">
 
             <TextView
                 android:id="@+id/ingredient_name_add_listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="@color/black"
                 android:text="@string/add_ingredient_listView_name"
-                android:layout_weight="1"/>
+                android:layout_weight="5"/>
 
             <TextView
                 android:id="@+id/ingredient_quantity_add_listView"
@@ -32,19 +33,21 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:text="@string/add_ingredient_listView_quantity"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:layout_marginStart="4dp"/>
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/add_ingredient_listView_btnDelete"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            app:icon="@android:drawable/ic_delete"
-            app:iconGravity="textEnd"
-            app:iconPadding="2sp"/>
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_trash"
+            android:background="#AA1818"
+            android:layout_marginEnd="8dp" />
 
     </LinearLayout>
 

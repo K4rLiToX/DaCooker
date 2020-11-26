@@ -51,6 +51,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 if(tabsLayout.getSelectedTabPosition() == 2)
                     btnFinish.setVisibility(View.VISIBLE);
                 else btnFinish.setVisibility(View.INVISIBLE);
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override

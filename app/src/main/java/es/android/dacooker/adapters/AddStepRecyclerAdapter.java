@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,8 +40,8 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StepModel step = stepModelList.get(position);
-        holder.orderStep.setText(step.getStepOrder());
-        holder.descriptionStep.setText(step.getDescription());
+        holder.orderStep.setText(String.valueOf(step.getStepOrder()));
+        holder.descriptionStep.setText(String.valueOf(step.getDescription()));
 
         String timer = step.getTimerTime();
         String hours = "", minutes = "";
@@ -49,8 +50,8 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
             hours = aux[0];
             minutes = aux[1];
         }
-        holder.hoursStep.setText(hours);
-        holder.minutesStep.setText(minutes);
+        holder.hoursStep.setText(String.valueOf(hours));
+        holder.minutesStep.setText(String.valueOf(minutes));
 
         holder.btnDelete.setOnClickListener( view -> {
             stepModelList.remove(position);
@@ -71,7 +72,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     //Intern Class
     class ViewHolder extends RecyclerView.ViewHolder {
-        Button btnDelete, btnUpdate;
+        ImageButton btnDelete, btnUpdate;
         TextView orderStep, descriptionStep, hoursStep, minutesStep;
 
         public ViewHolder(@NonNull View itemView) {

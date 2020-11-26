@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="@color/black"
                 android:text="@string/add_step_listView_order"
                 android:layout_weight="1"/>
 
@@ -29,6 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+                android:textColor="@color/black"
                 android:text="@string/add_step_listView_description"
                 android:layout_weight="1"/>
 
@@ -62,26 +63,26 @@
             android:layout_weight="2"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_step_listView_btnDelete"
-                android:layout_width="32dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                app:icon="@android:drawable/ic_delete"
-                app:iconGravity="textEnd"
-                app:iconPadding="2sp" />
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_trash"
+                android:background="@color/red_500"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_step_listView_btnUpdate"
-                android:layout_width="32dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginStart="3dp"
-                app:icon="@android:drawable/ic_menu_edit"
-                android:backgroundTint="#4185EF"
-                app:iconGravity="textEnd"
-                app:iconPadding="2sp"/>
-
+                android:layout_gravity="center"
+                android:src="@drawable/ic_edit"
+                android:layout_margin="8dp"
+                android:background="@color/red_700"
+                android:backgroundTint="#4185EF"/>
 
         </LinearLayout>
 
