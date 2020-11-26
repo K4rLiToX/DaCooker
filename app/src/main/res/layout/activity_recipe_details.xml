@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".activities.RecipeDetails"
-        android:orientation="vertical"
-        android:background="@color/activity_background">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/img_detail_recipe"
@@ -73,10 +72,10 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/activity_background"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

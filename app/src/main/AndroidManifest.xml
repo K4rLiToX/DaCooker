@@ -16,14 +16,7 @@
             android:name=".activities.RecipeDetails"
             android:label="@string/recipe_detail_label" />
         <activity
-            android:name=".activities.CustomActivity"
-            android:label="@string/custom_recipes_label" />
-        <activity
-            android:name=".activities.MostUsedActivity"
-            android:label="@string/most_used_recipes_label" />
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/recipes_label">
+            android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

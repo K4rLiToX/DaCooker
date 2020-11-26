@@ -11,7 +11,7 @@
             android:id="@+id/add_recipe_tab_layout"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:background="@color/red"
+            android:background="@color/red_500"
             app:tabTextColor="@color/white"
             app:tabIndicatorColor="@color/white"
             app:tabSelectedTextColor="@color/white"/>

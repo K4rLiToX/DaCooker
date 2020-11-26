@@ -11,4 +11,4 @@
     app:menu="@menu/menu_navigation"
     android:layout_alignParentBottom="true"
     android:background="@drawable/bottom_navbar_rounded_corners"
-    tools:showIn="@layout/activity_main" />
+    tools:showIn="@layout/activity_main"/>

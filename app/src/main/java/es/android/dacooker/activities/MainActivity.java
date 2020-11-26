@@ -1,11 +1,14 @@
 package es.android.dacooker.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,108 +19,60 @@ import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.RecyclerViewAdapter;
+import es.android.dacooker.fragments.CustomFragment;
+import es.android.dacooker.fragments.MostUsedFragment;
+import es.android.dacooker.fragments.RecipeFragment;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 
-public class MainActivity extends AppCompatActivity implements RecipeClickListener{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    @Override
-    public void onBackPressed(){
+    //Main Fragments
+    private final RecipeFragment recipeFragment = new RecipeFragment();
+    private final MostUsedFragment mostUsedFragment = new MostUsedFragment();
+    private final CustomFragment customFragment = new CustomFragment();
 
-    }
-
-    /*Constants*/
-    private final Context activityContext = MainActivity.this;
-
-    /*Views*/
-    private BottomNavigationView bottomNavigationView;
-    private RecyclerView mainRecyclerView;
-    private TextView tvNoRecipes;
-
-    /*Utilities*/
-    private RecyclerViewAdapter recyclerViewAdapter;
-    private RecipeClickListener recipeClickListener;
-
-    /*Parameters*/
-    private List<RecipeModel> recipeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initViews();
-        initParameters();
-
-        //Set bottom navigation listener from changing activity
-        this.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.menu_most_used:
-                    gotoActivity(MostUsedActivity.class);
-                    overridePendingTransition(0,0);
-                    return true;
-                case R.id.menu_recipes:
-                    return true;
-                case R.id.menu_custom:
-                    gotoActivity(CustomActivity.class);
-                    overridePendingTransition(0,0);
-                    return true;
-            }
-            return false;
-        });
-    }
-
-    /*On click methods*/
-    public void addRecipe(View view){
-        gotoActivity(AddNewRecipeActivity.class);
+        /*Views*/
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+        bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
+        setTitle(R.string.recipes_label);
     }
 
     @Override
-    public void onRecipeClick(int position){
-        RecipeModel recipe = recipeList.get(position);
-        Intent i = new Intent(activityContext, RecipeDetails.class);
-        i.putExtra("recipeSelected", recipe);
-        startActivity(i);
-    }
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int itemID = item.getItemId();
+        boolean res = false;
 
-    /*Private Methods*/
-
-    //Assigns views
-    private void initViews() {
-        this.bottomNavigationView = findViewById(R.id.bottom_navigation);
-        this.mainRecyclerView = findViewById(R.id.main_recyclerView);
-        this.tvNoRecipes = findViewById(R.id.tvEmptyRecipes);
-        //Set custom selected
-        this.bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
-    }
-
-    private void initParameters(){
-        //Inicializo la la lista de recetas
-        BBDD_Helper db = new BBDD_Helper(activityContext);
-        this.recipeList = BD_Operations.getRecipes(db);
-        if(this.recipeList.isEmpty()){
-            this.mainRecyclerView.setVisibility(View.GONE);
-            //Mostramos Text View (no hay recetas)
-            this.tvNoRecipes.setVisibility(View.VISIBLE);
+        if(itemID == R.id.menu_recipes){
+            changeFragment(recipeFragment);
+            setTitle(R.string.recipes_label);
+            res = true;
+        } else if(itemID == R.id.menu_most_used){
+            changeFragment(recipeFragment);
+            setTitle(R.string.recipes_label);
+            res = true;
+        } else if(itemID == R.id.menu_custom){
+            changeFragment(recipeFragment);
+            setTitle(R.string.recipes_label);
+            res = true;
         } else {
-            initRecyclerView();
+            res = false;
         }
+
+        return res;
     }
 
-    private void initRecyclerView(){
-        this.recyclerViewAdapter = new RecyclerViewAdapter(this.recipeList, this.recipeClickListener);
-        this.mainRecyclerView.setAdapter(this.recyclerViewAdapter);
+    private void changeFragment(Fragment fragmentToChange){
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
     }
 
-    //Changes activity given a class
-    private void gotoActivity(Class aClass){
-        startActivity(new Intent(activityContext, aClass));
-    }
-
-    //Shows a Toast
-    private void showToast(String msg){
-        Toast.makeText(activityContext, msg, Toast.LENGTH_LONG).show();
-    }
 }
