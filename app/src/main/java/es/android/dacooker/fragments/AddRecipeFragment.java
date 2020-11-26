@@ -91,22 +91,24 @@ public class AddRecipeFragment extends Fragment {
 
         if(!isCreada){
             isCreada = fileImage.mkdirs();
-        } else {
+        }
+
+        if(isCreada){
             imageName = (System.currentTimeMillis()/100) + ".jpg";
         }
 
         path = Environment.getExternalStorageDirectory() +
-                File.separator + RUTA_IMAGEN + File.separator + imageName;
+                File.separator + RUTA_IMAGEN + File.separator + imageName; //Ruta de almacenamiento
         File image = new File(path);
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //Lanza la app de camara
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); //Enviar la imgen tomada y almacenarla
         startActivityForResult(intent, 20);
     }
 
     private void selectRecipePhoto(){
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(Intent.createChooser(galleryIntent, "Select Application"), 1);    //PICK_IMAGE
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select Application"), 10);    //PICK_IMAGE
     }
 
     @Override
@@ -120,14 +122,9 @@ public class AddRecipeFragment extends Fragment {
                     recipePhoto.setImageURI(miPath);
                     break;
                 case 20:
-                    MediaScannerConnection.scanFile(Objects.requireNonNull(getActivity()).getApplicationContext(), new String[]{path}, null,
-                            (s, uri) -> {
-
-                            });
-
-                    Bitmap bitmap = new BitmapFactory().decodeFile(path);
+                    Bundle extras = data.getExtras();
+                    Bitmap bitmap = (Bitmap) extras.get("data");
                     recipePhoto.setImageBitmap(bitmap);
-
                     break;
             }
 
