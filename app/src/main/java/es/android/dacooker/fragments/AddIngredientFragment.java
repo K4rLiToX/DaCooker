@@ -41,7 +41,8 @@ public class AddIngredientFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         ingredientList = new ArrayList<>();
-        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
+        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(),
+                ingredientList);
     }
 
     @Override

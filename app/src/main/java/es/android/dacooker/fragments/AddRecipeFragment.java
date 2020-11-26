@@ -4,6 +4,9 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +26,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.io.File;
+import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.models.MealType;
@@ -37,6 +44,10 @@ public class AddRecipeFragment extends Fragment {
 
     EditText recipeName, recipeHours, recipeMinutes, recipeDescription;
     ImageView recipePhoto;
+
+    final String CARPETA_RAIZ = "misImagenesPrueba/";
+    final String RUTA_IMAGEN = CARPETA_RAIZ + "misFotos";
+    String path = "";
 
 
     public AddRecipeFragment() {
@@ -61,12 +72,12 @@ public class AddRecipeFragment extends Fragment {
 
 
         FloatingActionButton fabTakePhoto = v.findViewById(R.id.fabTakeRecipePhoto);
-        fabTakePhoto.setOnClickListener(click ->{
+        fabTakePhoto.setOnClickListener(photo ->{
             takeRecipePhoto();
         });
 
         FloatingActionButton fabSelectPhoto = v.findViewById(R.id.fabSelectRecipePhoto);
-        fabSelectPhoto.setOnClickListener(click ->{
+        fabSelectPhoto.setOnClickListener(gallery ->{
             selectRecipePhoto();
         });
 
@@ -74,21 +85,52 @@ public class AddRecipeFragment extends Fragment {
     }
 
     private void takeRecipePhoto() {
+        File fileImage = new File(Environment.getExternalStorageDirectory(), RUTA_IMAGEN);
+        boolean isCreada = fileImage.exists();
+        String imageName="";
 
+        if(!isCreada){
+            isCreada = fileImage.mkdirs();
+        } else {
+            imageName = (System.currentTimeMillis()/100) + ".jpg";
+        }
+
+        path = Environment.getExternalStorageDirectory() +
+                File.separator + RUTA_IMAGEN + File.separator + imageName;
+        File image = new File(path);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+        startActivityForResult(intent, 20);
     }
 
     private void selectRecipePhoto(){
-        Intent intentGallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intentGallery.setType("images/");
-        startActivityForResult(intentGallery.createChooser(intentGallery, "Seleccione la Aplicación"), 10);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select Application"), 1);    //PICK_IMAGE
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
-            Uri path = data.getData();
-            recipePhoto.setImageURI(path);
+
+            switch (requestCode){
+                case 10:
+                    Uri miPath = Objects.requireNonNull(data).getData();
+                    recipePhoto.setImageURI(miPath);
+                    break;
+                case 20:
+                    MediaScannerConnection.scanFile(Objects.requireNonNull(getActivity()).getApplicationContext(), new String[]{path}, null,
+                            (s, uri) -> {
+
+                            });
+
+                    Bitmap bitmap = new BitmapFactory().decodeFile(path);
+                    recipePhoto.setImageBitmap(bitmap);
+
+                    break;
+            }
+
         }
     }
 }
