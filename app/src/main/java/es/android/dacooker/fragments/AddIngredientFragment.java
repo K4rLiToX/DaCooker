@@ -49,6 +49,8 @@ public class AddIngredientFragment extends Fragment {
         til_name = v.findViewById(R.id.ingredient_name_input);
         til_quantity = v.findViewById(R.id.ingredient_quantity_input);
         btnAdd = v.findViewById(R.id.add_ingredient_btnAdd);
+
+
         rw = v.findViewById(R.id.add_ingredient_recycler);
 
         ingredientList = new ArrayList<>();

@@ -32,7 +32,6 @@ public class AddStepFragment extends Fragment {
     TextInputLayout til_hours, til_minute;
     EditText til_order, til_description, input_hours, input_minute;
     Button btnAdd;
-    Button btnFinish;
     RecyclerView rw;
     AddStepRecyclerAdapter rwAdapter;
     List<StepModel> stepsList;

@@ -1,36 +1,26 @@
 package es.android.dacooker.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import es.android.dacooker.R;
-import es.android.dacooker.adapters.AddRecipePagerAdapter;
 import es.android.dacooker.fragments.AddIngredientFragment;
 import es.android.dacooker.fragments.AddRecipeFragment;
 import es.android.dacooker.fragments.AddStepFragment;
-import es.android.dacooker.models.IngredientModel;
-import es.android.dacooker.models.RecipeModel;
-import es.android.dacooker.models.StepModel;
 
 public class AddNewRecipeActivity extends AppCompatActivity {
 
-    private TabLayout tabsLayout;
-    private ViewPager viewPager;
-    private AddRecipePagerAdapter pagerAdapter;
-    private Button btnFinish;
+    private Button btnToIngredients, btnToSteps, btnFinish;
+
+    //Fragments
+    private final AddRecipeFragment addRecipeFragment= new AddRecipeFragment();
+    private final AddIngredientFragment addIngredientFragment = new AddIngredientFragment();
+    private final AddStepFragment addStepFragment = new AddStepFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,52 +29,36 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-
-        // Initialize Adapter With Tabs
+        getSupportFragmentManager().beginTransaction().replace(R.id.add_recipe_fragment_container, addRecipeFragment).commit();
+        btnToIngredients = findViewById(R.id.toAddIngredient);
+        btnToSteps = findViewById(R.id.toAddStep);
         btnFinish = findViewById(R.id.btnFinish_activity);
-        btnFinish.setVisibility(View.INVISIBLE);
-        tabsLayout = findViewById(R.id.add_recipe_tab_layout);
-        viewPager = findViewById(R.id.add_recipe_viewPager);
 
-        pagerAdapter = new AddRecipePagerAdapter(getSupportFragmentManager());
+        btnToIngredients.setVisibility(View.VISIBLE);
 
-        viewPager.setAdapter(pagerAdapter);
-        tabsLayout.setupWithViewPager(viewPager);
-
-
-        tabsLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        btnToIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                if(tabsLayout.getSelectedTabPosition() == 2)
-                    btnFinish.setVisibility(View.VISIBLE);
-                else btnFinish.setVisibility(View.INVISIBLE);
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.add_recipe_fragment_container, addIngredientFragment).commit();
+                btnToIngredients.setVisibility(View.GONE);
+                btnToSteps.setVisibility(View.VISIBLE);
             }
+        });
 
+        btnToSteps.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+            public void onClick(View view) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.add_recipe_fragment_container, addStepFragment).commit();
+                btnToSteps.setVisibility(View.GONE);
+                btnFinish.setVisibility(View.VISIBLE);
             }
         });
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RecipeModel recipe;
-                List<IngredientModel> ingredientList;
-                List<StepModel> stepList;
-
-                //TextInputEditText recipeName = pagerAdapter.getItem(0).getView().findViewById(R.id.recipe_name_input);
-                Toast.makeText(AddNewRecipeActivity.this, pagerAdapter.getItem(2).getView().findViewById(R.id.step_order_input).toString(), Toast.LENGTH_LONG).show();
-
-                //Toast.makeText(AddNewRecipeActivity.this, recipeName.getText().toString(), Toast.LENGTH_LONG).show();
-
-
-                //finish();
+                btnFinish.setVisibility(View.GONE);
+                finish();
             }
         });
 

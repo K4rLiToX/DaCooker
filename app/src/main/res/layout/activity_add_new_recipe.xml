@@ -7,28 +7,39 @@
     android:layout_height="match_parent"
     tools:context=".activities.AddNewRecipeActivity">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/add_recipe_tab_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:background="@color/red_500"
-            app:tabTextColor="@color/white"
-            app:tabIndicatorColor="@color/white"
-            app:tabSelectedTextColor="@color/white"/>
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/add_recipe_viewPager"
+        <FrameLayout
+            android:id="@+id/add_recipe_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/add_recipe_tab_layout"/>
+            android:layout_above="@id/toAddIngredient"/>
+
+        <Button
+            android:id="@+id/toAddIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="8dp"
+            android:text="Next"/>
+
+        <Button
+            android:id="@+id/toAddStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="8dp"
+            android:text="Next"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnFinish_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/add_recipe_btnFinish"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:text="Finish and Cooking!"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"/>
 
 </RelativeLayout>
