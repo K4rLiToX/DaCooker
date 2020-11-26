@@ -28,7 +28,7 @@
             android:hint="@string/add_ingredient_name_hint"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ingredient_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:hint="@string/add_ingredient_quantity_hint"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ingredient_quantity_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

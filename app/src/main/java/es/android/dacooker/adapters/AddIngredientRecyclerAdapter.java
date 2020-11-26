@@ -18,11 +18,9 @@ import es.android.dacooker.models.IngredientModel;
 
 public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.MyViewHolder> {
 
-    private Context context;
-    private List<IngredientModel> ingredientList;
+    List<IngredientModel> ingredientList;
 
-    public AddIngredientRecyclerAdapter(Context context, List<IngredientModel> ingredientList){
-        this.context = context;
+    public AddIngredientRecyclerAdapter(List<IngredientModel> ingredientList){
         this.ingredientList = ingredientList;
     }
 
@@ -37,7 +35,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View ingredientItemView = layoutInflater.inflate(R.layout.add_ingredient_adapter_item, parent, false);
         MyViewHolder vh = new MyViewHolder(ingredientItemView);
         return vh;
@@ -48,9 +46,12 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
         IngredientModel ingredient = ingredientList.get(position);
         holder.nameIngredient.setText(ingredient.getIngredientName());
         holder.quantityIngredient.setText(ingredient.getQuantity());
-        holder.btnDelete.setOnClickListener( view -> {
-            ingredientList.remove(position);
-            notifyItemRemoved(position);
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ingredientList.remove(position);
+                notifyItemRemoved(position);
+            }
         });
     }
 
@@ -60,7 +61,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     }
 
     //Intern Class
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         Button btnDelete;
         TextView nameIngredient, quantityIngredient;
 

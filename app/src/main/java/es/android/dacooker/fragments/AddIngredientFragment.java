@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ import es.android.dacooker.models.IngredientModel;
  */
 public class AddIngredientFragment extends Fragment {
 
-    EditText til_name, til_quantity;
+    TextInputEditText til_name, til_quantity;
     Button btnAdd;
     List<IngredientModel> ingredientList;
 
@@ -35,14 +37,6 @@ public class AddIngredientFragment extends Fragment {
 
     public AddIngredientFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        ingredientList = new ArrayList<>();
-        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(),
-                ingredientList);
     }
 
     @Override
@@ -56,28 +50,32 @@ public class AddIngredientFragment extends Fragment {
         til_quantity = v.findViewById(R.id.ingredient_quantity_input);
         btnAdd = v.findViewById(R.id.add_ingredient_btnAdd);
         rw = v.findViewById(R.id.add_ingredient_recycler);
+
+        ingredientList = new ArrayList<>();
+        rwAdapter = new AddIngredientRecyclerAdapter(ingredientList);
         rw.setAdapter(rwAdapter);
 
-        btnAdd.setOnClickListener(view -> {
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(validFields()) {
+                    String nombre = til_name.getText().toString();
+                    String cantidad = til_quantity.getText().toString();
+                    IngredientModel ing = new IngredientModel(ingredientList.size(), nombre, cantidad, 0);
+                    ingredientList.add(ing);
 
-            if(validFields()) {
-                IngredientModel ing = new IngredientModel();
-                ing.setIngredientName(til_name.getText().toString());
-                ing.setQuantity(til_quantity.getText().toString());
-                ingredientList.add(ing);
+                    //Eliminar cuando funcione
+                    Toast.makeText(getActivity().getApplicationContext(), rwAdapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
 
-                //Eliminar cuando funcione
-                Toast.makeText(getActivity().getApplicationContext(), ingredientList.size()+"", Toast.LENGTH_SHORT).show();
+                    rwAdapter.notifyItemInserted(ingredientList.size()-1);
+                    til_name.setText("");
+                    til_quantity.setText("");
 
-                rwAdapter.notifyItemInserted(ingredientList.size()-1);
-                til_name.setText("");
-                til_quantity.setText("");
-
-            } else {
-                //Errores
-                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Errores
+                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
             }
-
         });
 
         return v;
