@@ -11,10 +11,13 @@
         android:theme="@style/Theme.DaCooker">
         <activity
             android:name=".activities.AddNewRecipeActivity"
-            android:label="@string/add_new_recipe_label" />
+            android:label="@string/add_new_recipe_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activities.RecipeDetails"
-            android:label="@string/recipe_detail_label" />
+            android:label="@string/recipe_detail_label"
+            android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.MainActivity">
             <intent-filter>

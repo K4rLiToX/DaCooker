@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import es.android.dacooker.fragments.AddIngredientFragment;
 import es.android.dacooker.fragments.AddRecipeFragment;
 import es.android.dacooker.fragments.AddStepFragment;
 
-public class AddRecipePagerAdapter extends FragmentPagerAdapter {
+public class AddRecipePagerAdapter extends FragmentStatePagerAdapter {
 
     //private ArrayList<String> arrayList = new ArrayList<>();
     //private List<Fragment> fragmentList = new ArrayList<>();

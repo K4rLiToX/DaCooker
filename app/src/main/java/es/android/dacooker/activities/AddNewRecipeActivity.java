@@ -26,6 +26,8 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_recipe);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         // Initialize Adapter With Tabs
         tabsLayout = findViewById(R.id.add_recipe_tab_layout);

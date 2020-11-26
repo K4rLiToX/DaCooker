@@ -42,6 +42,7 @@ public class RecipeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initViews();
         initParameters();

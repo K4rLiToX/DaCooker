@@ -26,8 +26,14 @@ import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
+import es.android.dacooker.utilities.SingletonMap;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+
+    //Constants
+    public static final String SHARED_DB_DATA_KEY = "SHARED_DB_KEY";
+
+    public BBDD_Helper db;
 
     //Main Fragments
     private final RecipeFragment recipeFragment = new RecipeFragment();
@@ -40,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Views*/
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
         setTitle(R.string.recipes_label);
+
+        db = new BBDD_Helper(MainActivity.this);
+        SingletonMap.getInstance().put(SHARED_DB_DATA_KEY, db);
     }
 
     @Override
@@ -53,16 +61,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         boolean res = false;
 
         if(itemID == R.id.menu_recipes){
-            changeFragment(recipeFragment);
-            setTitle(R.string.recipes_label);
+            changeFragment(recipeFragment, R.string.recipes_label);
             res = true;
         } else if(itemID == R.id.menu_most_used){
-            changeFragment(recipeFragment);
-            setTitle(R.string.recipes_label);
+            changeFragment(mostUsedFragment, R.string.most_used_recipes_label);
             res = true;
         } else if(itemID == R.id.menu_custom){
-            changeFragment(recipeFragment);
-            setTitle(R.string.recipes_label);
+            changeFragment(customFragment, R.string.custom_recipes_label);
             res = true;
         } else {
             res = false;
@@ -71,8 +76,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return res;
     }
 
-    private void changeFragment(Fragment fragmentToChange){
+    private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
+        setTitle(title);
     }
 
 }
