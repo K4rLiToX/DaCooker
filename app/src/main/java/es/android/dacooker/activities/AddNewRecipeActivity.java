@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -20,6 +22,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
     private TabLayout tabsLayout;
     private ViewPager viewPager;
     private AddRecipePagerAdapter pagerAdapter;
+    private Button btnFinish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,24 +33,35 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
 
         // Initialize Adapter With Tabs
+        btnFinish = findViewById(R.id.btnFinish_activity);
+        btnFinish.setVisibility(View.INVISIBLE);
         tabsLayout = findViewById(R.id.add_recipe_tab_layout);
         viewPager = findViewById(R.id.add_recipe_viewPager);
 
-        /*  Implementar si al cambiar Fragment se Borran Datos
-        ArrayList<String> titles = new ArrayList<>();
-        titles.add("Recipes");
-        titles.add("Ingredients");
-        titles.add("Potato");
-        */
-
         pagerAdapter = new AddRecipePagerAdapter(getSupportFragmentManager());
-        // Lo mismo que antes
-        //pagerAdapter.addFragment(new AddRecipeFragment(), titles.get(0));
-        //pagerAdapter.addFragment(new AddIngredientFragment(), titles.get(1));
-        //pagerAdapter.addFragment(new AddStepFragment(), titles.get(2));
 
         viewPager.setAdapter(pagerAdapter);
         tabsLayout.setupWithViewPager(viewPager);
+
+
+        tabsLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tabsLayout.getSelectedTabPosition() == 2)
+                    btnFinish.setVisibility(View.VISIBLE);
+                else btnFinish.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 }

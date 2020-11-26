@@ -1,5 +1,6 @@
 package es.android.dacooker.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +16,35 @@ import java.util.List;
 import es.android.dacooker.R;
 import es.android.dacooker.models.IngredientModel;
 
-public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.ViewHolder> {
+public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.MyViewHolder> {
 
+    private Context context;
     private List<IngredientModel> ingredientList;
 
-    public AddIngredientRecyclerAdapter(List<IngredientModel> ingredientList){
+    public AddIngredientRecyclerAdapter(Context context, List<IngredientModel> ingredientList){
+        this.context = context;
         this.ingredientList = ingredientList;
     }
 
+    /*
+    public void adviseAdd(IngredientModel ing){
+        this.ingredientList.add(ing);
+        notifyItemInserted(ingredientList.size()-1);
+    }
+    */
+
     @NonNull
     @Override
-    public AddIngredientRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View ingredientItemView = layoutInflater.inflate(R.layout.add_ingredient_adapter_item, parent, false);
-        AddIngredientRecyclerAdapter.ViewHolder vh = new AddIngredientRecyclerAdapter.ViewHolder(ingredientItemView);
+        MyViewHolder vh = new MyViewHolder(ingredientItemView);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddIngredientRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         IngredientModel ingredient = ingredientList.get(position);
         holder.nameIngredient.setText(ingredient.getIngredientName());
         holder.quantityIngredient.setText(ingredient.getQuantity());
@@ -50,11 +60,11 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     }
 
     //Intern Class
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         Button btnDelete;
         TextView nameIngredient, quantityIngredient;
 
-        public ViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             this.btnDelete = itemView.findViewById(R.id.add_ingredient_listView_btnDelete);
             this.nameIngredient = itemView.findViewById(R.id.ingredient_name_add_listView);

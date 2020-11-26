@@ -1,5 +1,6 @@
 package es.android.dacooker.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,24 +18,26 @@ import es.android.dacooker.models.StepModel;
 
 public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecyclerAdapter.ViewHolder> {
 
+    private Context context;
     private List<StepModel> stepModelList;
 
-    public AddStepRecyclerAdapter(List<StepModel> stepModelList){
+    public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList){
+        this.context = context;
         this.stepModelList = stepModelList;
     }
 
     @NonNull
     @Override
-    public AddStepRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View stepItemView = layoutInflater.inflate(R.layout.add_step_adapter_item, parent, false);
-        AddStepRecyclerAdapter.ViewHolder vh = new AddStepRecyclerAdapter.ViewHolder(stepItemView);
+        ViewHolder vh = new ViewHolder(stepItemView);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddStepRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StepModel step = stepModelList.get(position);
         holder.orderStep.setText(step.getStepOrder());
         holder.descriptionStep.setText(step.getDescription());
