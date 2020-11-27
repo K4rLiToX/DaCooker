@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     //Constants
     public static final String SHARED_DB_DATA_KEY = "SHARED_DB_KEY";
 
-    public BBDD_Helper db;
+    //public BBDD_Helper db;
 
     //Main Fragments
     private final RecipeFragment recipeFragment = new RecipeFragment();
@@ -49,32 +49,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
-        setTitle(R.string.recipes_label);
+        bottomNavigationView.getMenu().getItem(1).setCheckable(true).setChecked(true);
 
-        db = new BBDD_Helper(MainActivity.this);
-        SingletonMap.getInstance().put(SHARED_DB_DATA_KEY, db);
+        //db = new BBDD_Helper(MainActivity.this);
+        //SingletonMap.getInstance().put(SHARED_DB_DATA_KEY, db);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
-        boolean res = false;
 
         if(itemID == R.id.menu_recipes){
             changeFragment(recipeFragment, R.string.recipes_label);
-            res = true;
+            return true;
         } else if(itemID == R.id.menu_most_used){
             changeFragment(mostUsedFragment, R.string.most_used_recipes_label);
-            res = true;
+            return true;
         } else if(itemID == R.id.menu_custom){
             changeFragment(customFragment, R.string.custom_recipes_label);
-            res = true;
+            return true;
         } else {
-            res = false;
+            return false;
         }
-
-        return res;
     }
+
+
 
     private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
