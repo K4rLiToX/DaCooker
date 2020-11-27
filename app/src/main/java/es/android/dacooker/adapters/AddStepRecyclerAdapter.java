@@ -37,6 +37,10 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
         return vh;
     }
 
+    public List<StepModel> getStepModelList(){
+        return this.stepModelList;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StepModel step = stepModelList.get(position);
@@ -56,6 +60,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
         holder.btnDelete.setOnClickListener( view -> {
             stepModelList.remove(position);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position, stepModelList.size());
         });
 
         holder.btnUpdate.setOnClickListener( view -> {

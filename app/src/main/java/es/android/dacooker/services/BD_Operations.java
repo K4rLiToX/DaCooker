@@ -61,6 +61,43 @@ import es.android.dacooker.models.StepModel;
  */
 
 public class BD_Operations {
+
+
+    public static int getLastID(BBDD_Helper dbHelper){
+        // Gets the data repository in write mode
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] projection = {
+                Struct_BD.RECIPE_ID
+        };
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                null,                  // The columns for the WHERE clause
+                null,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        Integer ids = -1;
+
+        if(cursor.moveToLast()){
+
+            ids = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID));
+
+            cursor.close();
+            db.close();
+            return ids;
+        } else {
+            cursor.close();
+            db.close();
+            return ids;
+        }
+
+    }
+
     //
     // RECIPES METHODS
     //

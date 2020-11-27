@@ -41,15 +41,6 @@ public class AddIngredientFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        //rw = getView().findViewById(R.id.add_ingredient_recycler);
-        //rw.setAdapter(rwAdapter);
-    }
-    */
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +80,10 @@ public class AddIngredientFragment extends Fragment {
         });
 
         return v;
+    }
+
+    public List<IngredientModel> getIngredientList(){
+        return this.ingredientList;
     }
 
     private boolean validFields(){  //Cambiar para Validación Bien

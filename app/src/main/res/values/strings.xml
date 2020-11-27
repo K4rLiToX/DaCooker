@@ -82,5 +82,6 @@
     <string name="add_step_listView_hours">LV Hours</string>
     <string name="add_step_listView_minutes">LV Minutes</string>
     <string name="add_recipe_btnFinish">Finish &amp; Cooking!</string>
+    <string name="add_recipe_btnValidate">Validate Fields</string>
 
 </resources>

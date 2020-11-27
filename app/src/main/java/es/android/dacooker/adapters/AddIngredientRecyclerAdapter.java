@@ -27,13 +27,6 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
         this.ingredientList = ingredientList;
     }
 
-    /*
-    public void adviseAdd(IngredientModel ing){
-        this.ingredientList.add(ing);
-        notifyItemInserted(ingredientList.size()-1);
-    }
-    */
-
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,7 +45,12 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
         holder.btnDelete.setOnClickListener( view -> {
             ingredientList.remove(position);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position, ingredientList.size());
         });
+    }
+
+    public List<IngredientModel> getList(){
+        return ingredientList;
     }
 
     @Override
@@ -71,71 +69,5 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
             this.nameIngredient = itemView.findViewById(R.id.ingredient_name_add_listView);
             this.quantityIngredient = itemView.findViewById(R.id.ingredient_quantity_add_listView);
         }
-    }
-
-    public void setItems(List<IngredientModel> newItems)
-    {
-        clearItems();
-        addItems(newItems);
-    }
-
-    public void addItem(IngredientModel item, int position)
-    {
-        if (position > ingredientList.size()) return;
-
-        ingredientList.add(item);
-        notifyItemInserted(position);
-    }
-
-    public void addMoreItems(List<IngredientModel> newItems)
-    {
-        int position = ingredientList.size() + 1;
-        newItems.addAll(newItems);
-        notifyItemChanged(position, newItems);
-    }
-
-    public void addItems(List<IngredientModel> newItems)
-    {
-        ingredientList.addAll(newItems);
-        notifyDataSetChanged();
-    }
-
-    public void clearItems()
-    {
-        ingredientList.clear();
-        notifyDataSetChanged();
-    }
-
-    public void addLoader()
-    {
-        ingredientList.add(null);
-        notifyItemInserted(ingredientList.size() - 1);
-    }
-
-    public void removeLoader()
-    {
-        ingredientList.remove(ingredientList.size() - 1);
-        notifyItemRemoved(ingredientList.size());
-    }
-
-    public void removeItem(int position)
-    {
-        if (position >= ingredientList.size()) return;
-
-        ingredientList.remove(position);
-        notifyItemRemoved(position);
-    }
-
-    public void swapItems(int positionA, int positionB)
-    {
-        if (positionA > ingredientList.size()) return;
-        if (positionB > ingredientList.size()) return;
-
-        IngredientModel firstItem = ingredientList.get(positionA);
-
-        ingredientList.set(positionA, ingredientList.get(positionB));
-        ingredientList.set(positionB, firstItem);
-
-        notifyDataSetChanged();
     }
 }
