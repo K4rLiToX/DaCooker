@@ -6,5 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".fragments.CustomFragment">
 
+    <TextView
+        android:id="@+id/tvCustomComingNext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_custom_coming_next"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_centerInParent="true"
+        android:gravity="center"/>
+
 
 </RelativeLayout>

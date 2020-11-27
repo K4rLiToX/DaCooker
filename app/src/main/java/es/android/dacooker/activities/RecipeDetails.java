@@ -43,6 +43,8 @@ public class RecipeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
+
+        //Set Back Button on AppBar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         initViews();
@@ -52,6 +54,8 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     /*Private Methods*/
+
+    //Find Views in the Layout
     private void initViews(){
         this.imgRecipeDetail = findViewById(R.id.img_detail_recipe);
         this.tvRecipeTitleDetail = findViewById(R.id.recipe_detail_title);
@@ -62,20 +66,33 @@ public class RecipeDetails extends AppCompatActivity {
         this.btnStartRecipe = findViewById(R.id.btn_start_recipe);
         this.expandableLayout = findViewById(R.id.expandableLayout);
 
+        //Set onClick to Ingredients CardView
         this.expandableLayout.setOnClickListener(view -> {
+            //If its not expanded, show, else, hide
             ingredientRecyclerView.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
             isExpanded = !isExpanded;
+        });
+
+        //Set onClick to Start Cooking Button
+        this.btnStartRecipe.setOnClickListener(v -> {
+            //Go to Start Recipe Activity
         });
     }
 
     private void initParameters(){
+        //Get the Recipe inside de Intent
         this.recipeSelected = (RecipeModel) getIntent().getSerializableExtra("recipeSelected");
+        //Get the Recipe's Ingredient List
         this.ingredientList = recipeSelected.getIngredientsList();
+        //Set AppBar title to Recipe´s Name
+        setTitle(recipeSelected.getRecipeName());
 
+        //Ingredient CardView starts Hidden
         isExpanded = false;
         this.ingredientRecyclerView.setVisibility(View.GONE);
     }
 
+    //Set the Views with the Recipe Data
     private void setViews(){
         this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
@@ -84,10 +101,10 @@ public class RecipeDetails extends AppCompatActivity {
         this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
     }
 
+    //Set the Ingredient's Recyclerview
     private void initIngredientRecyclerView(){
         this.ingredientAdapter = new IngredientRecyclerAdapter(this.ingredientList);
         ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
-
 
 }

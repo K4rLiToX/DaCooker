@@ -3,35 +3,25 @@ package es.android.dacooker.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
-
 import es.android.dacooker.R;
-import es.android.dacooker.adapters.RecyclerViewAdapter;
 import es.android.dacooker.fragments.CustomFragment;
 import es.android.dacooker.fragments.MostUsedFragment;
 import es.android.dacooker.fragments.RecipeFragment;
-import es.android.dacooker.interfaces.RecipeClickListener;
-import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
-import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.SingletonMap;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     //Constants
     public static final String SHARED_DB_DATA_KEY = "SHARED_DB_KEY";
+    private final Context MAIN_ACTIVITY_CONTEXT = MainActivity.this;
 
     public BBDD_Helper db;
 
@@ -46,12 +36,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Bottom Navbar setup
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
         setTitle(R.string.recipes_label);
 
-        db = new BBDD_Helper(MainActivity.this);
+        //Database setup
+        db = new BBDD_Helper(MAIN_ACTIVITY_CONTEXT);
         SingletonMap.getInstance().put(SHARED_DB_DATA_KEY, db);
     }
 
@@ -76,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return res;
     }
 
+
+    /*Private Methods*/
     private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
         setTitle(title);

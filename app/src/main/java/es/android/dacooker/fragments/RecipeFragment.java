@@ -1,6 +1,5 @@
 package es.android.dacooker.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -20,7 +19,7 @@ import es.android.dacooker.R;
 import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.activities.MainActivity;
 import es.android.dacooker.activities.RecipeDetails;
-import es.android.dacooker.adapters.RecyclerViewAdapter;
+import es.android.dacooker.adapters.RecipeRecyclerViewAdapter;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
@@ -38,60 +37,67 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     private RecyclerView recipeRecyclerView;
     private TextView tvNoRecipes;
     //Adapters
-    private RecyclerViewAdapter adapter;
+    private RecipeRecyclerViewAdapter adapter;
     //Interface
     private RecipeClickListener recipeClickListener;
     //Services
     private BBDD_Helper db;
 
-
-    public RecipeFragment() {
-        // Required empty public constructor
-    }
+    // Required empty public constructor
+    public RecipeFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //Inflate de the View
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+        //Find de Layout Views
         recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
         tvNoRecipes = view.findViewById(R.id.tvEmptyRecipes);
+        //Initialize the recipe list
         initRecipeList();
+        //FAB Setup
         FloatingActionButton btnAddRecipe = view.findViewById(R.id.fabAddRecipe);
         btnAddRecipe.setOnClickListener(click -> {
             addRecipe();
         });
 
-        adapter = new RecyclerViewAdapter(recipeList,recipeClickListener);
+        //Create the Recyclerview's Adapter
+        adapter = new RecipeRecyclerViewAdapter(recipeList,recipeClickListener);
 
         return view;
     }
 
     private void initRecipeList(){
-        //Inicializar la lista de recetas
+        //Get the DB Service via SingletonMap
         db = (BBDD_Helper) SingletonMap.getInstance().get(MainActivity.SHARED_DB_DATA_KEY);
+        //Opertate with the DB to get the Recipe List
         this.recipeList = BD_Operations.getRecipes(db);
+
         if(this.recipeList.isEmpty()){
+            //No recipes -> hide recyclerview
             this.recipeRecyclerView.setVisibility(View.GONE);
-            //Mostramos Text View (no hay recetas)
+            //Show information textview
             this.tvNoRecipes.setVisibility(View.VISIBLE);
         } else {
-            initRecyclerView();
+            //Recipes -> set the recyclerview's adapter
+            recipeRecyclerView.setAdapter(adapter);
         }
     }
 
-    private void initRecyclerView(){
-        recipeRecyclerView.setHasFixedSize(true);
-        recipeRecyclerView.setAdapter(adapter);
-    }
-
+    //Whenever a Recycler's View Item is clicked
     @Override
     public void onRecipeClick(int position){
+        //Get the recipe that has been clicked
         RecipeModel recipe = recipeList.get(position);
+        //Create the intent to go to the RecipeDetails activity
         Intent i = new Intent(getActivity(), RecipeDetails.class);
+        //Put the recipe selected inside de intent
         i.putExtra("recipeSelected", recipe);
         startActivity(i);
     }
 
+    //Whenever the FAB is clicked, it will redirect to the AddNewRecipeActivity
     public void addRecipe(){
         startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
     }

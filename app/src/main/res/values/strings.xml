@@ -35,6 +35,7 @@
 
     <!-- Text Views -->
     <string name="tv_main_no_recipes">No Recipes Yet!</string>
+    <string name="tv_most_used_no_recipes">Start Cooking!</string>
     <string name="tv_custom_coming_next">Coming Next!</string>
 
     <!-- AddRecipe Activity  -->

@@ -34,6 +34,11 @@
                 android:src="@drawable/img_recipe_card_default"
                 android:contentDescription="@string/recipe_card_img_description"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,6 +61,19 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnDeleteRecipe_card"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_gravity="center"
+                android:layout_marginStart="70dp"
+                app:icon="@drawable/ic_trash"
+                app:iconGravity="textEnd"/>
+
+
+        </LinearLayout>
 
 
 
