@@ -63,6 +63,9 @@ import es.android.dacooker.models.StepModel;
 
 public class BD_Operations {
 
+    //
+    // RECIPES METHODS
+    //
 
     public static int getLastID(BBDD_Helper dbHelper){
         // Gets the data repository in write mode
@@ -98,10 +101,6 @@ public class BD_Operations {
         }
 
     }
-
-    //
-    // RECIPES METHODS
-    //
 
     public static void addRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
 
@@ -187,8 +186,8 @@ public class BD_Operations {
 
         //Obtener la tabla recetas
         String[] projection = {
+            Struct_BD.RECIPE_ID,
             Struct_BD.RECIPE_NAME,
-            Struct_BD.RECIPE_IMAGE,
             Struct_BD.RECIPE_MEALTYPE,
             Struct_BD.RECIPE_EXEC_TIME,
             Struct_BD.RECIPE_DESCRIPTION,
@@ -209,7 +208,7 @@ public class BD_Operations {
         List<RecipeModel> recipes = new ArrayList<>();
 
         if(cursor.moveToFirst()){
-            while(cursor.moveToNext()){
+            do {
                 //Tratamos la imagen
                 byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
                 Bitmap imageSaved;
@@ -235,16 +234,11 @@ public class BD_Operations {
                 );
                 recipes.add(r);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
-
-            cursor.close();
-            db.close();
-            return recipes;
-        } else {
-            cursor.close();
-            db.close();
-            return recipes;
+            } while(cursor.moveToNext());
         }
+            cursor.close();
+            db.close();
+            return recipes;
     }
 
     public static RecipeModel getRecipeById(int id_recipe, BBDD_Helper dbHelper) throws Exception{
@@ -253,8 +247,8 @@ public class BD_Operations {
 
         //Le decimos que queremos obtener de la BD; es decir, qué columnas
         String[] projection = {
+            Struct_BD.RECIPE_ID,
             Struct_BD.RECIPE_NAME,
-            Struct_BD.RECIPE_IMAGE,
             Struct_BD.RECIPE_MEALTYPE,
             Struct_BD.RECIPE_EXEC_TIME,
             Struct_BD.RECIPE_DESCRIPTION,
@@ -320,7 +314,6 @@ public class BD_Operations {
         String[] projection = {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
-                Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
                 Struct_BD.RECIPE_DESCRIPTION,
@@ -385,7 +378,6 @@ public class BD_Operations {
         String[] projection = {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
-                Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
                 Struct_BD.RECIPE_DESCRIPTION,
@@ -413,8 +405,7 @@ public class BD_Operations {
         List<RecipeModel> recipes = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do{
                 //Tratamos la imagen
                 byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
                 Bitmap imageSaved;
@@ -439,7 +430,7 @@ public class BD_Operations {
                 );
                 recipes.add(r);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -459,7 +450,6 @@ public class BD_Operations {
         String[] projection = {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
-                Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
                 Struct_BD.RECIPE_DESCRIPTION,
@@ -484,8 +474,7 @@ public class BD_Operations {
         List<RecipeModel> recipes = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do{
                 //Tratamos la imagen
                 byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
                 Bitmap imageSaved;
@@ -510,7 +499,7 @@ public class BD_Operations {
                 );
                 recipes.add(r);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -530,7 +519,6 @@ public class BD_Operations {
         String[] projection = {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
-                Struct_BD.RECIPE_IMAGE,
                 Struct_BD.RECIPE_MEALTYPE,
                 Struct_BD.RECIPE_EXEC_TIME,
                 Struct_BD.RECIPE_DESCRIPTION,
@@ -555,8 +543,7 @@ public class BD_Operations {
         int untilFive = 0;
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext() && untilFive > 0) {
-
+            do{
                 //Tratamos la imagen
                 byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
                 Bitmap imageSaved;
@@ -582,7 +569,7 @@ public class BD_Operations {
                 recipes.add(r);
                 untilFive--;
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext() && untilFive > 0);
 
             cursor.close();
             db.close();
