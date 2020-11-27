@@ -176,7 +176,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
             error = "Description must be between 0-140 characters";
         else if(time.length <= 0 || time[0].trim().equalsIgnoreCase("") || Integer.valueOf(time[0]) < 0)
             error = "Hours must be a number. If not necessary, put 0 in it";
-        else if(time.length <= 1 || time[1].trim().equalsIgnoreCase("") || Integer.valueOf(time[1]) < 0 || Integer.valueOf(time[1]) > 60)
+        else if(time.length <= 1 || time[1].trim().equalsIgnoreCase("") || Integer.valueOf(time[1]) < 0 || Integer.valueOf(time[1]) > 59)
             error = "Minutes must be a number. Use 0 to 59 to fill";
         else if(r.getMealType() == null) error = "You have to use a MealType";
 

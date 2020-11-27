@@ -19,6 +19,7 @@ import es.android.dacooker.models.StepModel;
     * Almost All Methods Require BBDD_Helper instance as their last parameter
 
     > RECIPES
+     - getLastID : Get The last ID to Add Ingredients and Steps to Recipe New
      - getRecipes : Get All Recipes
      - addRecipe: Add Recipe
      - updateRecipe: Update Recipe
