@@ -13,7 +13,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class AddStepFragment extends Fragment {
 
     CheckBox cb_timer;
     TextInputLayout til_hours, til_minute;
-    EditText til_order, til_description, input_hours, input_minute;
+    TextInputEditText til_order, til_description, input_hours, input_minute;
     Button btnAdd;
     RecyclerView rw;
     AddStepRecyclerAdapter rwAdapter;
@@ -130,9 +133,7 @@ public class AddStepFragment extends Fragment {
         String hour = input_hours.getText().toString().trim();
         String minute = input_minute.getText().toString().trim();
         if(timerOn && (hour.equalsIgnoreCase("") || hour == null) ) return false;
-        if(timerOn && (minute.equalsIgnoreCase("") || minute == null ||
-                (Integer.parseInt(hour) != 0 && Integer.parseInt(minute) > 59))) return false;
-
-        return true;
+        return !timerOn || (!minute.equalsIgnoreCase("") && minute != null &&
+                (Integer.parseInt(hour) == 0 || Integer.parseInt(minute) <= 59));
     }
 }

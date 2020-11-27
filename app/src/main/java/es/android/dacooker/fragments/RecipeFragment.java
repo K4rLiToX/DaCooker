@@ -37,9 +37,13 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     private RecyclerView recipeRecyclerView;
     private TextView tvNoRecipes;
     //Adapters
+<<<<<<< Updated upstream
     private RecipeRecyclerViewAdapter adapter;
     //Interface
     private RecipeClickListener recipeClickListener;
+=======
+    private RecyclerViewAdapter adapter;
+>>>>>>> Stashed changes
     //Services
     private BBDD_Helper db;
 
@@ -54,9 +58,14 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         //Find de Layout Views
         recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
         tvNoRecipes = view.findViewById(R.id.tvEmptyRecipes);
+<<<<<<< Updated upstream
         //Initialize the recipe list
         initRecipeList();
         //FAB Setup
+=======
+
+        initListAndRecyclerView();
+>>>>>>> Stashed changes
         FloatingActionButton btnAddRecipe = view.findViewById(R.id.fabAddRecipe);
         btnAddRecipe.setOnClickListener(click -> {
             addRecipe();
@@ -73,6 +82,10 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         db = (BBDD_Helper) SingletonMap.getInstance().get(MainActivity.SHARED_DB_DATA_KEY);
         //Opertate with the DB to get the Recipe List
         this.recipeList = BD_Operations.getRecipes(db);
+<<<<<<< Updated upstream
+=======
+        adapter = new RecyclerViewAdapter(recipeList,this);
+>>>>>>> Stashed changes
 
         if(this.recipeList.isEmpty()){
             //No recipes -> hide recyclerview
@@ -85,10 +98,19 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         }
     }
 
+<<<<<<< Updated upstream
     //Whenever a Recycler's View Item is clicked
     @Override
     public void onRecipeClick(int position){
         //Get the recipe that has been clicked
+=======
+    public void addRecipe(){
+        startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
+    }
+
+    @Override
+    public void onRecipeClick(int position) {
+>>>>>>> Stashed changes
         RecipeModel recipe = recipeList.get(position);
         //Create the intent to go to the RecipeDetails activity
         Intent i = new Intent(getActivity(), RecipeDetails.class);
@@ -96,9 +118,12 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         i.putExtra("recipeSelected", recipe);
         startActivity(i);
     }
+<<<<<<< Updated upstream
 
     //Whenever the FAB is clicked, it will redirect to the AddNewRecipeActivity
     public void addRecipe(){
         startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
     }
+=======
+>>>>>>> Stashed changes
 }

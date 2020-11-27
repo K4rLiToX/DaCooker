@@ -84,9 +84,7 @@ public class AddIngredientFragment extends Fragment {
     }
 
     private boolean validFields(){  //Cambiar para Validación Bien
-        if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().trim().equalsIgnoreCase("") ||
-                til_name.getText().toString() == null || til_quantity.getText().toString() == null ) return false;
-
-        return true;
+        return !til_name.getText().toString().trim().equalsIgnoreCase("") && !til_quantity.getText().toString().trim().equalsIgnoreCase("") &&
+                til_name.getText().toString() != null && til_quantity.getText().toString() != null;
     }
 }

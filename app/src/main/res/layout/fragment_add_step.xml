@@ -31,7 +31,7 @@
             android:layout_below="@id/add_step_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/step_order_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_below="@id/til_stepOrder"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/step_description_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -72,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_step_requiredTimer_hint"
+                android:layout_marginStart="2dp"
                 android:textColor="#777676"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -85,7 +86,7 @@
                 android:layout_weight="1"
                 android:enabled="false">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/step_timerTime_hours_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -106,7 +107,7 @@
                 android:layout_weight="1"
                 android:enabled="false">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/step_timerTime_minutes_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

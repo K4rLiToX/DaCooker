@@ -24,6 +24,7 @@
     <string name="recipe_detail_title">Recipe Detail Title</string>
     <string name="recipe_detail_time">Recipe Detail Time</string>
     <string name="recipe_detail_mealType">Meal Type</string>
+    <string name="recipe_detail_noIngredients">No Ingredients!</string>
 
     <!--Ingredient Card-->
     <string name="ingredient_card_name">Ingredient Name</string>

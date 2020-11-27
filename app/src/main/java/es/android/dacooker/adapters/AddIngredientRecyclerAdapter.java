@@ -18,6 +18,10 @@ import es.android.dacooker.models.IngredientModel;
 
 public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.MyViewHolder> {
 
+<<<<<<< Updated upstream
+=======
+    private final Context context;
+>>>>>>> Stashed changes
     List<IngredientModel> ingredientList;
 
     public AddIngredientRecyclerAdapter(List<IngredientModel> ingredientList){
@@ -37,8 +41,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View ingredientItemView = layoutInflater.inflate(R.layout.add_ingredient_adapter_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(ingredientItemView);
-        return vh;
+        return new MyViewHolder(ingredientItemView);
     }
 
     @Override

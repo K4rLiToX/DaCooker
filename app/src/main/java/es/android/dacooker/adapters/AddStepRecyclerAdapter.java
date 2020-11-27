@@ -18,8 +18,8 @@ import es.android.dacooker.models.StepModel;
 
 public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecyclerAdapter.ViewHolder> {
 
-    private Context context;
-    private List<StepModel> stepModelList;
+    private final Context context;
+    List<StepModel> stepModelList;
 
     public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList){
         this.context = context;
@@ -32,8 +32,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View stepItemView = layoutInflater.inflate(R.layout.add_step_adapter_item, parent, false);
-        ViewHolder vh = new ViewHolder(stepItemView);
-        return vh;
+        return new ViewHolder(stepItemView);
     }
 
     @Override
@@ -70,7 +69,11 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     }
 
     //Intern Class
+<<<<<<< Updated upstream
     class ViewHolder extends RecyclerView.ViewHolder {
+=======
+    static class ViewHolder extends RecyclerView.ViewHolder {
+>>>>>>> Stashed changes
         Button btnDelete, btnUpdate;
         TextView orderStep, descriptionStep, hoursStep, minutesStep;
 

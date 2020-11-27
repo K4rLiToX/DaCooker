@@ -1,51 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+<<<<<<< Updated upstream
             android:layout_weight="1">
+=======
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp">
+>>>>>>> Stashed changes
 
             <TextView
                 android:id="@+id/ingredient_name_add_listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+<<<<<<< Updated upstream
                 android:text="@string/add_ingredient_listView_name"
                 android:layout_weight="1"/>
+=======
+                android:textColor="@color/black"
+                android:text="@string/add_ingredient_listView_name"/>
+>>>>>>> Stashed changes
 
             <TextView
                 android:id="@+id/ingredient_quantity_add_listView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
+<<<<<<< Updated upstream
                 android:text="@string/add_ingredient_listView_quantity"
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"/>
+=======
+                android:text="@string/add_ingredient_listView_quantity"/>
+>>>>>>> Stashed changes
 
         </LinearLayout>
 
         <Button
             android:id="@+id/add_ingredient_listView_btnDelete"
+<<<<<<< Updated upstream
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:icon="@android:drawable/ic_delete"
             app:iconGravity="textEnd"
             app:iconPadding="2sp"/>
+=======
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            app:icon="@drawable/ic_trash"
+            app:iconGravity="textEnd"
+            android:layout_marginStart="100dp"/>
+
+>>>>>>> Stashed changes
 
     </LinearLayout>
 
-</RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>
