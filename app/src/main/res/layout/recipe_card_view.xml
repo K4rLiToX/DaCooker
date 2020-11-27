@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_gravity="center"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="100dp"
                 app:icon="@drawable/ic_trash"
                 app:iconGravity="textEnd"/>
 

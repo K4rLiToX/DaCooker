@@ -7,49 +7,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AddRecipeFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/recipe_img_input"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="170dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/img_recipe_card_default"/>
 
-            <ImageView
-                android:id="@+id/recipe_img_input"
-                android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:scaleType="centerCrop"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/img_recipe_card_default"/>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabTakeRecipePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_change_photo"
+            app:tint="@color/white"
+            app:maxImageSize="20dp"
+            app:fabSize="mini"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:layout_above="@id/til_recipeName"/>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabTakeRecipePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_change_photo"
-                app:tint="@color/white"
-                app:maxImageSize="20dp"
-                app:fabSize="mini"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="8dp"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabSelectRecipePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_gallery"
-                app:tint="@color/white"
-                app:maxImageSize="20dp"
-                app:fabSize="mini"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="65dp"/>
-
-
-        </RelativeLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSelectRecipePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_gallery"
+            app:tint="@color/white"
+            app:maxImageSize="20dp"
+            app:fabSize="mini"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="65dp"
+            android:layout_above="@id/til_recipeName"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_recipeName"
@@ -57,26 +49,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_below="@+id/recipe_img_input"
             android:hint="@string/add_recipe_name_hint"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/recipe_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:singleLine="false"
-                />
+                android:singleLine="false"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <LinearLayout
+            android:id="@+id/recipe_time_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/til_recipeName">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_recipeHour"
@@ -90,7 +83,7 @@
                 android:hint="@string/add_recipe_hours_hint"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/recipe_hour_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -121,23 +114,24 @@
 
         </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_recipeMealType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="15dp"
-        android:hint="@string/add_recipe_mealType_hint"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-        <AutoCompleteTextView
-            android:id="@+id/recipe_mealType_dropdown_select"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_recipeMealType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"/>
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/recipe_time_layout"
+            android:hint="@string/add_recipe_mealType_hint"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <AutoCompleteTextView
+                android:id="@+id/recipe_mealType_dropdown_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_recipeDescription"
@@ -146,10 +140,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="8dp"
+            android:layout_below="@+id/til_recipeMealType"
             android:hint="@string/add_recipe_description_hint"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/recipe_description_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,7 +158,17 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btnToAddIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/til_recipeDescription"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btn_next"/>
+
+    </RelativeLayout>
 
 
 </ScrollView>

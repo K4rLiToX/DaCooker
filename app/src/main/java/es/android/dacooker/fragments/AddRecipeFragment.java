@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,10 +21,13 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -31,7 +35,9 @@ import java.io.File;
 import java.util.Objects;
 
 import es.android.dacooker.R;
+import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.models.MealType;
+import es.android.dacooker.models.RecipeModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,10 +50,13 @@ public class AddRecipeFragment extends Fragment {
 
     EditText recipeName, recipeHours, recipeMinutes, recipeDescription;
     ImageView recipePhoto;
+    Button btnToIngredients;
 
     final String CARPETA_RAIZ = "misImagenesPrueba/";
     final String RUTA_IMAGEN = CARPETA_RAIZ + "misFotos";
     String path = "";
+
+
 
 
     public AddRecipeFragment() {
@@ -69,7 +78,7 @@ public class AddRecipeFragment extends Fragment {
         recipeHours = v.findViewById(R.id.recipe_hour_input);
         recipeMinutes = v.findViewById(R.id.recipe_minute_input);
         recipeDescription = v.findViewById(R.id.recipe_description_input);
-
+        btnToIngredients = v.findViewById(R.id.btnToAddIngredient);
 
         FloatingActionButton fabTakePhoto = v.findViewById(R.id.fabTakeRecipePhoto);
         fabTakePhoto.setOnClickListener(photo ->{
@@ -79,6 +88,13 @@ public class AddRecipeFragment extends Fragment {
         FloatingActionButton fabSelectPhoto = v.findViewById(R.id.fabSelectRecipePhoto);
         fabSelectPhoto.setOnClickListener(gallery ->{
             selectRecipePhoto();
+        });
+
+        btnToIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToIngredients();
+            }
         });
 
         return v;
@@ -129,5 +145,84 @@ public class AddRecipeFragment extends Fragment {
             }
 
         }
+    }
+
+    private void goToIngredients(){
+        boolean validate = validateFields();
+
+        if(validate){
+            //Create New Recipe
+            RecipeModel recipeCreated = new RecipeModel();
+            //Treat the Image
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) recipePhoto.getDrawable();
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+            recipeCreated.setImage(bitmap);
+            //Name
+            recipeCreated.setRecipeName(recipeName.getText().toString());
+            //Execution Time
+            String minutes = "00";
+            if(!recipeMinutes.getText().toString().isEmpty()) minutes = recipeMinutes.getText().toString();
+            recipeCreated.setExecutionTime(recipeHours.getText().toString() + ":" + minutes);
+            //Mealtype
+            MealType mealType;
+            String mealTypeS = mealTypeDropdown.getEditableText().toString();
+
+            if(mealTypeS.toLowerCase().equals("launch")) mealType = MealType.LAUNCH;
+            else if(mealTypeS.toLowerCase().equals("dinner")) mealType = MealType.DINNER;
+            else mealType = MealType.OTHER;
+            recipeCreated.setMealType(mealType);
+            //Description
+            recipeCreated.setRecipeDescription(recipeDescription.getText().toString());
+
+            //Create a Bundle to Store the Recipe
+            Bundle bundleRecipe = new Bundle();
+            bundleRecipe.putSerializable("recipeCreated", recipeCreated);
+
+            //Go to the AddIngredientFragment
+            AddIngredientFragment ingredientFragment = new AddIngredientFragment();
+            ingredientFragment.setArguments(bundleRecipe);
+            getFragmentManager().beginTransaction().replace(R.id.fragment_container, ingredientFragment).commit();
+        } else {
+            Toast.makeText(getContext(), recipeName.getText().toString() + ", " + recipeHours.getText().toString() + ", " + recipeMinutes.getText().toString() + ", " + mealTypeDropdown.getEditableText().toString() + ", " + recipeDescription.getText().toString(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "Some Fields are Empty", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean validateFields(){
+        boolean recipeNameValidator = nameValidator();
+        boolean recipeHourValidator = hourValidator();
+        boolean recipeMinuteValidator = minuteValidator();
+        boolean recipeMealTypeValidator = mealTypeValidator();
+
+        return recipeNameValidator && recipeHourValidator && recipeMinuteValidator && recipeMealTypeValidator;
+    }
+
+    private boolean nameValidator(){
+        return !recipeName.getText().toString().isEmpty();
+    }
+
+    private boolean hourValidator(){
+        boolean horas;
+        if(!recipeHours.getText().toString().isEmpty()) {
+            horas = Integer.parseInt(recipeHours.getText().toString()) >= 0;
+        } else {
+            horas = false;
+        }
+
+        return horas;
+    }
+
+    private boolean minuteValidator(){
+        boolean minutes;
+        if(!recipeMinutes.getText().toString().isEmpty()){
+            minutes = Integer.parseInt(recipeMinutes.getText().toString()) >= 0;
+        } else {
+            minutes = true;
+        }
+        return minutes;
+    }
+
+    private boolean mealTypeValidator(){
+        return !mealTypeDropdown.getEditableText().toString().isEmpty();
     }
 }
