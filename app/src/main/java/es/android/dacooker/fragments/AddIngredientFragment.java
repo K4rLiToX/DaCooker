@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.AddIngredientRecyclerAdapter;
+import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.models.IngredientModel;
 
 /**
@@ -27,7 +29,7 @@ import es.android.dacooker.models.IngredientModel;
  */
 public class AddIngredientFragment extends Fragment {
 
-    TextInputEditText til_name, til_quantity;
+    EditText til_name, til_quantity;
     Button btnAdd;
     List<IngredientModel> ingredientList;
 
@@ -52,30 +54,29 @@ public class AddIngredientFragment extends Fragment {
         rw = v.findViewById(R.id.add_ingredient_recycler);
 
         ingredientList = new ArrayList<>();
-        rwAdapter = new AddIngredientRecyclerAdapter(ingredientList);
+        rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
         rw.setAdapter(rwAdapter);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(validFields()) {
-                    String nombre = til_name.getText().toString();
-                    String cantidad = til_quantity.getText().toString();
-                    IngredientModel ing = new IngredientModel(ingredientList.size(), nombre, cantidad, 0);
-                    ingredientList.add(ing);
+        btnAdd.setOnClickListener(view -> {
 
-                    //Eliminar cuando funcione
-                    Toast.makeText(getActivity().getApplicationContext(), rwAdapter.getItemCount()+"", Toast.LENGTH_SHORT).show();
+            if(validFields()) {
+                IngredientModel ing = new IngredientModel();
+                ing.setIngredientName(til_name.getText().toString());
+                ing.setQuantity(til_quantity.getText().toString());
+                ingredientList.add(ing);
 
-                    rwAdapter.notifyItemInserted(ingredientList.size()-1);
-                    til_name.setText("");
-                    til_quantity.setText("");
+                //Eliminar cuando funcione
+                Toast.makeText(getActivity().getApplicationContext(), ingredientList.size()+"", Toast.LENGTH_SHORT).show();
 
-                } else {
-                    //Errores
-                    Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
-                }
+                rwAdapter.notifyItemInserted(ingredientList.size()-1);
+                til_name.setText("");
+                til_quantity.setText("");
+
+            } else {
+                //Errores
+                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
+
         });
 
         return v;

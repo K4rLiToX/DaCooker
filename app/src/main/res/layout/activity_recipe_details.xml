@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.RecipeDetails">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".activities.RecipeDetails"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/img_detail_recipe"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:scaleType="centerCrop"
-            android:layout_marginBottom="20dp"
-            android:src="@drawable/img_recipe_card_default"/>
+        android:layout_above="@+id/btn_start_recipe"
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="2dp">
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/img_detail_recipe"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/img_recipe_card_default" />
 
             <TextView
                 android:id="@+id/recipe_detail_title"
@@ -32,14 +33,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/recipe_detail_title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:layout_weight="3"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:orientation="horizontal"
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/recipe_detail_time"
@@ -47,90 +47,102 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="@string/recipe_detail_time"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/recipe_detail_mealType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="11dp"
                     android:text="@string/recipe_detail_mealType"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_weight="1"
+                    android:textAlignment="textEnd"/>
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/recipe_detail_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/recipe_detail_default_description"
+                android:justificationMode="inter_word"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <LinearLayout
+                        android:id="@+id/expandableLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="13dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:padding="2dp"
+                            android:text="@string/recipe_detail_ingredient_title"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
+
+                        <ImageView
+                            android:id="@+id/recipe_detail_ingredient_recyclerView_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_down_arrow" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recipe_detail_ingredient_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:paddingStart="15dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="15dp"
+                        android:paddingBottom="2dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/recipe_detail_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/recipe_detail_default_description"
-            android:justificationMode="inter_word"/>
+    </ScrollView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="8dp">
+    <Button
+        android:id="@+id/btn_start_recipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="11dp"
+        android:textAlignment="center"
+        android:text="@string/btn_recipe_detail_start"
+        android:layout_alignParentBottom="true"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="2dp">
-
-                <LinearLayout
-                    android:id="@+id/expandableLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="13dp"
-                        android:layout_weight="3"
-                        android:gravity="center_vertical"
-                        android:padding="2dp"
-                        android:text="@string/recipe_detail_ingredient_title"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_down_arrow" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recipe_detail_ingredient_recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginBottom="5dp"
-                    android:paddingStart="15dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="15dp"
-                    android:paddingBottom="2dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/btn_start_recipe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="3dp"
-            android:text="@string/btn_recipe_detail_start"/>
+</RelativeLayout>
 
 
-    </LinearLayout>
 
-</ScrollView>
+
+

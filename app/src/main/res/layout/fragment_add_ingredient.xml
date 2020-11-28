@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AddIngredientFragment">
 
     <LinearLayout
@@ -77,9 +78,11 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/add_ingredient_recycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:padding="4dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,27 +19,21 @@ import es.android.dacooker.models.IngredientModel;
 
 public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.MyViewHolder> {
 
+    private final Context context;
     List<IngredientModel> ingredientList;
 
-    public AddIngredientRecyclerAdapter(List<IngredientModel> ingredientList){
+    public AddIngredientRecyclerAdapter(Context context, List<IngredientModel> ingredientList){
+        this.context = context;
         this.ingredientList = ingredientList;
     }
-
-    /*
-    public void adviseAdd(IngredientModel ing){
-        this.ingredientList.add(ing);
-        notifyItemInserted(ingredientList.size()-1);
-    }
-    */
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View ingredientItemView = layoutInflater.inflate(R.layout.add_ingredient_adapter_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(ingredientItemView);
-        return vh;
+        return new MyViewHolder(ingredientItemView);
     }
 
     @Override
@@ -46,13 +41,15 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
         IngredientModel ingredient = ingredientList.get(position);
         holder.nameIngredient.setText(ingredient.getIngredientName());
         holder.quantityIngredient.setText(ingredient.getQuantity());
-        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ingredientList.remove(position);
-                notifyItemRemoved(position);
-            }
+        holder.btnDelete.setOnClickListener( view -> {
+            ingredientList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, ingredientList.size());
         });
+    }
+
+    public List<IngredientModel> getList(){
+        return ingredientList;
     }
 
     @Override
@@ -62,7 +59,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
 
     //Intern Class
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        Button btnDelete;
+        ImageView btnDelete;
         TextView nameIngredient, quantityIngredient;
 
         public MyViewHolder(@NonNull View itemView) {
