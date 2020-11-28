@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_margin="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/step_order_add_listView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:text="@string/add_step_listView_order"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:id="@+id/step_description_add_listView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:text="@string/add_step_listView_description"
-                android:layout_weight="1"/>
+            android:layout_weight="2">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,53 +26,77 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
+                    android:text="@string/add_step_listView_step"
+                    style="@style/TextAppearance.AppCompat.SearchResult.Title"/>
+
+                <TextView
+                    android:id="@+id/step_order_add_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    style="@style/TextAppearance.AppCompat.SearchResult.Title"
+                    android:text="@string/add_step_listView_order"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/step_description_add_listView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:text="@string/add_step_listView_description"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp">
+
+                <TextView
                     android:id="@+id/step_hours_add_listView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    style="@style/TextAppearance.AppCompat.Small"
                     android:text="@string/add_step_listView_hours"/>
 
                 <TextView
                     android:id="@+id/step_minutes_add_listView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    style="@style/TextAppearance.AppCompat.Small"
                     android:text="@string/add_step_listView_minutes"/>
 
             </LinearLayout>
-
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_weight="6"
+            android:gravity="end"
             android:orientation="horizontal">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/add_step_listView_btnDelete"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:src="@drawable/ic_trash"
-                android:background="@color/red_500"/>
+                android:src="@drawable/ic_trash"/>
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/add_step_listView_btnUpdate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_edit"
-                android:layout_margin="8dp"
-                android:background="@color/red_700"
-                android:backgroundTint="#4185EF"/>
+                android:src="@drawable/ic_edit"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

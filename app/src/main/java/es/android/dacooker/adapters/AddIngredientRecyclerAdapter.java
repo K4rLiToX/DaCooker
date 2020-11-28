@@ -19,8 +19,8 @@ import es.android.dacooker.models.IngredientModel;
 
 public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngredientRecyclerAdapter.MyViewHolder> {
 
-    private Context context;
-    private List<IngredientModel> ingredientList;
+    private final Context context;
+    List<IngredientModel> ingredientList;
 
     public AddIngredientRecyclerAdapter(Context context, List<IngredientModel> ingredientList){
         this.context = context;
@@ -33,8 +33,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View ingredientItemView = layoutInflater.inflate(R.layout.add_ingredient_adapter_item, parent, false);
-        MyViewHolder vh = new MyViewHolder(ingredientItemView);
-        return vh;
+        return new MyViewHolder(ingredientItemView);
     }
 
     @Override
@@ -59,8 +58,8 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     }
 
     //Intern Class
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageButton btnDelete;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView btnDelete;
         TextView nameIngredient, quantityIngredient;
 
         public MyViewHolder(@NonNull View itemView) {

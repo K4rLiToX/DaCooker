@@ -5,17 +5,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,7 +39,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
     private TabLayout tabsLayout;
     private ViewPager viewPager;
-    private AddRecipePagerAdapter pagerAdapter;
+    AddRecipePagerAdapter pagerAdapter;
     private Button btnFinish, btnValidate;
 
     private Fragment add_recipe;
@@ -124,10 +126,14 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         String name, description, hours, minutes;
         String mtSelection;
         MealType mt = null;
+        ImageView image;
+        BitmapDrawable bitmapDrawable;
+        Bitmap bitmap;
         View v = add_recipe.getView();
 
         //Get Information
         name = ((EditText) v.findViewById(R.id.recipe_name_input)).getText().toString();
+        image = v.findViewById(R.id.recipe_img_input);
         description = ((EditText) v.findViewById(R.id.recipe_description_input)).getText().toString();
         hours = ((EditText) v.findViewById(R.id.recipe_hour_input)).getText().toString();
         minutes = ((EditText) v.findViewById(R.id.recipe_minute_input)).getText().toString();
@@ -141,6 +147,10 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         //Prepare Recipe
         RecipeModel r = new RecipeModel();
         r.setRecipeName(name);
+
+        bitmapDrawable = (BitmapDrawable) image.getDrawable();
+        bitmap = bitmapDrawable.getBitmap();
+                
         r.setRecipeDescription(description);
         r.setExecutionTime(hours+":"+minutes);
         r.setMealType(mt);

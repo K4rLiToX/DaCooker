@@ -17,7 +17,7 @@ import es.android.dacooker.models.IngredientModel;
 public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRecyclerAdapter.IngredientViewHolder>{
 
     //List to Show
-    private List<IngredientModel> ingredientList;
+    List<IngredientModel> ingredientList;
 
     public IngredientRecyclerAdapter(List<IngredientModel> ingredientList){
         this.ingredientList = ingredientList;
@@ -28,8 +28,7 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
     public IngredientRecyclerAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View ingredientCardView = layoutInflater.inflate(R.layout.ingredient_dropdown_card, parent, false);
-        IngredientRecyclerAdapter.IngredientViewHolder vh = new IngredientRecyclerAdapter.IngredientViewHolder(ingredientCardView);
-        return vh;
+        return new IngredientViewHolder(ingredientCardView);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
     }
 
     //Intern Class
-    class IngredientViewHolder extends RecyclerView.ViewHolder {
+    static class IngredientViewHolder extends RecyclerView.ViewHolder {
 
         TextView ingredientCardName, ingredientCardQuantity;
         LinearLayout expandableLayout;

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,8 +20,8 @@ import es.android.dacooker.models.StepModel;
 
 public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecyclerAdapter.ViewHolder> {
 
-    private Context context;
-    private List<StepModel> stepModelList;
+    private final Context context;
+    List<StepModel> stepModelList;
 
     public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList){
         this.context = context;
@@ -33,8 +34,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View stepItemView = layoutInflater.inflate(R.layout.add_step_adapter_item, parent, false);
-        ViewHolder vh = new ViewHolder(stepItemView);
-        return vh;
+        return new ViewHolder(stepItemView);
     }
 
     public List<StepModel> getStepModelList(){
@@ -76,8 +76,8 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     }
 
     //Intern Class
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton btnDelete, btnUpdate;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView btnDelete, btnUpdate;
         TextView orderStep, descriptionStep, hoursStep, minutesStep;
 
         public ViewHolder(@NonNull View itemView) {

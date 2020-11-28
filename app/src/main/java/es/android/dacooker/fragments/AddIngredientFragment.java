@@ -82,10 +82,6 @@ public class AddIngredientFragment extends Fragment {
         return v;
     }
 
-    public List<IngredientModel> getIngredientList(){
-        return this.ingredientList;
-    }
-
     private boolean validFields(){  //Cambiar para Validación Bien
         if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().trim().equalsIgnoreCase("") ||
                 til_name.getText().toString() == null || til_quantity.getText().toString() == null ) return false;

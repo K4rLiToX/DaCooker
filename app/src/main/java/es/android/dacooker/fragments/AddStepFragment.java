@@ -131,9 +131,7 @@ public class AddStepFragment extends Fragment {
         String hour = input_hours.getText().toString().trim();
         String minute = input_minute.getText().toString().trim();
         if(timerOn && (hour.equalsIgnoreCase("") || hour == null) ) return false;
-        if(timerOn && (minute.equalsIgnoreCase("") || minute == null ||
-                (Integer.parseInt(hour) != 0 && Integer.parseInt(minute) > 59))) return false;
-
-        return true;
+        return !timerOn || (!minute.equalsIgnoreCase("") && minute != null &&
+                (Integer.parseInt(hour) == 0 || Integer.parseInt(minute) <= 59));
     }
 }

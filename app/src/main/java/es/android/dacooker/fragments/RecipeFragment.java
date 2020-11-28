@@ -43,11 +43,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     private RecyclerView recipeRecyclerView;
     private TextView tvNoRecipes;
     //Adapters
-    private RecyclerViewAdapter adapter;
-    //Interface
-    private RecipeClickListener recipeClickListener;
-    //Services
-    private BBDD_Helper db;
+    RecyclerViewAdapter adapter;
 
 
     public RecipeFragment() {
@@ -70,9 +66,9 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     private void initListAndRecyclerView() {
-        db = new BBDD_Helper(getActivity().getApplicationContext());
+        BBDD_Helper db = new BBDD_Helper(getActivity().getApplicationContext());
         this.recipeList = BD_Operations.getRecipes(db);
-        adapter = new RecyclerViewAdapter(recipeList,recipeClickListener);
+        adapter = new RecyclerViewAdapter(recipeList,this);
 
         Toast.makeText(getContext(), recipeList.size() + "", Toast.LENGTH_LONG).show();
         if(this.recipeList.isEmpty()){

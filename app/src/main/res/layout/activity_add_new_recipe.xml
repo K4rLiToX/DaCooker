@@ -20,6 +20,7 @@
             android:id="@+id/add_recipe_viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@+id/btnFinish_activity"
             android:layout_below="@id/add_recipe_tab_layout"/>
 
         <Button

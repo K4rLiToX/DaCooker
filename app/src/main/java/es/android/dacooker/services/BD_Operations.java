@@ -91,14 +91,10 @@ public class BD_Operations {
 
             ids = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID));
 
-            cursor.close();
-            db.close();
-            return ids;
-        } else {
-            cursor.close();
-            db.close();
-            return ids;
         }
+        cursor.close();
+        db.close();
+        return ids;
 
     }
 
@@ -233,7 +229,6 @@ public class BD_Operations {
                         imageSaved
                 );
                 recipes.add(r);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
         }
             cursor.close();
@@ -338,8 +333,7 @@ public class BD_Operations {
         List<RecipeModel> recipes = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do {
                 //Tratamos la imagen
                 byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
                 Bitmap imageSaved;
@@ -356,8 +350,7 @@ public class BD_Operations {
                         imageSaved
                 );
                 recipes.add(r);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -429,7 +422,6 @@ public class BD_Operations {
                         imageSaved
                 );
                 recipes.add(r);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
 
             cursor.close();
@@ -498,7 +490,6 @@ public class BD_Operations {
                         imageSaved
                 );
                 recipes.add(r);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
 
             cursor.close();
@@ -568,7 +559,6 @@ public class BD_Operations {
                 );
                 recipes.add(r);
                 untilFive--;
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext() && untilFive > 0);
 
             cursor.close();
@@ -643,19 +633,17 @@ public class BD_Operations {
                 " WHERE id = ? and order_s >= ?  ", param);
 
         if(cursor.moveToFirst()) {
-
-            while(cursor.moveToNext()) {
-
+            do {
                 boolean boolSaved = IntToBoolean(cursor.getInt(
-                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
                 StepModel sn = new StepModel(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
-                    boolSaved,
-                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
+                        boolSaved,
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 
                 );
 
@@ -673,7 +661,7 @@ public class BD_Operations {
                         selectionArgs);
 
                 cursor.moveToNext();
-            }
+            } while(cursor.moveToNext());
         }
     }
 
@@ -687,9 +675,7 @@ public class BD_Operations {
                 " WHERE id = ? and order_s >= ?  ", param);
 
         if(cursor.moveToFirst()) {
-
-            while(cursor.moveToNext()) {
-
+            do {
                 boolean boolSaved = IntToBoolean(cursor.getInt(
                         cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
@@ -717,7 +703,7 @@ public class BD_Operations {
                         selectionArgs);
 
                 cursor.moveToNext();
-            }
+            } while(cursor.moveToNext());
         }
     }
 
@@ -760,11 +746,9 @@ public class BD_Operations {
                 " WHERE id_recipe = ? ;", param);
 
         if(cursor.moveToFirst()) {
-
-            while(cursor.moveToNext()) {
-
+            do {
                 boolean boolSaved = IntToBoolean(cursor.getInt(
-                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
                 StepModel sn = new StepModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
@@ -786,7 +770,7 @@ public class BD_Operations {
                         selectionArgs);
 
                 cursor.moveToNext();
-            }
+            } while(cursor.moveToNext());
         }
 
     }
@@ -800,11 +784,9 @@ public class BD_Operations {
                 " WHERE id_recipe = ? ;", param);
 
         if(cursor.moveToFirst()) {
-
-            while(cursor.moveToNext()) {
-
+            do {
                 boolean boolSaved = IntToBoolean(cursor.getInt(
-                            cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
+                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
                 StepModel sn = new StepModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
@@ -826,7 +808,7 @@ public class BD_Operations {
                         selectionArgs);
 
                 cursor.moveToNext();
-            }
+            } while(cursor.moveToNext());
         }
 
     }
@@ -918,8 +900,7 @@ public class BD_Operations {
         List<StepModel> steps = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do {
                 //Tratamos el booleano
                 boolean saved = IntToBoolean(cursor.getInt(
                         cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
@@ -935,7 +916,7 @@ public class BD_Operations {
                 );
                 steps.add(s);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -981,8 +962,7 @@ public class BD_Operations {
         List<StepModel> steps = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do{
                 //Tratamos el booleano
                 boolean saved = IntToBoolean(cursor.getInt(
                         cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
@@ -998,7 +978,7 @@ public class BD_Operations {
                 );
                 steps.add(s);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -1044,8 +1024,7 @@ public class BD_Operations {
         List<StepModel> steps = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do {
                 StepModel s = new StepModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
@@ -1056,7 +1035,7 @@ public class BD_Operations {
                 );
                 steps.add(s);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
@@ -1148,9 +1127,7 @@ public class BD_Operations {
                 " WHERE id_recipe = ? ;", param);
 
         if(cursor.moveToFirst()) {
-
-            while(cursor.moveToNext()) {
-
+            do{
                 boolean boolSaved = IntToBoolean(cursor.getInt(
                         cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
@@ -1174,7 +1151,7 @@ public class BD_Operations {
                         selectionArgs);
 
                 cursor.moveToNext();
-            }
+            } while(cursor.moveToNext());
         }
 
     }
@@ -1254,8 +1231,7 @@ public class BD_Operations {
         List<IngredientModel> ingredients = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do {
                 //Creamos el Ingredient
                 IngredientModel i = new IngredientModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_ID)),
@@ -1265,8 +1241,7 @@ public class BD_Operations {
                 );
                 ingredients.add(i);
                 cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
-
+            } while(cursor.moveToNext());
             cursor.close();
             db.close();
             return ingredients;
@@ -1307,8 +1282,7 @@ public class BD_Operations {
         List<IngredientModel> ingredients = new ArrayList<>();
 
         if(cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
-
+            do {
                 //Creamos el Ingredient
                 IngredientModel i = new IngredientModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_ID)),
@@ -1317,8 +1291,7 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
                 );
                 ingredients.add(i);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
-            }
+            } while(cursor.moveToNext());
 
             cursor.close();
             db.close();
