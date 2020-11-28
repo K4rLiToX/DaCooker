@@ -1310,7 +1310,7 @@ public class BD_Operations {
     //
 
     // Transform Array to Bitmap -> To Show In App
-    public static Bitmap ArrayToBitmap(byte [] bitmapData){
+    public static Bitmap ArrayToBitmap(byte[] bitmapData){
         if(bitmapData == null){
             Bitmap solved = null;
             return solved;
