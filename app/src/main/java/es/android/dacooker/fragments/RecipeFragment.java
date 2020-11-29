@@ -2,6 +2,8 @@ package es.android.dacooker.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -9,6 +11,7 @@ import androidx.core.content.res.TypedArrayUtils;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +40,8 @@ import es.android.dacooker.utilities.SingletonMap;
  */
 public class RecipeFragment extends Fragment implements RecipeClickListener{
 
+    //Constants
+    final String SHARED_IMG_KEY = "SHARED_IMG_KEY";
     //List to Show
     private List<RecipeModel> recipeList;
     //Views
@@ -85,6 +90,9 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         RecipeModel recipe = recipeList.get(position);
         Intent i = new Intent(getActivity(), RecipeDetails.class);
         i.putExtra("recipeSelected", recipe);
+        //Bitmap is not serializable, so instead we get the recipeImage and use the SingletonMap
+        Bitmap recipeImageBitmap = recipe.getImage();
+        SingletonMap.getInstance().put(SHARED_IMG_KEY, recipeImageBitmap);
         startActivity(i);
     }
 

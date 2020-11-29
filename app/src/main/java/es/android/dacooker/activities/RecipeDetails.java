@@ -3,7 +3,10 @@ package es.android.dacooker.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,10 +20,12 @@ import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.IngredientRecyclerAdapter;
+import es.android.dacooker.fragments.RecipeFragment;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
+import es.android.dacooker.utilities.SingletonMap;
 
 
 public class RecipeDetails extends AppCompatActivity {
@@ -41,6 +46,9 @@ public class RecipeDetails extends AppCompatActivity {
 
     //Ingredient's List to Show
     private List<IngredientModel> ingredientList;
+
+    //Image Bitmap
+    private Bitmap imageBitmap;
 
 
     @Override
@@ -85,6 +93,8 @@ public class RecipeDetails extends AppCompatActivity {
             BBDD_Helper db = new BBDD_Helper(getApplicationContext());
             this.recipeSelected = (RecipeModel) getIntent().getSerializableExtra("recipeSelected");
             this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
+            //Get the image bitmap stored in SingletonMap
+            this.imageBitmap = (Bitmap) SingletonMap.getInstance().get("SHARED_IMG_KEY");
         } catch (Exception e){
             ingredientList = new ArrayList<>();
         }
@@ -94,8 +104,10 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void setViews(){
-        if(this.recipeSelected.getImage() != null) this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
+
+        if(this.imageBitmap != null) this.imgRecipeDetail.setImageBitmap(this.imageBitmap);
         else this.imgRecipeDetail.setImageResource(R.drawable.img_recipe_card_default);
+
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
         this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTime());
         this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));

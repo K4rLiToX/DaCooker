@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -134,6 +135,8 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         //Get Information
         name = ((EditText) v.findViewById(R.id.recipe_name_input)).getText().toString();
         image = v.findViewById(R.id.recipe_img_input);
+        bitmapDrawable = (BitmapDrawable) image.getDrawable();
+        bitmap = bitmapDrawable.getBitmap();
         description = ((EditText) v.findViewById(R.id.recipe_description_input)).getText().toString();
         hours = ((EditText) v.findViewById(R.id.recipe_hour_input)).getText().toString();
         minutes = ((EditText) v.findViewById(R.id.recipe_minute_input)).getText().toString();
@@ -148,9 +151,9 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         RecipeModel r = new RecipeModel();
         r.setRecipeName(name);
 
-        bitmapDrawable = (BitmapDrawable) image.getDrawable();
-        bitmap = bitmapDrawable.getBitmap();
-                
+        Bitmap default_img = BitmapFactory.decodeResource(getResources(), R.drawable.img_recipe_card_default);
+        if(!bitmap.equals(default_img)) r.setImage(bitmap);
+        else r.setImage(null);
         r.setRecipeDescription(description);
         r.setExecutionTime(hours+":"+minutes);
         r.setMealType(mt);

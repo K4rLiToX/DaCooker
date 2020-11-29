@@ -15,7 +15,7 @@ public class RecipeModel implements Serializable {
     private String executionTime;
     private String recipeDescription;
     private int timesCooked;
-    private Bitmap image;
+    private transient Bitmap image;
     private List<IngredientModel> ingredientsList;
     private List<StepModel> stepsList;
 
