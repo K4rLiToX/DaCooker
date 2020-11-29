@@ -41,8 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if(recipe.getImage() != null) holder.imgRecipeCard.setImageBitmap(recipe.getImage());
         else holder.imgRecipeCard.setImageResource(R.drawable.img_recipe_card_default);
         holder.titleRecipeCard.setText(recipe.getRecipeName());
-        holder.timeRecipeCardH.setText(recipe.getExecutionTimeHour()+"h ");
-        holder.timeRecipeCardMin.setText(recipe.getExecutionTimeMinute()+"min");
+        holder.timeRecipeCard.setText(recipe.getExecutionTimeHour()+"h " + recipe.getExecutionTimeMinute()+"min");
         holder.mealTypeRecipeCard.setText(recipe.getMealType().name());
     }
 
@@ -54,14 +53,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     //Intern Class
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgRecipeCard;
-        TextView titleRecipeCard, timeRecipeCardH, timeRecipeCardMin, mealTypeRecipeCard;
+        TextView titleRecipeCard, timeRecipeCard, mealTypeRecipeCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.imgRecipeCard = itemView.findViewById(R.id.img_card_recipe);
             this.titleRecipeCard = itemView.findViewById(R.id.recipe_card_title);
-            this.timeRecipeCardH = itemView.findViewById(R.id.recipe_card_time_hours);
-            this.timeRecipeCardMin = itemView.findViewById(R.id.recipe_card_time_minute);
+            this.timeRecipeCard = itemView.findViewById(R.id.recipe_card_time);
             this.mealTypeRecipeCard = itemView.findViewById(R.id.recipe_card_mealType);
 
             itemView.setOnClickListener( view -> {

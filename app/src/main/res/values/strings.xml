@@ -15,6 +15,7 @@
 
     <!-- Recipe Card-->
     <string name="recipe_card_title">Recipe Card Title</string>
+    <string name="recipe_card_time">Recipe Execution Time</string>
     <string name="recipe_card_hours">Recipe Hour</string>
     <string name="recipe_card_minutes">Recipe Minute</string>
     <string name="recipe_card_img_description">Recipe Card Image</string>
@@ -24,6 +25,7 @@
     <string name="recipe_detail_default_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis massa ante, quis viverra risus luctus ut. Proin faucibus mauris sollicitudin felis fermentum pretium. Aliquam venenatis in nunc et vestibulum. Nullam ac egestas sem. In mattis enim felis, vel facilisis nunc placerat non. Aliquam dapibus enim lectus, a dapibus ipsum malesuada sed. Curabitur et cursus justo, sit amet hendrerit neque. Nulla non turpis congue sapien rhoncus finibus ut venenatis dui. Sed eu lacus enim. Proin ornare in augue eget lacinia. Nulla facilisi. Ut vel ligula sit amet sem tincidunt porta in sit amet metus. Nullam congue porttitor velit, ut consequat.</string>
     <string name="recipe_detail_ingredient_title">Ingredients</string>
     <string name="recipe_detail_title">Recipe Detail Title</string>
+    <string name="recipe_detail_time">Recipe Detail Time</string>
     <string name="recipe_detail_time_hour">Recipe Hour</string>
     <string name="recipe_detail_time_minute">Recipe Minute</string>
     <string name="recipe_detail_mealType">Meal Type</string>

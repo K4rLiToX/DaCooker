@@ -41,32 +41,14 @@
                 android:orientation="horizontal"
                 android:padding="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/recipe_detail_time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="2dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/recipe_detail_time_hour"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/recipe_detail_time_hour"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:layout_weight="1"/>
-
-                    <TextView
-                        android:id="@+id/recipe_detail_time_minute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/recipe_detail_time_minute"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:text="@string/recipe_detail_time"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/recipe_detail_mealType"
@@ -75,7 +57,7 @@
                     android:layout_marginEnd="11dp"
                     android:text="@string/recipe_detail_mealType"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:textAlignment="textEnd"/>
 
             </LinearLayout>
