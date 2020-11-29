@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,10 @@ import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Objects;
 
 import es.android.dacooker.R;
@@ -41,6 +45,7 @@ public class AddRecipeFragment extends Fragment {
     MealType[] MEALTYPES = MealType.values();
     ArrayAdapter<MealType> adapter;
     AutoCompleteTextView mealTypeDropdown;
+    FloatingActionButton fabTakephoto;
 
     EditText recipeName, recipeHours, recipeMinutes, recipeDescription;
     ImageView recipePhoto;
@@ -49,6 +54,8 @@ public class AddRecipeFragment extends Fragment {
     final String RUTA_IMAGEN = CARPETA_RAIZ + "misFotos";
     String path = "";
 
+    //Propio
+    private Uri photoURI;
 
     public AddRecipeFragment() {
         // Required empty public constructor
@@ -73,7 +80,8 @@ public class AddRecipeFragment extends Fragment {
 
         FloatingActionButton fabTakePhoto = v.findViewById(R.id.fabTakeRecipePhoto);
         fabTakePhoto.setOnClickListener(photo ->{
-            takeRecipePhoto();
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent,20);
         });
 
         FloatingActionButton fabSelectPhoto = v.findViewById(R.id.fabSelectRecipePhoto);
@@ -85,6 +93,7 @@ public class AddRecipeFragment extends Fragment {
     }
 
     private void takeRecipePhoto() {
+
         File fileImage = new File(Environment.getExternalStorageDirectory(), RUTA_IMAGEN);
         boolean isCreada = fileImage.exists();
         String imageName="";
@@ -104,6 +113,7 @@ public class AddRecipeFragment extends Fragment {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //Lanza la app de camara
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); //Enviar la imgen tomada y almacenarla
         startActivityForResult(intent, 20);
+
     }
 
     private void selectRecipePhoto(){
@@ -122,8 +132,17 @@ public class AddRecipeFragment extends Fragment {
                     recipePhoto.setImageURI(miPath);
                     break;
                 case 20:
-                    Bundle extras = data.getExtras();
-                    Bitmap bitmap = (Bitmap) extras.get("data");
+                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    // convert byte array to Bitmap
+
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
+                            byteArray.length);
+
                     recipePhoto.setImageBitmap(bitmap);
                     break;
             }
