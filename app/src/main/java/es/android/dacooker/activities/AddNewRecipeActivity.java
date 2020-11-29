@@ -66,7 +66,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                     btnFinish.setVisibility(View.VISIBLE);
                 else btnFinish.setVisibility(View.INVISIBLE);
 
-                if(tabsLayout.getSelectedTabPosition() == 1)
+                if(tabsLayout.getSelectedTabPosition() == 0)
                     btnValidate.setVisibility(View.VISIBLE);
                 else btnValidate.setVisibility(View.INVISIBLE);
 

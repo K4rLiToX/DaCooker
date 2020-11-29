@@ -586,7 +586,8 @@ public class BD_Operations {
         ContentValues values = new ContentValues();
         values.put(Struct_BD.STEP_DESCRIPTION, s.getDescription());
         values.put(Struct_BD.STEP_REQUIRED_TIMER, BooleanToInt(s.isRequiredTimer()));
-        values.put(Struct_BD.STEP_TIMER_TIME, s.getTimerTime());
+        values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerHour());
+        values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerMinute());
         values.put(Struct_BD.STEP_ORDER, s.getStepOrder());
         values.put(Struct_BD.STEP_RECIPE, id_recipe);
 
@@ -606,7 +607,8 @@ public class BD_Operations {
         ContentValues values = new ContentValues();
         values.put(Struct_BD.STEP_DESCRIPTION, s.getDescription());
         values.put(Struct_BD.STEP_REQUIRED_TIMER, s.isRequiredTimer());
-        values.put(Struct_BD.STEP_TIMER_TIME, s.getTimerTime());
+        values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerHour());
+        values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerMinute());
         values.put(Struct_BD.STEP_ORDER, s.getStepOrder());
 
         // Which row to update, based on the title
@@ -641,7 +643,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         boolSaved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 
@@ -683,7 +686,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         boolSaved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 
@@ -754,7 +758,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         boolSaved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 
@@ -792,7 +797,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         boolSaved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 
@@ -822,7 +828,8 @@ public class BD_Operations {
                 Struct_BD.STEP_ID,
                 Struct_BD.STEP_DESCRIPTION,
                 Struct_BD.STEP_REQUIRED_TIMER,
-                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_TIMER_HOUR,
+                Struct_BD.STEP_TIMER_MINUTE,
                 Struct_BD.STEP_ORDER,
                 Struct_BD.STEP_RECIPE
         };
@@ -851,7 +858,8 @@ public class BD_Operations {
                     id_step,
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                     saved,
-                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
             );
@@ -876,7 +884,8 @@ public class BD_Operations {
                 Struct_BD.STEP_ID,
                 Struct_BD.STEP_DESCRIPTION,
                 Struct_BD.STEP_REQUIRED_TIMER,
-                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_TIMER_HOUR,
+                Struct_BD.STEP_TIMER_MINUTE,
                 Struct_BD.STEP_ORDER,
                 Struct_BD.STEP_RECIPE
         };
@@ -910,7 +919,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         saved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
@@ -938,7 +948,8 @@ public class BD_Operations {
                 Struct_BD.STEP_ID,
                 Struct_BD.STEP_DESCRIPTION,
                 Struct_BD.STEP_REQUIRED_TIMER,
-                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_TIMER_HOUR,
+                Struct_BD.STEP_TIMER_MINUTE,
                 Struct_BD.STEP_ORDER,
                 Struct_BD.STEP_RECIPE
         };
@@ -972,7 +983,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         saved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
@@ -1000,7 +1012,8 @@ public class BD_Operations {
                 Struct_BD.STEP_ID,
                 Struct_BD.STEP_DESCRIPTION,
                 Struct_BD.STEP_REQUIRED_TIMER,
-                Struct_BD.STEP_TIMER_TIME,
+                Struct_BD.STEP_TIMER_HOUR,
+                Struct_BD.STEP_TIMER_MINUTE,
                 Struct_BD.STEP_ORDER,
                 Struct_BD.STEP_RECIPE
         };
@@ -1029,7 +1042,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         req_timer,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
@@ -1135,7 +1149,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
                         boolSaved,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
 

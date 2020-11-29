@@ -28,7 +28,8 @@ public class Struct_BD {
     protected static final String STEP_ID = "ID";
     protected static final String STEP_DESCRIPTION = "DESCRIPTION";
     protected static final String STEP_REQUIRED_TIMER = "REQUIRED_TIMER";
-    protected static final String STEP_TIMER_TIME = "TIMER_TIME";
+    protected static final String STEP_TIMER_HOUR = "TIMER_HOUR";
+    protected static final String STEP_TIMER_MINUTE = "TIMER_MINUTE";
     protected static final String STEP_ORDER = "ORDER_S";
     protected static final String STEP_RECIPE = "ID_RECIPE";
 
@@ -36,7 +37,8 @@ public class Struct_BD {
             + STEP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + STEP_DESCRIPTION + " TEXT,"
             + STEP_REQUIRED_TIMER + " BOOLEAN,"
-            + STEP_TIMER_TIME + " TEXT,"
+            + STEP_TIMER_HOUR + " INTEGER,"
+            + STEP_TIMER_MINUTE + " INTEGER,"
             + STEP_ORDER + " INTEGER,"
             + STEP_RECIPE + " INTEGER )";
 

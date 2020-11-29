@@ -47,15 +47,10 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
         holder.orderStep.setText(String.valueOf(step.getStepOrder()));
         holder.descriptionStep.setText(String.valueOf(step.getDescription()));
 
-        String timer = step.getTimerTime();
-        String hours = "", minutes = "";
-        if(timer != null) {
-            String[] aux = timer.split(":");
-            hours = aux[0];
-            minutes = aux[1];
-        }
-        holder.hoursStep.setText(String.valueOf(hours));
-        holder.minutesStep.setText(String.valueOf(minutes));
+        String hours = step.getTimerHour()+"h", minutes = step.getTimerMinute()+"min";
+
+        holder.hoursStep.setText(hours);
+        holder.minutesStep.setText(minutes);
 
         holder.btnDelete.setOnClickListener( view -> {
             stepModelList.remove(position);

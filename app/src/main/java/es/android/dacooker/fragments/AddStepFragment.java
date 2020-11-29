@@ -91,14 +91,12 @@ public class AddStepFragment extends Fragment {
                 step.setRequiredTimer(timerOn);
 
                 String timer = null;
-                if(timerOn) timer = input_hours.getText().toString().trim() + ":" + input_minute.getText().toString().trim();
-                step.setTimerTime(timer);
-
+                if(timerOn) {
+                    step.setTimerHour(Integer.parseInt(input_hours.getText().toString().trim()));
+                    step.setTimerMinute(Integer.parseInt(input_minute.getText().toString().trim()));
+                }
 
                 stepsList.add(step);
-
-                //Eliminar cuando funcione
-                Toast.makeText(getActivity().getApplicationContext(), stepsList.size()+"", Toast.LENGTH_SHORT).show();
 
                 rwAdapter.notifyItemInserted(stepsList.size()-1);
                 til_order.setText("");
@@ -126,7 +124,6 @@ public class AddStepFragment extends Fragment {
     private boolean validFields(boolean timerOn){  //Cambiar para Validación Bien
         if(til_order.getText().toString().trim().equalsIgnoreCase("") || til_order.getText().toString() == null ) return false;
         if(til_description.getText().toString().trim().equalsIgnoreCase("") || til_order.getText().toString() == null ) return false;
-
 
         String hour = input_hours.getText().toString().trim();
         String minute = input_minute.getText().toString().trim();

@@ -9,7 +9,8 @@ public class StepModel implements Serializable {
     private int id;
     private String description;
     private boolean requiredTimer;
-    private String timerTime;
+    private int timer_hour;
+    private int timer_minute;
     private int stepOrder;
     private int recipe_id;
 
@@ -19,12 +20,13 @@ public class StepModel implements Serializable {
     public StepModel() {}
 
     //All Attributes Constructor
-    public StepModel(int id, String description, boolean requiredTimer, String timerTime, int stepOrder, int recipe_id) {
+    public StepModel(int id, String description, boolean requiredTimer, int timer_hour, int timer_minute, int stepOrder, int recipe_id) {
         this.id = id;
         this.stepOrder = stepOrder;
         this.description = description;
         this.requiredTimer = requiredTimer;
-        this.timerTime = timerTime;
+        this.timer_hour = timer_hour;
+        this.timer_minute = timer_minute;
         this.recipe_id = recipe_id;
     }
 
@@ -56,12 +58,20 @@ public class StepModel implements Serializable {
         this.requiredTimer = requiredTimer;
     }
 
-    public String getTimerTime() {
-        return this.timerTime;
+    public int getTimerHour() {
+        return this.timer_hour;
     }
 
-    public void setTimerTime(String timerTime) {
-        this.timerTime = timerTime;
+    public void setTimerHour(int timer_hour) {
+        this.timer_hour = timer_hour;
+    }
+
+    public int getTimerMinute() {
+        return this.timer_minute;
+    }
+
+    public void setTimerMinute(int timer_minute) {
+        this.timer_minute = timer_minute;
     }
 
     public int getRecipe_Id() {

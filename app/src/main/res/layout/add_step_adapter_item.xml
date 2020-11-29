@@ -67,6 +67,7 @@
                     android:id="@+id/step_minutes_add_listView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
                     style="@style/TextAppearance.AppCompat.Small"
                     android:text="@string/add_step_listView_minutes"/>
 
