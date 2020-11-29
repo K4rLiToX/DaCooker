@@ -57,6 +57,14 @@
     <string name="add_recipe_btnNext">Next</string>
     <string name="add_recipe_execTime">Execution Time</string>
 
+    <!-- Add Recipe - Alert Dialog -->
+    <string name="add_recipe_alert_dialog_title">Choose an Option</string>
+    <string name="add_recipe_alert_dialog_camera">Camera</string>
+    <string name="add_recipe_alert_dialog_gallery">Gallery</string>
+    <string name="add_recipe_alert_dialog_dismiss">Cancel</string>
+
+    <string name="add_recipe_alert_dialog_choose_gallery_app">Select Application</string>
+
     <!-- Add Recipe - Ingredient Inputs -->
     <string name="add_ingredient_text">Required Ingredients</string>
     <string name="add_ingredient_text2">Ingredients Added</string>
@@ -83,5 +91,6 @@
     <string name="add_step_listView_minutes">LV Minutes</string>
     <string name="add_recipe_btnFinish">Finish &amp; Cooking!</string>
     <string name="add_recipe_btnValidate">Validate Fields</string>
+    
 
 </resources>

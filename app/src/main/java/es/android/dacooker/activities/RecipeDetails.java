@@ -30,6 +30,9 @@ import es.android.dacooker.utilities.SingletonMap;
 
 public class RecipeDetails extends AppCompatActivity {
 
+    //SingletonMap Key
+    private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
+
     //Views
     private ImageView imgRecipeDetail, imgIngredientRecyclerViewIcon;
     private TextView tvRecipeTitleDetail, tvRecipeTimeDetail, tvRecipeMealType, tvRecipeDescription;
@@ -46,9 +49,6 @@ public class RecipeDetails extends AppCompatActivity {
 
     //Ingredient's List to Show
     private List<IngredientModel> ingredientList;
-
-    //Image Bitmap
-    private Bitmap imageBitmap;
 
 
     @Override
@@ -91,10 +91,8 @@ public class RecipeDetails extends AppCompatActivity {
     private void initParameters(){
         try {
             BBDD_Helper db = new BBDD_Helper(getApplicationContext());
-            this.recipeSelected = (RecipeModel) getIntent().getSerializableExtra("recipeSelected");
+            this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
             this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
-            //Get the image bitmap stored in SingletonMap
-            this.imageBitmap = (Bitmap) SingletonMap.getInstance().get("SHARED_IMG_KEY");
         } catch (Exception e){
             ingredientList = new ArrayList<>();
         }
@@ -105,7 +103,7 @@ public class RecipeDetails extends AppCompatActivity {
 
     private void setViews(){
 
-        if(this.imageBitmap != null) this.imgRecipeDetail.setImageBitmap(this.imageBitmap);
+        if(this.recipeSelected.getImage() != null) this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
         else this.imgRecipeDetail.setImageResource(R.drawable.img_recipe_card_default);
 
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());

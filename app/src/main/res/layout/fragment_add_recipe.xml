@@ -25,7 +25,7 @@
                 android:src="@drawable/img_recipe_card_default"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabTakeRecipePhoto"
+                android:id="@+id/fabChooseRecipePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_change_photo"
@@ -35,19 +35,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="8dp"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabSelectRecipePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_gallery"
-                app:tint="@color/white"
-                app:maxImageSize="20dp"
-                app:fabSize="mini"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="65dp"/>
-
 
         </RelativeLayout>
 
