@@ -8,7 +8,8 @@ public class Struct_BD {
     protected static final String RECIPE_NAME = "NAME";
     protected static final String RECIPE_IMAGE = "IMAGE";
     protected static final String RECIPE_MEALTYPE = "MEAL_TYPE";
-    protected static final String RECIPE_EXEC_TIME = "EXECUTION_TIME";
+    protected static final String RECIPE_EXEC_TIME_HOUR = "EXECUTION_HOUR";
+    protected static final String RECIPE_EXEC_TIME_MINUTE = "EXECUTION_MINUTE";
     protected static final String RECIPE_DESCRIPTION = "RECIPE_DESCRIPTION";
     protected static final String RECIPE_TIMES_COOKED = "TIMES_COOKED";
 
@@ -16,7 +17,8 @@ public class Struct_BD {
             + RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + RECIPE_NAME + " TEXT,"
             + RECIPE_MEALTYPE + " TEXT,"
-            + RECIPE_EXEC_TIME + " TEXT,"
+            + RECIPE_EXEC_TIME_HOUR + " INTEGER,"
+            + RECIPE_EXEC_TIME_MINUTE + " INTEGER,"
             + RECIPE_DESCRIPTION + " TEXT,"
             + RECIPE_TIMES_COOKED + " INTEGER,"
             + RECIPE_IMAGE + " BLOB )";

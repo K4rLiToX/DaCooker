@@ -147,6 +147,10 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         if(!mtSelection.trim().equals("") && mtSelection != null)
             mt = MealType.valueOf(mtSelection);
 
+        int h, min;
+        if(hours.equalsIgnoreCase("") || hours == null) h = -1;
+        if(minutes.equalsIgnoreCase("") || minutes == null) min = -1;
+
         //Prepare Recipe
         RecipeModel r = new RecipeModel();
         r.setRecipeName(name);
@@ -155,7 +159,8 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         if(!bitmap.equals(default_img)) r.setImage(bitmap);
         else r.setImage(null);
         r.setRecipeDescription(description);
-        r.setExecutionTime(hours+":"+minutes);
+        r.setExecutionTimeHour(Integer.parseInt(hours));
+        r.setExecutionTimeMinute(Integer.parseInt(minutes));
         r.setMealType(mt);
 
         return r;
@@ -179,17 +184,15 @@ public class AddNewRecipeActivity extends AppCompatActivity {
     private boolean validateRecipeFields(){
         RecipeModel r = this.getRecipeData();
 
-        String[] time =  r.getExecutionTime().split(":");
-
         String error = "";
 
         if(r.getRecipeName().trim().equalsIgnoreCase("") || r.getRecipeName().length() > 60)
             error = "Recipe name must be between 0 and 60 characters";
         else if(r.getRecipeDescription().length() > 140)
             error = "Description must be between 0-140 characters";
-        else if(time.length <= 0 || time[0].trim().equalsIgnoreCase("") || Integer.parseInt(time[0]) < 0)
+        else if(r.getExecutionTimeHour() < 0)
             error = "Hours must be a number. If not necessary, put 0 in it";
-        else if(time.length <= 1 || time[1].trim().equalsIgnoreCase("") || Integer.parseInt(time[1]) < 0 || Integer.parseInt(time[1]) > 59)
+        else if(r.getExecutionTimeMinute() < 0 || r.getExecutionTimeMinute() > 59)
             error = "Minutes must be a number. Use 0 to 59 to fill";
         else if(r.getMealType() == null) error = "You have to use a MealType";
 

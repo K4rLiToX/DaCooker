@@ -107,7 +107,8 @@ public class BD_Operations {
         ContentValues values = new ContentValues();
         values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
         values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
-        values.put(Struct_BD.RECIPE_EXEC_TIME, r.getExecutionTime());
+        values.put(Struct_BD.RECIPE_EXEC_TIME_HOUR, r.getExecutionTimeHour());
+        values.put(Struct_BD.RECIPE_EXEC_TIME_MINUTE, r.getExecutionTimeMinute());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
         values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
 
@@ -125,7 +126,8 @@ public class BD_Operations {
         ContentValues values = new ContentValues();
         values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
         values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
-        values.put(Struct_BD.RECIPE_EXEC_TIME, r.getExecutionTime());
+        values.put(Struct_BD.RECIPE_EXEC_TIME_HOUR, r.getExecutionTimeHour());
+        values.put(Struct_BD.RECIPE_EXEC_TIME_MINUTE, r.getExecutionTimeMinute());
         values.put(Struct_BD.RECIPE_DESCRIPTION, r.getRecipeDescription());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
         values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
@@ -185,7 +187,8 @@ public class BD_Operations {
             Struct_BD.RECIPE_ID,
             Struct_BD.RECIPE_NAME,
             Struct_BD.RECIPE_MEALTYPE,
-            Struct_BD.RECIPE_EXEC_TIME,
+            Struct_BD.RECIPE_EXEC_TIME_HOUR,
+            Struct_BD.RECIPE_EXEC_TIME_MINUTE,
             Struct_BD.RECIPE_DESCRIPTION,
             Struct_BD.RECIPE_TIMES_COOKED,
             Struct_BD.RECIPE_IMAGE
@@ -223,7 +226,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
@@ -245,7 +249,8 @@ public class BD_Operations {
             Struct_BD.RECIPE_ID,
             Struct_BD.RECIPE_NAME,
             Struct_BD.RECIPE_MEALTYPE,
-            Struct_BD.RECIPE_EXEC_TIME,
+            Struct_BD.RECIPE_EXEC_TIME_HOUR,
+            Struct_BD.RECIPE_EXEC_TIME_MINUTE,
             Struct_BD.RECIPE_DESCRIPTION,
             Struct_BD.RECIPE_TIMES_COOKED,
             Struct_BD.RECIPE_IMAGE
@@ -284,7 +289,8 @@ public class BD_Operations {
                     id_recipe,
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                     mt,
-                    cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                     imageSaved
@@ -310,7 +316,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
                 Struct_BD.RECIPE_MEALTYPE,
-                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_EXEC_TIME_HOUR,
+                Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
@@ -344,7 +351,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mealType,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
@@ -365,21 +373,23 @@ public class BD_Operations {
     }
 
     //NO SE SI FUNCIONARÁ, LA VERDAD
-    public static List<RecipeModel> getRecipesByLessExecutionTime(String executionTime, BBDD_Helper dbHelper) throws Exception{
+    public static List<RecipeModel> getRecipesByLessExecutionTime(int executionTimeHour, int executionTimeMinute, BBDD_Helper dbHelper) throws Exception{
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
                 Struct_BD.RECIPE_MEALTYPE,
-                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_EXEC_TIME_HOUR,
+                Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
 
-        String selection = Struct_BD.RECIPE_EXEC_TIME + " <= ?";
-        String[] selectionArgs = { executionTime };
+        String selection = Struct_BD.RECIPE_EXEC_TIME_HOUR + " <= ? or ("
+                + Struct_BD.RECIPE_EXEC_TIME_HOUR + " == ? AND " + Struct_BD.RECIPE_EXEC_TIME_MINUTE + " <= ? )";
+        String[] selectionArgs = { executionTimeHour+"", executionTimeHour+"", executionTimeMinute+""};
 
         // How you want the results sorted in the resulting Cursor
         //String sortOrder = Struct_BBDD.NOMBRE_COLUMNA_2 + " DESC";
@@ -416,7 +426,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
@@ -443,14 +454,15 @@ public class BD_Operations {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
                 Struct_BD.RECIPE_MEALTYPE,
-                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_EXEC_TIME_HOUR,
+                Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
         };
 
         // How you want the results sorted in the resulting Cursor
-        String sortOrder = Struct_BD.RECIPE_EXEC_TIME + " DESC";
+        String sortOrder = Struct_BD.RECIPE_EXEC_TIME_HOUR + " ASC, " + Struct_BD.RECIPE_EXEC_TIME_MINUTE + " ASC";
 
         Cursor cursor = db.query(
                 Struct_BD.RECIPE_TABLE,
@@ -484,7 +496,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved
@@ -511,7 +524,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_ID,
                 Struct_BD.RECIPE_NAME,
                 Struct_BD.RECIPE_MEALTYPE,
-                Struct_BD.RECIPE_EXEC_TIME,
+                Struct_BD.RECIPE_EXEC_TIME_HOUR,
+                Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
                 Struct_BD.RECIPE_IMAGE
@@ -552,7 +566,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
                         mt,
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
                         imageSaved

@@ -12,7 +12,8 @@ public class RecipeModel implements Serializable {
     private int id;
     private String recipeName;
     private MealType mealType;
-    private String executionTime;
+    private int executionTime_Hour;
+    private int executionTime_Minute;
     private String recipeDescription;
     private int timesCooked;
     private transient Bitmap image;
@@ -25,11 +26,12 @@ public class RecipeModel implements Serializable {
     public RecipeModel(){}
 
     //All Attributes Constructor
-    public RecipeModel(int id, String recipeName, MealType mealType, String executionTime, String recipeDescription, int timesCooked, Bitmap image){
+    public RecipeModel(int id, String recipeName, MealType mealType, int executionTime_Hour, int executionTime_Minute, String recipeDescription, int timesCooked, Bitmap image){
         this.id = id;
         this.recipeName = recipeName;
         this.mealType = mealType;
-        this.executionTime = executionTime;
+        this.executionTime_Hour = executionTime_Hour;
+        this.executionTime_Minute = executionTime_Minute;
         this.recipeDescription = recipeDescription;
         this.timesCooked = timesCooked;
         this.image = image;
@@ -55,13 +57,17 @@ public class RecipeModel implements Serializable {
         this.mealType = mealType;
     }
 
-    public String getExecutionTime() {
-        return this.executionTime;
+    public int getExecutionTimeHour() {
+        return this.executionTime_Hour;
     }
 
-    public void setExecutionTime(String executionTime) {
-        this.executionTime = executionTime;
+    public void setExecutionTimeHour(int executionTime_Hour) { this.executionTime_Hour = executionTime_Hour; }
+
+    public int getExecutionTimeMinute() {
+        return this.executionTime_Minute;
     }
+
+    public void setExecutionTimeMinute(int executionTime_Minute) { this.executionTime_Minute = executionTime_Minute; }
 
     public String getRecipeDescription(){
         return this.recipeDescription;

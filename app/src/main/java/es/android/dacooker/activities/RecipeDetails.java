@@ -35,7 +35,7 @@ public class RecipeDetails extends AppCompatActivity {
 
     //Views
     private ImageView imgRecipeDetail, imgIngredientRecyclerViewIcon;
-    private TextView tvRecipeTitleDetail, tvRecipeTimeDetail, tvRecipeMealType, tvRecipeDescription;
+    private TextView tvRecipeTitleDetail, tvRecipeTimeDetailHour, tvRecipeTimeDetailMinute, tvRecipeMealType, tvRecipeDescription;
     private RecyclerView ingredientRecyclerView;
     Button btnStartRecipe;
     LinearLayout expandableLayout;
@@ -67,7 +67,8 @@ public class RecipeDetails extends AppCompatActivity {
     private void initViews(){
         this.imgRecipeDetail = findViewById(R.id.img_detail_recipe);
         this.tvRecipeTitleDetail = findViewById(R.id.recipe_detail_title);
-        this.tvRecipeTimeDetail = findViewById(R.id.recipe_detail_time);
+        this.tvRecipeTimeDetailHour = findViewById(R.id.recipe_detail_time_hour);
+        this.tvRecipeTimeDetailMinute = findViewById(R.id.recipe_detail_time_minute);
         this.tvRecipeMealType = findViewById(R.id.recipe_detail_mealType);
         this.tvRecipeDescription = findViewById(R.id.recipe_detail_description);
         this.ingredientRecyclerView = findViewById(R.id.recipe_detail_ingredient_recyclerView);
@@ -107,7 +108,8 @@ public class RecipeDetails extends AppCompatActivity {
         else this.imgRecipeDetail.setImageResource(R.drawable.img_recipe_card_default);
 
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
-        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTime());
+        this.tvRecipeTimeDetailHour.setText(this.recipeSelected.getExecutionTimeHour()+"h ");
+        this.tvRecipeTimeDetailMinute.setText(this.recipeSelected.getExecutionTimeMinute()+"min");
         this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));
         this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
     }
