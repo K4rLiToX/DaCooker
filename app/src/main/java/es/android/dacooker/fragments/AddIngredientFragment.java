@@ -59,7 +59,8 @@ public class AddIngredientFragment extends Fragment {
 
         btnAdd.setOnClickListener(view -> {
 
-            if(validFields()) {
+            String err = validFields();
+            if(err.equalsIgnoreCase("")) {
                 IngredientModel ing = new IngredientModel();
                 ing.setIngredientName(til_name.getText().toString());
                 ing.setQuantity(til_quantity.getText().toString());
@@ -74,7 +75,7 @@ public class AddIngredientFragment extends Fragment {
 
             } else {
                 //Errores
-                Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), err, Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -82,10 +83,14 @@ public class AddIngredientFragment extends Fragment {
         return v;
     }
 
-    private boolean validFields(){  //Cambiar para Validación Bien
-        if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().trim().equalsIgnoreCase("") ||
-                til_name.getText().toString() == null || til_quantity.getText().toString() == null ) return false;
+    private String validFields(){  //Cambiar para Validación Bien
 
-        return true;
+        String err = "";
+        if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_name.getText().toString().length() > 100)
+            err = "Name must be between 0-100 characters";
+        else if(til_quantity.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().length() > 100)
+            err = "Quantity must be between 0-50 characters";
+
+        return err;
     }
 }

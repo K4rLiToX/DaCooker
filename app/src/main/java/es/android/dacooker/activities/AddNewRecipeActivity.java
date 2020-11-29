@@ -147,9 +147,11 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         if(!mtSelection.trim().equals("") && mtSelection != null)
             mt = MealType.valueOf(mtSelection);
 
-        int h, min;
-        if(hours.equalsIgnoreCase("") || hours == null) h = -1;
-        if(minutes.equalsIgnoreCase("") || minutes == null) min = -1;
+        int h = 0, min = 0;
+        if(hours == null || hours.equalsIgnoreCase("")) h = -1;
+        else h = Integer.parseInt(hours);
+        if(minutes == null || minutes.equalsIgnoreCase("")) min = -1;
+        else min = Integer.parseInt(minutes);
 
         //Prepare Recipe
         RecipeModel r = new RecipeModel();
@@ -159,8 +161,8 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         if(!bitmap.equals(default_img)) r.setImage(bitmap);
         else r.setImage(null);
         r.setRecipeDescription(description);
-        r.setExecutionTimeHour(Integer.parseInt(hours));
-        r.setExecutionTimeMinute(Integer.parseInt(minutes));
+        r.setExecutionTimeHour(h);
+        r.setExecutionTimeMinute(min);
         r.setMealType(mt);
 
         return r;

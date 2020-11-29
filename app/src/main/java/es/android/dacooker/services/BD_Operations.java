@@ -107,6 +107,7 @@ public class BD_Operations {
         ContentValues values = new ContentValues();
         values.put(Struct_BD.RECIPE_NAME, r.getRecipeName());
         values.put(Struct_BD.RECIPE_MEALTYPE, r.getMealType().toString());
+        values.put(Struct_BD.RECIPE_DESCRIPTION, r.getRecipeDescription());
         values.put(Struct_BD.RECIPE_EXEC_TIME_HOUR, r.getExecutionTimeHour());
         values.put(Struct_BD.RECIPE_EXEC_TIME_MINUTE, r.getExecutionTimeMinute());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
