@@ -1,8 +1,11 @@
 package es.android.dacooker.fragments;
 
+import android.content.ClipData;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import es.android.dacooker.R;
@@ -75,6 +80,9 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
         rw = v.findViewById(R.id.add_step_recyclerView);
         rw.setAdapter(rwAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(rw);
 
         cb_timer.setOnClickListener(view -> {
             boolean timerOn = cb_timer.isChecked();
@@ -143,7 +151,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
        if(til_description.getText().toString().trim().isEmpty()) return false;
 
        if(timerOn && (input_hours.getText().toString().trim().isEmpty() || Integer.parseInt(input_hours.getText().toString()) < 0)) return false;
-        return !timerOn || (!input_minute.getText().toString().trim().isEmpty() && Integer.parseInt(input_minute.getText().toString()) >= 0 && Integer.parseInt(input_minute.getText().toString()) <= 59);
+       return !timerOn || (!input_minute.getText().toString().trim().isEmpty() && Integer.parseInt(input_minute.getText().toString()) >= 0 && Integer.parseInt(input_minute.getText().toString()) <= 59);
     }
 
     @Override
@@ -160,7 +168,9 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         } else {
             cb_timer.setChecked(false);
             input_hours.setEnabled(false);
+            input_hours.setText("");
             input_minute.setEnabled(false);
+            input_minute.setText("");
         }
     }
 
@@ -170,4 +180,25 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         rwAdapter.notifyItemRemoved(position);
         rwAdapter.notifyItemRangeChanged(position, stepsList.size());
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP |
+            ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            Collections.swap(stepsList, fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+            rwAdapter.notifyItemRangeChanged(fromPosition, stepsList.size());
+            rwAdapter.notifyItemRangeChanged(toPosition, stepsList.size());
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
 }
