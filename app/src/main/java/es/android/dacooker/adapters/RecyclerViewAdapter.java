@@ -18,9 +18,9 @@ import es.android.dacooker.models.RecipeModel;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     //List to Show
-    private List<RecipeModel> recipeList;
+    List<RecipeModel> recipeList;
     //Interface for OnClick
-    private RecipeClickListener recipeClickListener;
+    RecipeClickListener recipeClickListener;
 
     public RecyclerViewAdapter(List<RecipeModel> recipeList, RecipeClickListener recipeClickListener) {
         this.recipeList = recipeList;

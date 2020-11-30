@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import es.android.dacooker.R;
+import es.android.dacooker.interfaces.AddRecipeStepClickListener;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.StepModel;
 
@@ -22,10 +23,12 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     private final Context context;
     List<StepModel> stepModelList;
+    AddRecipeStepClickListener addRecipeStepClickListener;
 
-    public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList){
+    public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList, AddRecipeStepClickListener addRecipeStepClickListener){
         this.context = context;
         this.stepModelList = stepModelList;
+        this.addRecipeStepClickListener = addRecipeStepClickListener;
     }
 
     @NonNull
@@ -52,17 +55,6 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
         holder.hoursStep.setText(hours);
         holder.minutesStep.setText(minutes);
 
-        holder.btnDelete.setOnClickListener( view -> {
-            stepModelList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, stepModelList.size());
-        });
-
-        holder.btnUpdate.setOnClickListener( view -> {
-            //Probar hacerlo con Singleton
-            //Método del Fragment que se ejecute al pulsar el Editar
-            // y copie los datos
-        });
     }
 
     @Override
@@ -71,7 +63,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     }
 
     //Intern Class
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView btnDelete, btnUpdate;
         TextView orderStep, descriptionStep, hoursStep, minutesStep;
 
@@ -83,6 +75,20 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
             this.descriptionStep = itemView.findViewById(R.id.step_description_add_listView);
             this.hoursStep = itemView.findViewById(R.id.step_hours_add_listView);
             this.minutesStep = itemView.findViewById(R.id.step_minutes_add_listView);
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addRecipeStepClickListener.onDeleteListener(getAdapterPosition());
+                }
+            });
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addRecipeStepClickListener.onEditListener(getAdapterPosition());
+                }
+            });
         }
     }
 
