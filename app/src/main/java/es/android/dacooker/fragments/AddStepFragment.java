@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,7 +100,6 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
                 } else {
                     addOrUpdate(stepsList.get(stepToUpdatePosition), stepToUpdatePosition);
                 }
-
             }
         });
         return v;
@@ -183,22 +183,35 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP |
             ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+
         @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            int fromPosition = viewHolder.getAdapterPosition();
-            int toPosition = target.getAdapterPosition();
-
-            Collections.swap(stepsList, fromPosition, toPosition);
-            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
-            rwAdapter.notifyItemRangeChanged(fromPosition, stepsList.size());
-            rwAdapter.notifyItemRangeChanged(toPosition, stepsList.size());
-
-            return false;
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if(actionState == ItemTouchHelper.ACTION_STATE_DRAG) viewHolder.itemView.setAlpha(0.5f);
         }
 
         @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
+        public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            viewHolder.itemView.setAlpha(1.0f);
         }
+
+        @Override
+       public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+           int fromPosition = viewHolder.getAdapterPosition();
+           int toPosition = target.getAdapterPosition();
+
+           Collections.swap(stepsList, fromPosition, toPosition);
+           recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+           rwAdapter.notifyItemRangeChanged(fromPosition, stepsList.size());
+           rwAdapter.notifyItemRangeChanged(toPosition, stepsList.size());
+
+           return false;
+       }
+
+       @Override
+       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+       }
     };
 }
