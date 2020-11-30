@@ -21,7 +21,7 @@
             android:textSize="20sp"
             android:layout_alignParentTop="true"/>
 
-       <com.google.android.material.textfield.TextInputLayout
+       <!--<com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_stepOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:inputType="numberSigned"
                 android:singleLine="true" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_stepDescription"
@@ -48,7 +48,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:hint="@string/add_step_description_hint"
-            android:layout_below="@id/til_stepOrder"
+            android:layout_below="@id/add_step_text"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <EditText

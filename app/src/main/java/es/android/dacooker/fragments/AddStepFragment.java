@@ -32,7 +32,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
     CheckBox cb_timer;
     TextInputLayout til_hours, til_minute;
-    EditText til_order, til_description, input_hours, input_minute;
+    EditText til_description, input_hours, input_minute;
     Button btnAddOrUpdate;
     Button btnFinish;
     RecyclerView rw;
@@ -66,7 +66,6 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         ////// Para que te hagas una idea, ahora mismo no hay boton en el fragment de Steps.
         // El boton es de la Activity y solo aparece en Step. Hay que discutir esto
         cb_timer = v.findViewById(R.id.checkbox_requiredTimer);
-        til_order = v.findViewById(R.id.step_order_input);
         til_description = v.findViewById(R.id.step_description_input);
 
         til_hours = v.findViewById(R.id.til_stepTimer_hours);
@@ -102,7 +101,11 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         boolean timerOn = cb_timer.isChecked();
 
         if(validFields(timerOn)) {
-            step.setStepOrder(Integer.parseInt(til_order.getText().toString()));
+            if(position == -1){ //Add step
+                step.setStepOrder(stepsList.size() + 1);
+            } else { //Update Step
+                step.setStepOrder(position + 1);
+            }
 
             step.setDescription(til_description.getText().toString());
             step.setRequiredTimer(timerOn);
@@ -120,7 +123,6 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
                 btnAddOrUpdate.setText(R.string.add_step_btnAdd);
             }
 
-            til_order.setText("");
             til_description.setText("");
 
             if(timerOn){
@@ -138,7 +140,6 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
     }
 
     private boolean validFields(boolean timerOn){
-       if(til_order.getText().toString().trim().isEmpty() || Integer.parseInt(til_order.getText().toString()) <= 0) return false;
        if(til_description.getText().toString().trim().isEmpty()) return false;
 
        if(timerOn && (input_hours.getText().toString().trim().isEmpty() || Integer.parseInt(input_hours.getText().toString()) < 0)) return false;
@@ -149,10 +150,11 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
     public void onEditListener(int position) {
         stepToUpdatePosition = position;
         btnAddOrUpdate.setText(R.string.add_step_btnUpdate);
-        til_order.setText(String.valueOf(stepsList.get(position).getStepOrder()));
         til_description.setText(stepsList.get(position).getDescription());
         if(stepsList.get(position).getTimerHour() != 0 && stepsList.get(position).getTimerMinute() != 0) {
             cb_timer.setChecked(true);
+            input_hours.setEnabled(true);
+            input_minute.setEnabled(true);
             input_hours.setText(String.valueOf(stepsList.get(position).getTimerHour()));
             input_minute.setText(String.valueOf(stepsList.get(position).getTimerMinute()));
         } else {

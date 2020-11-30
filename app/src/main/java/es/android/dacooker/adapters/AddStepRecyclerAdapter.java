@@ -47,7 +47,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StepModel step = stepModelList.get(position);
-        holder.orderStep.setText(String.valueOf(step.getStepOrder()));
+        holder.orderStep.setText(String.valueOf(position + 1));
         holder.descriptionStep.setText(String.valueOf(step.getDescription()));
 
         String hours = step.getTimerHour()+"h", minutes = step.getTimerMinute()+"min";
