@@ -6,6 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -162,14 +164,30 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void deleteRecipe(){
-        try {
-            BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
-            BD_Operations.deleteRecipe(recipeSelected.getId(), db);
-            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
-            finish();
-        } catch (Exception e){
-            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
-        }
+            AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeDetails.this);
+            alertBuilder.setTitle(R.string.recipe_fragment_alert_dialog_title);
+            alertBuilder.setMessage(R.string.recipe_fragment_alert_dialog_message);
+            alertBuilder.setPositiveButton(R.string.recipe_fragment_alert_dialog_confirmation, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
+                        BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
+                        BD_Operations.deleteRecipe(recipeSelected.getId(), db);
+                        Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } catch (Exception e){
+                        Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            alertBuilder.setNegativeButton(R.string.recipe_fragment_alert_dialog_dismiss, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            alertBuilder.create();
+            alertBuilder.show();
     }
 
     private void editRecipe(){

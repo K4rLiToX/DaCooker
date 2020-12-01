@@ -1,14 +1,20 @@
 package es.android.dacooker.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcel;
@@ -34,6 +40,7 @@ import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.SingletonMap;
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +57,8 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     private TextView tvNoRecipes;
     //Adapters
     RecyclerViewAdapter adapter;
+    //ItemTouch
+    ItemTouchHelper itemTouchHelper;
 
 
     public RecipeFragment() {
@@ -82,8 +91,40 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             this.tvNoRecipes.setVisibility(View.VISIBLE);
         } else {
             recipeRecyclerView.setAdapter(adapter);
+            //Set the itemtouchhelper to delete on swipe
+            itemTouchHelper = new ItemTouchHelper(simpleCallback);
+            itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
         }
     }
+
+    //LEFT is for action on swipe from left to right
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            int position = viewHolder.getAdapterPosition();
+            if(direction == ItemTouchHelper.LEFT){
+                RecipeModel recipetoDelete = recipeList.get(position);
+                deleteRecipe(recipetoDelete, position);
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            new RecyclerViewSwipeDecorator.Builder(getActivity(), c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)
+                    .create()
+                    .decorate();
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
+
 
     @Override
     public void onRecipeClick(int position){
@@ -98,9 +139,39 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         this.initListAndRecyclerView();
+    }
+
+    private void deleteRecipe(RecipeModel recipeToDelete, int position){
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setTitle(R.string.recipe_fragment_alert_dialog_title);
+        alertBuilder.setMessage(R.string.recipe_fragment_alert_dialog_message);
+        alertBuilder.setPositiveButton(R.string.recipe_fragment_alert_dialog_confirmation, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                try {
+                    BBDD_Helper db = new BBDD_Helper(getActivity());
+                    BD_Operations.deleteRecipe(recipeToDelete, db);
+                    recipeList.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    adapter.notifyItemRangeChanged(position, recipeList.size());
+                    Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    Toast.makeText(getActivity(), "Error on Delete.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        alertBuilder.setNegativeButton(R.string.recipe_fragment_alert_dialog_dismiss, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                initListAndRecyclerView();
+            }
+        });
+        alertBuilder.create();
+        alertBuilder.show();
     }
 
 }

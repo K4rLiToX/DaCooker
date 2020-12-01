@@ -13,6 +13,13 @@
     <string name="bottom_navigation_title_recipes">Recipes</string>
     <string name="bottom_navigation_title_custom">Custom</string>
 
+    <!-- Recipe Fragment -->
+    <string name="recipe_fragment_alert_dialog_title">WARNING!</string>
+    <string name="recipe_fragment_alert_dialog_message">Are you sure you want to delete this recipe? Changes cannot be undone</string>
+    <string name="recipe_fragment_alert_dialog_confirmation">Delete</string>
+    <string name="recipe_fragment_alert_dialog_dismiss">Cancel</string>
+    <string name="recipe_fragment.delete_recipe_ok">Recipe Deleted Correctly</string>
+
     <!-- Recipe Card-->
     <string name="recipe_card_title">Recipe Card Title</string>
     <string name="recipe_card_time">Recipe Execution Time</string>
