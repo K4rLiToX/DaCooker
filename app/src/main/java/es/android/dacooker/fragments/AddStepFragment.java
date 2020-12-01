@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
     CheckBox cb_timer;
     TextInputLayout til_hours, til_minute;
-    EditText til_description, input_hours, input_minute;
+    TextInputEditText til_description, input_hours, input_minute;
     Button btnAddOrUpdate;
     Button btnFinish;
     RecyclerView rw;

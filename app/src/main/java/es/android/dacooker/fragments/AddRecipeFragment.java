@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,7 +54,7 @@ public class AddRecipeFragment extends Fragment {
     ArrayAdapter<MealType> adapter;
     AutoCompleteTextView mealTypeDropdown;
 
-    EditText recipeName, recipeHours, recipeMinutes, recipeDescription;
+    TextInputEditText recipeName, recipeHours, recipeMinutes, recipeDescription;
     ImageView recipePhoto;
 
     //Propio

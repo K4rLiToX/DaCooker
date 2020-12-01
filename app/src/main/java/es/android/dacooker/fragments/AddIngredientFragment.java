@@ -30,7 +30,7 @@ import es.android.dacooker.models.IngredientModel;
  */
 public class AddIngredientFragment extends Fragment {
 
-    EditText til_name, til_quantity;
+    TextInputEditText til_name, til_quantity;
     Button btnAdd;
     List<IngredientModel> ingredientList;
 

@@ -125,7 +125,7 @@ public class RecipeDetails extends AppCompatActivity {
     private void setViews(){
 
         if(this.recipeSelected.getImage() != null) this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
-        else this.imgRecipeDetail.setImageResource(R.drawable.img_recipe_card_default);
+        else this.imgRecipeDetail.setImageResource(R.mipmap.img_recipe_card_default);
 
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
         this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTimeHour()+"h " + this.recipeSelected.getExecutionTimeMinute()+"min");

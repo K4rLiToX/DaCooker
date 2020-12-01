@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_recipe_card_default"
+                android:src="@mipmap/img_recipe_card_default"
                 android:contentDescription="@string/recipe_card_img_description"/>
 
             <TextView

@@ -39,7 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         RecipeModel recipe = recipeList.get(position);
         if(recipe.getImage() != null) holder.imgRecipeCard.setImageBitmap(recipe.getImage());
-        else holder.imgRecipeCard.setImageResource(R.drawable.img_recipe_card_default);
+        else holder.imgRecipeCard.setImageResource(R.mipmap.img_recipe_card_default);
         holder.titleRecipeCard.setText(recipe.getRecipeName());
         holder.timeRecipeCard.setText(recipe.getExecutionTimeHour()+"h " + recipe.getExecutionTimeMinute()+"min");
         holder.mealTypeRecipeCard.setText(recipe.getMealType().name());

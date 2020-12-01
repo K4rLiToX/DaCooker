@@ -47,8 +47,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int safePosition = holder.getAdapterPosition();
-        StepModel step = stepModelList.get(safePosition);
+        StepModel step = stepModelList.get(position);
         holder.orderStep.setText(String.valueOf(position + 1));
         holder.descriptionStep.setText(String.valueOf(step.getDescription()));
 
@@ -96,8 +95,8 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     public void setEditList(List<StepModel> stepList){
         int prevSize = this.stepModelList.size();
-        stepModelList.clear();
-        stepModelList.addAll(stepList);
+        this.stepModelList.clear();
+        this.stepModelList.addAll(stepList);
         notifyItemRangeRemoved(0, prevSize);
         notifyItemRangeInserted(0, stepList.size());
     }

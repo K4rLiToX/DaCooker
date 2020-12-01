@@ -179,7 +179,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         RecipeModel r = new RecipeModel();
         r.setRecipeName(name);
 
-        Bitmap default_img = BitmapFactory.decodeResource(getResources(), R.drawable.img_recipe_card_default);
+        Bitmap default_img = BitmapFactory.decodeResource(getResources(), R.mipmap.img_recipe_card_default);
         if(!bitmap.equals(default_img)) r.setImage(bitmap);
         else r.setImage(null);
         r.setRecipeDescription(description);
@@ -280,13 +280,13 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         if (rEdit.getRecipeDescription() != null) description = rEdit.getRecipeDescription();
         ((EditText) v.findViewById(R.id.recipe_description_input)).setText(description);
 
-        ((EditText) v.findViewById(R.id.recipe_hour_input)).setText(rEdit.getExecutionTimeHour() + "");
-        ((EditText) v.findViewById(R.id.recipe_minute_input)).setText(rEdit.getExecutionTimeMinute() + "");
+        ((EditText) v.findViewById(R.id.recipe_hour_input)).setText(String.valueOf(rEdit.getExecutionTimeHour()));
+        ((EditText) v.findViewById(R.id.recipe_minute_input)).setText(String.valueOf(rEdit.getExecutionTimeMinute()));
         ((AutoCompleteTextView) v.findViewById(R.id.recipe_mealType_dropdown_select))
                 .setText(rEdit.getMealType().name(), false);
 
         if (rEdit.getImage() == null) image = ((BitmapDrawable)
-            getDrawable(R.drawable.img_recipe_card_default)).getBitmap();
+            getDrawable(R.mipmap.img_recipe_card_default)).getBitmap();
         else image = rEdit.getImage();
         ((ImageView) v.findViewById(R.id.recipe_img_input)).setImageBitmap(image);
 
@@ -323,12 +323,14 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 if(r.getId() == -1) throw new Exception();
 
                 BD_Operations.deleteIngredientsFromRecipeId(r.getId(), dbHelper);
-                BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
+
 
                 for(IngredientModel ing : this.getIngredientsData()){
                     ing.setIdRecipe(r.getId());
                     BD_Operations.addIngredient(ing, r.getId(), dbHelper);
                 }
+
+                BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
 
                 for(StepModel s : this.getStepsData()){
                     s.setRecipe_ID(r.getId());

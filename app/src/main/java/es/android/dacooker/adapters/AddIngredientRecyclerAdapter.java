@@ -72,8 +72,8 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
 
     public void setEditList(List<IngredientModel> ingredientList){
         int prevSize = this.ingredientList.size();
-        ingredientList.clear();
-        ingredientList.addAll(ingredientList);
+        this.ingredientList.clear();
+        this.ingredientList.addAll(ingredientList);
         notifyItemRangeRemoved(0, prevSize);
         notifyItemRangeInserted(0, ingredientList.size());
     }

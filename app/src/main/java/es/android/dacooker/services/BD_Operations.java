@@ -115,7 +115,7 @@ public class BD_Operations {
 
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.RECIPE_TABLE, null, values);
-
+        db.close();
         if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
 
     }
@@ -142,7 +142,7 @@ public class BD_Operations {
                 values,
                 selection,
                 selectionArgs);
-
+        db.close();
         if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
 
     }
@@ -158,7 +158,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(r.getId()) };
 
         int deletedRows = db.delete(Struct_BD.RECIPE_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Recipe couldn't be deleted. Try later");
 
     }
@@ -174,7 +174,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(id_recipe) };
 
         int deletedRows = db.delete(Struct_BD.RECIPE_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Recipe couldn't be deleted. Try later");
 
     }
@@ -603,13 +603,13 @@ public class BD_Operations {
         values.put(Struct_BD.STEP_DESCRIPTION, s.getDescription());
         values.put(Struct_BD.STEP_REQUIRED_TIMER, BooleanToInt(s.isRequiredTimer()));
         values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerHour());
-        values.put(Struct_BD.STEP_TIMER_HOUR, s.getTimerMinute());
+        values.put(Struct_BD.STEP_TIMER_MINUTE, s.getTimerMinute());
         values.put(Struct_BD.STEP_ORDER, s.getStepOrder());
         values.put(Struct_BD.STEP_RECIPE, id_recipe);
 
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.STEP_TABLE, null, values);
-
+        db.close();
         if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
 
     }
@@ -636,7 +636,7 @@ public class BD_Operations {
                 values,
                 selection,
                 selectionArgs);
-
+        db.close();
         if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
 
     }
@@ -678,10 +678,10 @@ public class BD_Operations {
                         values,
                         selection,
                         selectionArgs);
-
-                cursor.moveToNext();
             } while(cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
     }
 
     public static void updateStepOrdersLess(StepModel s, BBDD_Helper dbHelper) {
@@ -721,10 +721,10 @@ public class BD_Operations {
                         values,
                         selection,
                         selectionArgs);
-
-                cursor.moveToNext();
             } while(cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
     }
 
     public static void deleteStep(StepModel s, BBDD_Helper dbHelper) throws Exception {
@@ -737,7 +737,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(s.getId()) };
 
         int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
 
     }
@@ -752,7 +752,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(id_step) };
 
         int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
 
     }
@@ -790,10 +790,10 @@ public class BD_Operations {
                         selection,
                         selectionArgs);
 
-                cursor.moveToNext();
             } while(cursor.moveToNext());
         }
-
+        cursor.close();
+        db.close();
     }
 
     public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws Exception{
@@ -829,10 +829,10 @@ public class BD_Operations {
                         selection,
                         selectionArgs);
 
-                cursor.moveToNext();
             } while(cursor.moveToNext());
         }
-
+        cursor.close();
+        db.close();
     }
 
     public static StepModel getStepById(int id_step, BBDD_Helper dbHelper) throws Exception{
@@ -941,7 +941,6 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
                 steps.add(s);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
 
             cursor.close();
@@ -1005,7 +1004,6 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
                 steps.add(s);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
 
             cursor.close();
@@ -1063,8 +1061,6 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
                 );
-                steps.add(s);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
 
             cursor.close();
@@ -1094,7 +1090,7 @@ public class BD_Operations {
 
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.INGREDIENT_TABLE, null, values);
-
+        db.close();
         if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
 
     }
@@ -1117,7 +1113,7 @@ public class BD_Operations {
                 values,
                 selection,
                 selectionArgs);
-
+        db.close();
         if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
 
     }
@@ -1130,7 +1126,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(i.getId()) };
 
         int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Ingredient couldn't be deleted. Try later");
 
     }
@@ -1143,7 +1139,7 @@ public class BD_Operations {
         String[] selectionArgs = { String.valueOf(r.getId()) };
 
         int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
-
+        db.close();
         if(deletedRows <= 0) throw new Exception("Ingredient(s) couldn't be deleted. Try later");
 
     }
@@ -1176,6 +1172,8 @@ public class BD_Operations {
                         selectionArgs);
             } while(cursor.moveToNext());
         }
+        cursor.close();
+        db.close();
 
     }
 
@@ -1263,7 +1261,6 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
                 );
                 ingredients.add(i);
-                cursor.moveToNext();    //Pasamos a la siguiente posición
             } while(cursor.moveToNext());
             cursor.close();
             db.close();
