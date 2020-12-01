@@ -177,7 +177,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         RecipeModel r = new RecipeModel();
         r.setRecipeName(name);
 
-        Bitmap default_img = BitmapFactory.decodeResource(getResources(), R.mipmap.img_recipe_card_default);
+        Bitmap default_img = ((BitmapDrawable) getDrawable(R.mipmap.img_recipe_card_default)).getBitmap();
         if(!bitmap.equals(default_img)) r.setImage(bitmap);
         else r.setImage(null);
         r.setRecipeDescription(description);
