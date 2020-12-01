@@ -30,11 +30,6 @@ import es.android.dacooker.utilities.SingletonMap;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-    //Constants
-    public static final String SHARED_DB_DATA_KEY = "SHARED_DB_KEY";
-
-    //public BBDD_Helper db;
-
     //Main Fragments
     private final RecipeFragment recipeFragment = new RecipeFragment();
     private final MostUsedFragment mostUsedFragment = new MostUsedFragment();

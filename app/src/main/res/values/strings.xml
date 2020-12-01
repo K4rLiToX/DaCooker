@@ -30,6 +30,12 @@
     <string name="recipe_detail_time_minute">Recipe Minute</string>
     <string name="recipe_detail_mealType">Meal Type</string>
     <string name="recipe_detail_ingredientList_empty">No Ingredients!</string>
+    <string name="recipe_detail_deleted">Recipe Deleted</string>
+    <string name="recipe_detail_deleted_error">Error on Delete</string>
+
+    <!-- Recipe Detail App Bar Menu -->
+    <string name="recipe_detail_app_bar_menu_delete">Delete</string>
+    <string name="recipe_detail_app_bar_menu_edit">Edit</string>
 
     <!--Ingredient Card-->
     <string name="ingredient_card_name">Ingredient Name</string>

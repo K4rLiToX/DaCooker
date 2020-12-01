@@ -21,7 +21,8 @@
         <activity
             android:name=".activities.RecipeDetails"
             android:label="@string/recipe_detail_label"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/Theme.DaCooker.NoActionBar"/>
         <activity
             android:name=".activities.MainActivity">
             <intent-filter>

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -50,13 +49,13 @@ public class AddNewRecipeActivity extends AppCompatActivity {
     //Edition Mode
     boolean forEdit;
     private RecipeModel rEdit;
-    private List<IngredientModel> ingList;
-    private List<StepModel> stepList;
+    List<IngredientModel> ingList;
+    List<StepModel> stepList;
 
     //SingletonMap Keys
-    private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
-    private final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
-    private final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
+    private static final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
+    private static final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
+    private static final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -154,7 +154,7 @@ public class BD_Operations {
         deleteStepsFromRecipe(r, dbHelper);
         deleteIngredientsFromRecipe(r, dbHelper);
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String selection = Struct_BD.RECIPE_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(r.getId()) };
@@ -170,7 +170,7 @@ public class BD_Operations {
         deleteStepsFromRecipeId(id_recipe, dbHelper);
         deleteIngredientsFromRecipeId(id_recipe, dbHelper);
 
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String selection = Struct_BD.RECIPE_ID + " LIKE ?";
         String[] selectionArgs = { String.valueOf(id_recipe) };
@@ -178,7 +178,6 @@ public class BD_Operations {
         int deletedRows = db.delete(Struct_BD.RECIPE_TABLE, selection, selectionArgs);
         db.close();
         if(deletedRows <= 0) throw new Exception("Recipe couldn't be deleted. Try later");
-
     }
 
     public static List<RecipeModel> getRecipes(BBDD_Helper dbHelper) {

@@ -1,17 +1,24 @@
 package es.android.dacooker.activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.appbar.MaterialToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +51,6 @@ public class RecipeDetails extends AppCompatActivity {
     Button btnStartRecipe;
     LinearLayout expandableLayout;
 
-    //EDIT
-    Button btnEdit;
-
     //Utilities
     IngredientRecyclerAdapter ingredientAdapter;
     private boolean isExpanded;
@@ -63,12 +67,39 @@ public class RecipeDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        Toolbar detail_toolbar = findViewById(R.id.recipe_detail_app_bar);
+        setSupportActionBar(detail_toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         initViews();
         initParameters();
         setViews();
         initIngredientRecyclerView();
+
+        //detail_toolbar.setNavigationOnClickListener(v -> finish());
+
+        detail_toolbar.setOnMenuItemClickListener(item -> {
+            int itemID = item.getItemId();
+            if(itemID == R.id.recipe_detail_menu_app_bar_delete){
+                deleteRecipe();
+                return true;
+            } else if(itemID == R.id.recipe_detail_menu_app_bar_edit){
+                editRecipe();
+                return true;
+            } else {
+                return super.onOptionsItemSelected(item);
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.recipe_detail_menu_app_bar, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /*Private Methods*/
@@ -93,17 +124,6 @@ public class RecipeDetails extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), R.string.recipe_detail_ingredientList_empty, Toast.LENGTH_LONG).show();
             }
-        });
-
-        btnEdit = findViewById(R.id.btn_edit);
-        btnEdit.setOnClickListener(view -> {
-            finish();
-            SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeSelected);
-            SingletonMap.getInstance().put(SHARE_INGLIST_KEY, this.ingredientList);
-            SingletonMap.getInstance().put(SHARE_STEPLIST_KEY, this.stepList);
-            Intent i = new Intent(this, AddNewRecipeActivity.class);
-            i.putExtra("edit", true);
-            startActivity(i);
         });
     }
 
@@ -141,4 +161,24 @@ public class RecipeDetails extends AppCompatActivity {
         ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
 
+    private void deleteRecipe(){
+        try {
+            BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
+            BD_Operations.deleteRecipe(recipeSelected.getId(), db);
+            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
+            finish();
+        } catch (Exception e){
+            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void editRecipe(){
+        finish();
+        SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeSelected);
+        SingletonMap.getInstance().put(SHARE_INGLIST_KEY, ingredientList);
+        SingletonMap.getInstance().put(SHARE_STEPLIST_KEY, stepList);
+        Intent i = new Intent(RecipeDetails.this, AddNewRecipeActivity.class);
+        i.putExtra("edit", true);
+        startActivity(i);
+    }
 }

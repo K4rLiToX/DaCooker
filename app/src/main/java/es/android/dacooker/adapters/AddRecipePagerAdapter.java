@@ -17,8 +17,8 @@ import es.android.dacooker.fragments.AddStepFragment;
 
 public class AddRecipePagerAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<String> titleList = new ArrayList<>();
-    private List<Fragment> fragmentList = new ArrayList<>();
+    ArrayList<String> titleList = new ArrayList<>();
+    List<Fragment> fragmentList = new ArrayList<>();
 
     public AddRecipePagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
