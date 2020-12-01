@@ -328,9 +328,12 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 }
 
                 BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
+                int o = 1;
                 for(StepModel s : this.getStepsData()){
+                    s.setStepOrder(o);
                     s.setRecipe_ID(r.getId());
                     BD_Operations.addStep(s, r.getId(), dbHelper);
+                    o++;
                 }
 
                 finish();
