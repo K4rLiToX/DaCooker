@@ -3,6 +3,7 @@ package es.android.dacooker.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import es.android.dacooker.adapters.IngredientRecyclerAdapter;
 import es.android.dacooker.fragments.RecipeFragment;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.RecipeModel;
+import es.android.dacooker.models.StepModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.SingletonMap;
@@ -32,6 +34,8 @@ public class RecipeDetails extends AppCompatActivity {
 
     //SingletonMap Key
     private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
+    private final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
+    private final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
 
     //Views
     private ImageView imgRecipeDetail, imgIngredientRecyclerViewIcon;
@@ -40,6 +44,9 @@ public class RecipeDetails extends AppCompatActivity {
     Button btnStartRecipe;
     LinearLayout expandableLayout;
 
+    //EDIT
+    Button btnEdit;
+
     //Utilities
     IngredientRecyclerAdapter ingredientAdapter;
     private boolean isExpanded;
@@ -47,8 +54,9 @@ public class RecipeDetails extends AppCompatActivity {
     //Recipe to Show
     private RecipeModel recipeSelected;
 
-    //Ingredient's List to Show
+    //Ingredients and Steps Lists
     private List<IngredientModel> ingredientList;
+    private List<StepModel> stepList;
 
 
     @Override
@@ -86,6 +94,17 @@ public class RecipeDetails extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), R.string.recipe_detail_ingredientList_empty, Toast.LENGTH_LONG).show();
             }
         });
+
+        btnEdit = findViewById(R.id.btn_edit);
+        btnEdit.setOnClickListener(view -> {
+            finish();
+            SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeSelected);
+            SingletonMap.getInstance().put(SHARE_INGLIST_KEY, this.ingredientList);
+            SingletonMap.getInstance().put(SHARE_STEPLIST_KEY, this.stepList);
+            Intent i = new Intent(this, AddNewRecipeActivity.class);
+            i.putExtra("edit", true);
+            startActivity(i);
+        });
     }
 
     private void initParameters(){
@@ -93,8 +112,10 @@ public class RecipeDetails extends AppCompatActivity {
             BBDD_Helper db = new BBDD_Helper(getApplicationContext());
             this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
             this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
+            this.stepList = BD_Operations.getStepsFromRecipeIdOrdered(recipeSelected.getId(), db);
         } catch (Exception e){
             ingredientList = new ArrayList<>();
+            this.stepList = new ArrayList<>();
         }
 
         isExpanded = false;
@@ -117,5 +138,10 @@ public class RecipeDetails extends AppCompatActivity {
         ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.initParameters();
+    }
 
 }

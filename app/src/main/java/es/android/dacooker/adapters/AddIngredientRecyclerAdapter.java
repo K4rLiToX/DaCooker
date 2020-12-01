@@ -69,4 +69,12 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
             this.quantityIngredient = itemView.findViewById(R.id.ingredient_quantity_add_listView);
         }
     }
+
+    public void setEditList(List<IngredientModel> ingredientList){
+        int prevSize = this.ingredientList.size();
+        ingredientList.clear();
+        ingredientList.addAll(ingredientList);
+        notifyItemRangeRemoved(0, prevSize);
+        notifyItemRangeInserted(0, ingredientList.size());
+    }
 }

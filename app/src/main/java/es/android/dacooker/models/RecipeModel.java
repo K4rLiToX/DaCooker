@@ -41,6 +41,8 @@ public class RecipeModel implements Serializable {
 
     public int getId(){ return this.id; }
 
+    public void setId(int id){ this.id = id;}
+
     public String getRecipeName() {
         return this.recipeName;
     }

@@ -1153,35 +1153,27 @@ public class BD_Operations {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String[] param = { String.valueOf(id_recipe) };
-        Cursor cursor = db.rawQuery("SELECT * FROM STEPS" +
+        Cursor cursor = db.rawQuery("SELECT * FROM INGREDIENTS" +
                 " WHERE id_recipe = ? ;", param);
 
         if(cursor.moveToFirst()) {
             do{
-                boolean boolSaved = IntToBoolean(cursor.getInt(
-                        cursor.getColumnIndexOrThrow(Struct_BD.STEP_REQUIRED_TIMER)));
 
-                StepModel sn = new StepModel(
-                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ID)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.STEP_DESCRIPTION)),
-                        boolSaved,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_HOUR)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_TIMER_MINUTE)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_ORDER)),
-                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.STEP_RECIPE))
-
+                IngredientModel in = new IngredientModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_NAME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_QUANTITY)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.INGREDIENT_RECIPE))
                 );
 
                 // Which row to update, based on the title
-                String selection = Struct_BD.STEP_ID + " LIKE ?";
-                String[] selectionArgs = { String.valueOf(sn.getId()) };
+                String selection = Struct_BD.INGREDIENT_ID + " LIKE ?";
+                String[] selectionArgs = { String.valueOf(in.getId()) };
 
                 db.delete(
-                        Struct_BD.STEP_TABLE,
+                        Struct_BD.INGREDIENT_TABLE,
                         selection,
                         selectionArgs);
-
-                cursor.moveToNext();
             } while(cursor.moveToNext());
         }
 

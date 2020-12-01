@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import es.android.dacooker.R;
+import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.models.MealType;
 
 /**
@@ -87,6 +88,8 @@ public class AddRecipeFragment extends Fragment {
             }
         });
 
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
+
         return v;
     }
 
@@ -120,7 +123,6 @@ public class AddRecipeFragment extends Fragment {
         alertDialog.create();
         alertDialog.show();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

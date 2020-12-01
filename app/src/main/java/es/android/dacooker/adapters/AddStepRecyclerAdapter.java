@@ -1,6 +1,7 @@
 package es.android.dacooker.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,8 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        StepModel step = stepModelList.get(position);
+        int safePosition = holder.getAdapterPosition();
+        StepModel step = stepModelList.get(safePosition);
         holder.orderStep.setText(String.valueOf(position + 1));
         holder.descriptionStep.setText(String.valueOf(step.getDescription()));
 
@@ -90,6 +92,14 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
                 }
             });
         }
+    }
+
+    public void setEditList(List<StepModel> stepList){
+        int prevSize = this.stepModelList.size();
+        stepModelList.clear();
+        stepModelList.addAll(stepList);
+        notifyItemRangeRemoved(0, prevSize);
+        notifyItemRangeInserted(0, stepList.size());
     }
 
 }

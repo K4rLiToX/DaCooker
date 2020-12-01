@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import es.android.dacooker.R;
+import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.interfaces.AddRecipeStepClickListener;
 import es.android.dacooker.models.IngredientModel;
@@ -66,11 +67,6 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         //Initialize Elements
         btnAddOrUpdate = v.findViewById(R.id.add_step_btnAdd);
 
-        //Quitar la linea siguiente segun se decida hacerlo. Solo es por probar.
-        //btnFinish = v.findViewById(R.id.btn_finish_recipe);
-        //btnFinish.setVisibility(View.INVISIBLE);
-        ////// Para que te hagas una idea, ahora mismo no hay boton en el fragment de Steps.
-        // El boton es de la Activity y solo aparece en Step. Hay que discutir esto
         cb_timer = v.findViewById(R.id.checkbox_requiredTimer);
         til_description = v.findViewById(R.id.step_description_input);
 
@@ -102,6 +98,9 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
                 }
             }
         });
+
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, null, v);
+
         return v;
     }
 
@@ -143,7 +142,8 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
         } else {
             //Errores
-            Toast.makeText(getActivity().getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Description cannot be empty. " +
+                    "Hours, Minutes Must Be Correct", Toast.LENGTH_SHORT).show();
         }
     }
 

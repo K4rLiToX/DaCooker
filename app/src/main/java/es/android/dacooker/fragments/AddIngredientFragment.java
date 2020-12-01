@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
+import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.adapters.AddIngredientRecyclerAdapter;
 import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.models.IngredientModel;
@@ -79,6 +80,8 @@ public class AddIngredientFragment extends Fragment {
             }
 
         });
+
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
 
         return v;
     }

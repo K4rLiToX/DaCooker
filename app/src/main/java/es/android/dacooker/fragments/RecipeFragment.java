@@ -76,7 +76,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         this.recipeList = BD_Operations.getRecipes(db);
         adapter = new RecyclerViewAdapter(recipeList,this);
 
-        Toast.makeText(getContext(), recipeList.size() + "", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), recipeList.size() + "", Toast.LENGTH_LONG).show();
         if(this.recipeList.isEmpty()){
             this.recipeRecyclerView.setVisibility(View.GONE);
             //Mostramos Text View (no hay recetas)
@@ -97,4 +97,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     public void addRecipe(){
         startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        this.initListAndRecyclerView();
+    }
+
 }
