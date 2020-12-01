@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
@@ -73,6 +74,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     public void setEditList(List<IngredientModel> ingredientList){
         int prevSize = this.ingredientList.size();
         this.ingredientList.clear();
+        if(ingredientList == null) ingredientList = new ArrayList<>();
         this.ingredientList.addAll(ingredientList);
         notifyItemRangeRemoved(0, prevSize);
         notifyItemRangeInserted(0, ingredientList.size());

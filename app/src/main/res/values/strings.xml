@@ -96,6 +96,29 @@
     <string name="add_recipe_btnFinish">Finish &amp; Cooking!</string>
     <string name="add_recipe_btnValidate">Validate Fields</string>
     <string name="add_step_btnUpdate">Update Changes</string>
-    
+
+    <!-- AddIngredientFragment -->
+    <string name="addIng_err_name">Name must be between 0-100 characters</string>
+    <string name="addIng_err_quantity">Quantity must be between 0-50 characters</string>
+
+    <!-- AddStepFragment -->
+    <string name="addStep_err">Description cannot be empty. Hours, Minutes Must Be Correct</string>
+
+    <!-- Most Used Fragment -->
+    <string name="txt_noMost">No Most Used Recipes</string>
+
+    <!--Add New Recipe Activity -->
+    <string name="btnUpdate">Update &amp; Change</string>
+    <string name="edit_title">Update Recipe</string>
+    <string name="add_recipe_fragment_title">Recipe</string>
+    <string name="add_ingredients_fragment_title">Ingredients</string>
+    <string name="add_steps_fragment_title">Steps</string>
+    <string name="validation_err_name">Recipe name must be between 0–60 characters</string>
+    <string name="validation_err_description">Description must be between 0–140 characters</string>
+    <string name="validation_err_hour">Hours must be a number. If not necessary, put 0 in it</string>
+    <string name="validation_err_minute">Minutes must be a number. Use 0 to 59 to fill</string>
+    <string name="validation_err_mealtype">Use a MealType</string>
+    <string name="err_addition_recipe">Error during Addition</string>
+    <string name="err_update_recipe">Error during Update</string>
 
 </resources>

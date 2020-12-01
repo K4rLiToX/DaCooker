@@ -3,11 +3,9 @@ package es.android.dacooker.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +19,8 @@ import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.IngredientRecyclerAdapter;
+import es.android.dacooker.exceptions.IngredientException;
+import es.android.dacooker.exceptions.StepException;
 import es.android.dacooker.fragments.RecipeFragment;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.RecipeModel;
@@ -84,7 +84,7 @@ public class RecipeDetails extends AppCompatActivity {
         this.imgIngredientRecyclerViewIcon = findViewById(R.id.recipe_detail_ingredient_recyclerView_icon);
 
         this.expandableLayout.setOnClickListener(view -> {
-            if(!ingredientList.isEmpty()){
+            if(!this.ingredientList.isEmpty()){
                 ingredientRecyclerView.setVisibility(isExpanded ? View.GONE : View.VISIBLE);
                 if(isExpanded) imgIngredientRecyclerViewIcon.setImageResource(R.drawable.ic_down_arrow);
                 else imgIngredientRecyclerViewIcon.setImageResource(R.drawable.ic_up_arrow);
@@ -113,8 +113,9 @@ public class RecipeDetails extends AppCompatActivity {
             this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
             this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
             this.stepList = BD_Operations.getStepsFromRecipeIdOrdered(recipeSelected.getId(), db);
-        } catch (Exception e){
-            ingredientList = new ArrayList<>();
+        } catch (IngredientException e){
+            this.ingredientList = new ArrayList<>();
+        } catch(StepException e) {
             this.stepList = new ArrayList<>();
         }
 
@@ -122,13 +123,15 @@ public class RecipeDetails extends AppCompatActivity {
         this.ingredientRecyclerView.setVisibility(View.GONE);
     }
 
+    @SuppressLint("SetTextI18n")
     private void setViews(){
 
         if(this.recipeSelected.getImage() != null) this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
         else this.imgRecipeDetail.setImageResource(R.mipmap.img_recipe_card_default);
 
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
-        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTimeHour()+"h " + this.recipeSelected.getExecutionTimeMinute()+"min");
+        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTimeHour()+"h "
+                + this.recipeSelected.getExecutionTimeMinute()+"min");
         this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));
         this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
     }
@@ -136,12 +139,6 @@ public class RecipeDetails extends AppCompatActivity {
     private void initIngredientRecyclerView(){
         this.ingredientAdapter = new IngredientRecyclerAdapter(this.ingredientList);
         ingredientRecyclerView.setAdapter(ingredientAdapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        this.initParameters();
     }
 
 }

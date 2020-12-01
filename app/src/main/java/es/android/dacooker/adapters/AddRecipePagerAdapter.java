@@ -33,14 +33,6 @@ public class AddRecipePagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return fragmentList.get(position);
-        /*
-        switch(position){
-            case 0: return new AddRecipeFragment();
-            case 1: return new AddIngredientFragment();
-            case 2: return new AddStepFragment();
-        }
-        return null;
-         */
     }
 
     @Override
@@ -52,14 +44,6 @@ public class AddRecipePagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titleList.get(position);
-        /*
-        switch(position){
-            case 0: return "Recipe";
-            case 1: return "Ingredients";
-            case 2: return "Steps";
-        }
-        return null;
-         */
     }
 
 }

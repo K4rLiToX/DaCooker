@@ -9,6 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.android.dacooker.exceptions.IngredientException;
+import es.android.dacooker.exceptions.StepException;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.MealType;
 import es.android.dacooker.models.RecipeModel;
@@ -519,6 +521,7 @@ public class BD_Operations {
     }
 
     public static List<RecipeModel> getRecipesOrderByTimesCooked(BBDD_Helper dbHelper) throws Exception{
+
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -546,7 +549,7 @@ public class BD_Operations {
 
 
         List<RecipeModel> recipes = new ArrayList<>();
-        int untilFive = 0;
+        int untilFive = 5;
 
         if(cursor.moveToFirst()) {
             do{
@@ -593,7 +596,7 @@ public class BD_Operations {
     // STEPS METHODS
     //
 
-    public static void addStep(StepModel s, int id_recipe, BBDD_Helper dbHelper) throws Exception {
+    public static void addStep(StepModel s, int id_recipe, BBDD_Helper dbHelper) throws StepException {
 
         updateStepOrdersPlus(s, dbHelper);
 
@@ -610,11 +613,11 @@ public class BD_Operations {
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.STEP_TABLE, null, values);
         db.close();
-        if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
+        if(row == -1) throw new StepException("Error Ocurred. Not Possible Addition.");
 
     }
 
-    public static void updateStep(StepModel s, BBDD_Helper dbHelper) throws Exception {
+    public static void updateStep(StepModel s, BBDD_Helper dbHelper) throws StepException {
 
         updateStepOrdersPlus(s, dbHelper);
 
@@ -637,7 +640,7 @@ public class BD_Operations {
                 selection,
                 selectionArgs);
         db.close();
-        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+        if(row <= 0) throw new StepException("Error Ocurred. Not Possible Edition.");
 
     }
 
@@ -727,7 +730,7 @@ public class BD_Operations {
         db.close();
     }
 
-    public static void deleteStep(StepModel s, BBDD_Helper dbHelper) throws Exception {
+    public static void deleteStep(StepModel s, BBDD_Helper dbHelper) throws StepException {
 
         updateStepOrdersLess(s, dbHelper);
 
@@ -738,11 +741,11 @@ public class BD_Operations {
 
         int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
         db.close();
-        if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
+        if(deletedRows <= 0) throw new StepException("Step couldn't be deleted. Try later");
 
     }
 
-    public static void deleteStep(int id_step, BBDD_Helper dbHelper) throws Exception {
+    public static void deleteStep(int id_step, BBDD_Helper dbHelper) throws StepException {
 
         updateStepOrdersLess(getStepById(id_step, dbHelper), dbHelper);
 
@@ -753,11 +756,11 @@ public class BD_Operations {
 
         int deletedRows = db.delete(Struct_BD.STEP_TABLE, selection, selectionArgs);
         db.close();
-        if(deletedRows <= 0) throw new Exception("Step couldn't be deleted. Try later");
+        if(deletedRows <= 0) throw new StepException("Step couldn't be deleted. Try later");
 
     }
 
-    public static void deleteStepsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+    public static void deleteStepsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -796,7 +799,7 @@ public class BD_Operations {
         db.close();
     }
 
-    public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+    public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -835,7 +838,7 @@ public class BD_Operations {
         db.close();
     }
 
-    public static StepModel getStepById(int id_step, BBDD_Helper dbHelper) throws Exception{
+    public static StepModel getStepById(int id_step, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -887,12 +890,12 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Step not Found");
+            throw new StepException("Step not Found");
         }
 
     }
 
-    public static List<StepModel> getStepsFromRecipeOrdered(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+    public static List<StepModel> getStepsFromRecipeOrdered(RecipeModel r, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -950,12 +953,12 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Steps Not Found");
+            throw new StepException("Steps Not Found");
         }
 
     }
 
-    public static List<StepModel> getStepsFromRecipeIdOrdered(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+    public static List<StepModel> getStepsFromRecipeIdOrdered(int id_recipe, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1013,12 +1016,12 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Steps Not Found");
+            throw new StepException("Steps Not Found");
         }
 
     }
 
-    public static List<StepModel> getStepsLookingRequiredTimer(boolean req_timer, BBDD_Helper dbHelper) throws Exception{
+    public static List<StepModel> getStepsLookingRequiredTimer(boolean req_timer, BBDD_Helper dbHelper) throws StepException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1070,7 +1073,7 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Steps Not Found");
+            throw new StepException("Steps Not Found");
         }
 
     }
@@ -1079,7 +1082,7 @@ public class BD_Operations {
     // INGREDIENTS METHODS
     //
 
-    public static void addIngredient(IngredientModel i, int id_recipe, BBDD_Helper dbHelper) throws Exception {
+    public static void addIngredient(IngredientModel i, int id_recipe, BBDD_Helper dbHelper) throws IngredientException {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -1091,11 +1094,11 @@ public class BD_Operations {
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.INGREDIENT_TABLE, null, values);
         db.close();
-        if(row == -1) throw new Exception("Error Ocurred. Not Possible Addition.");
+        if(row == -1) throw new IngredientException("Error Ocurred. Not Possible Addition.");
 
     }
 
-    public static void updateIngredient(IngredientModel i, BBDD_Helper dbHelper) throws Exception {
+    public static void updateIngredient(IngredientModel i, BBDD_Helper dbHelper) throws IngredientException {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -1114,11 +1117,11 @@ public class BD_Operations {
                 selection,
                 selectionArgs);
         db.close();
-        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+        if(row <= 0) throw new IngredientException("Error Ocurred. Not Possible Edition.");
 
     }
 
-    public static void deleteIngredient(IngredientModel i, BBDD_Helper dbHelper) throws Exception {
+    public static void deleteIngredient(IngredientModel i, BBDD_Helper dbHelper) throws IngredientException {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1127,11 +1130,11 @@ public class BD_Operations {
 
         int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
         db.close();
-        if(deletedRows <= 0) throw new Exception("Ingredient couldn't be deleted. Try later");
+        if(deletedRows <= 0) throw new IngredientException("Ingredient couldn't be deleted. Try later");
 
     }
 
-    public static void deleteIngredientsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
+    public static void deleteIngredientsFromRecipe(RecipeModel r, BBDD_Helper dbHelper) throws IngredientException {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1140,11 +1143,11 @@ public class BD_Operations {
 
         int deletedRows = db.delete(Struct_BD.INGREDIENT_TABLE, selection, selectionArgs);
         db.close();
-        if(deletedRows <= 0) throw new Exception("Ingredient(s) couldn't be deleted. Try later");
+        if(deletedRows <= 0) throw new IngredientException("Ingredient(s) couldn't be deleted. Try later");
 
     }
 
-    public static void deleteIngredientsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+    public static void deleteIngredientsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws IngredientException{
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -1177,7 +1180,7 @@ public class BD_Operations {
 
     }
 
-    public static IngredientModel getIngredientById(int id_ingredient, BBDD_Helper dbHelper) throws Exception{
+    public static IngredientModel getIngredientById(int id_ingredient, BBDD_Helper dbHelper) throws IngredientException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1219,12 +1222,12 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Ingredient not Found");
+            throw new IngredientException("Ingredient not Found");
         }
 
     }
 
-    public static List<IngredientModel> getIngredientsByRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception{
+    public static List<IngredientModel> getIngredientsByRecipe(RecipeModel r, BBDD_Helper dbHelper) throws IngredientException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1269,12 +1272,12 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Ingredients Not Found");
+            throw new IngredientException("Ingredients Not Found");
         }
 
     }
 
-    public static List<IngredientModel> getIngredientsByIdRecipe(int id_recipe, BBDD_Helper dbHelper) throws Exception{
+    public static List<IngredientModel> getIngredientsByIdRecipe(int id_recipe, BBDD_Helper dbHelper) throws IngredientException{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -1320,7 +1323,7 @@ public class BD_Operations {
         } else{
             cursor.close();
             db.close();
-            throw new Exception("Ingredients Not Found");
+            throw new IngredientException("Ingredients Not Found");
         }
 
     }

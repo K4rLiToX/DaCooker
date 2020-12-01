@@ -85,6 +85,8 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         cb_timer.setOnClickListener(view -> {
             boolean timerOn = cb_timer.isChecked();
             til_hours.setEnabled(timerOn);
+            input_hours.setText("");
+            input_minute.setText("");
             til_minute.setEnabled(timerOn);
         });
 
@@ -143,8 +145,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
 
         } else {
             //Errores
-            Toast.makeText(getActivity().getApplicationContext(), "Description cannot be empty. " +
-                    "Hours, Minutes Must Be Correct", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.addStep_err), Toast.LENGTH_SHORT).show();
         }
     }
 

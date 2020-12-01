@@ -50,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
         bottomNavigationView.getMenu().getItem(1).setCheckable(true).setChecked(true);
-
-        //db = new BBDD_Helper(MainActivity.this);
-        //SingletonMap.getInstance().put(SHARED_DB_DATA_KEY, db);
     }
 
     @Override

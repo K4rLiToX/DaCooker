@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
@@ -96,6 +97,7 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     public void setEditList(List<StepModel> stepList){
         int prevSize = this.stepModelList.size();
         this.stepModelList.clear();
+        if(stepList == null) stepList = new ArrayList<>();
         this.stepModelList.addAll(stepList);
         notifyItemRangeRemoved(0, prevSize);
         notifyItemRangeInserted(0, stepList.size());

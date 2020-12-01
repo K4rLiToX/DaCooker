@@ -9,9 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -125,8 +123,8 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.add_recipe_viewPager);
 
         if(forEdit) {
-            btnFinish.setText("Update & Change");
-            setTitle("Update Recipe");
+            btnFinish.setText(getString(R.string.btnUpdate));
+            setTitle(R.string.edit_title);
         }
 
     }
@@ -138,9 +136,9 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         add_ingredients = new AddIngredientFragment();
         add_steps = new AddStepFragment();
 
-        pagerAdapter.addFragment(add_recipe, "Recipe");
-        pagerAdapter.addFragment(add_ingredients, "Ingredients");
-        pagerAdapter.addFragment(add_steps, "Steps");
+        pagerAdapter.addFragment(add_recipe, getString(R.string.add_recipe_fragment_title));
+        pagerAdapter.addFragment(add_ingredients, getString(R.string.add_ingredients_fragment_title));
+        pagerAdapter.addFragment(add_steps, getString(R.string.add_steps_fragment_title));
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(pagerAdapter.getCount());
@@ -211,14 +209,14 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         String error = "";
 
         if(r.getRecipeName().trim().equalsIgnoreCase("") || r.getRecipeName().length() > 60)
-            error = "Recipe name must be between 0 and 60 characters";
+            error = getString(R.string.validation_err_name);
         else if(r.getRecipeDescription().length() > 140)
-            error = "Description must be between 0-140 characters";
+            error = getString(R.string.validation_err_description);
         else if(r.getExecutionTimeHour() < 0)
-            error = "Hours must be a number. If not necessary, put 0 in it";
+            error = getString(R.string.validation_err_hour);
         else if(r.getExecutionTimeMinute() < 0 || r.getExecutionTimeMinute() > 59)
-            error = "Minutes must be a number. Use 0 to 59 to fill";
-        else if(r.getMealType() == null) error = "You have to use a MealType";
+            error = getString(R.string.validation_err_minute);
+        else if(r.getMealType() == null) error = getString(R.string.validation_err_mealtype);
 
         if(error.trim().length() != 0) {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
@@ -252,7 +250,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 finish();
 
             } catch (Exception e) {
-                Toast.makeText(this, "Error during addition", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_addition_recipe), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -324,14 +322,12 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
                 BD_Operations.deleteIngredientsFromRecipeId(r.getId(), dbHelper);
 
-
                 for(IngredientModel ing : this.getIngredientsData()){
                     ing.setIdRecipe(r.getId());
                     BD_Operations.addIngredient(ing, r.getId(), dbHelper);
                 }
 
                 BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
-
                 for(StepModel s : this.getStepsData()){
                     s.setRecipe_ID(r.getId());
                     BD_Operations.addStep(s, r.getId(), dbHelper);
@@ -340,7 +336,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 finish();
 
             } catch (Exception e) {
-                Toast.makeText(this, "Error during update", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.err_update_recipe), Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }

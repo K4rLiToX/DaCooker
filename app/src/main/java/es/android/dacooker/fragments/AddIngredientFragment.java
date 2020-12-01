@@ -67,9 +67,6 @@ public class AddIngredientFragment extends Fragment {
                 ing.setQuantity(til_quantity.getText().toString());
                 ingredientList.add(ing);
 
-                //Eliminar cuando funcione
-                Toast.makeText(getActivity().getApplicationContext(), ingredientList.size()+"", Toast.LENGTH_SHORT).show();
-
                 rwAdapter.notifyItemInserted(ingredientList.size()-1);
                 til_name.setText("");
                 til_quantity.setText("");
@@ -86,13 +83,15 @@ public class AddIngredientFragment extends Fragment {
         return v;
     }
 
-    private String validFields(){  //Cambiar para Validación Bien
+    private String validFields(){
 
         String err = "";
-        if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_name.getText().toString().length() > 100)
-            err = "Name must be between 0-100 characters";
-        else if(til_quantity.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().length() > 100)
-            err = "Quantity must be between 0-50 characters";
+        if(til_name.getText().toString().trim().equalsIgnoreCase("")
+                || til_name.getText().toString().length() > 100)
+            err = getString(R.string.addIng_err_name);
+        else if(til_quantity.getText().toString().trim().equalsIgnoreCase("")
+                || til_quantity.getText().toString().length() > 100)
+            err = getString(R.string.addIng_err_quantity);
 
         return err;
     }
