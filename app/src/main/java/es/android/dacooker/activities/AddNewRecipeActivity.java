@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -320,17 +321,19 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 if(r.getId() == -1) throw new Exception();
 
                 BD_Operations.deleteIngredientsFromRecipeId(r.getId(), dbHelper);
-
+                Log.e("ingSize: ", this.getIngredientsData().size()+"");
                 for(IngredientModel ing : this.getIngredientsData()){
                     ing.setIdRecipe(r.getId());
                     BD_Operations.addIngredient(ing, r.getId(), dbHelper);
                 }
 
                 BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
+                Log.e("stepsSize: ", this.getStepsData().size()+"");
                 int o = 1;
                 for(StepModel s : this.getStepsData()){
                     s.setStepOrder(o);
                     s.setRecipe_ID(r.getId());
+                    Log.e("Step: ", o+"");
                     BD_Operations.addStep(s, r.getId(), dbHelper);
                     o++;
                 }

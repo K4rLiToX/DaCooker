@@ -130,16 +130,18 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void initParameters(){
-        try {
-            BBDD_Helper db = new BBDD_Helper(getApplicationContext());
-            this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
-            this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
-            this.stepList = BD_Operations.getStepsFromRecipeIdOrdered(recipeSelected.getId(), db);
-        } catch (IngredientException e){
-            this.ingredientList = new ArrayList<>();
-        } catch(StepException e) {
-            this.stepList = new ArrayList<>();
-        }
+        BBDD_Helper db = new BBDD_Helper(getApplicationContext());
+
+        //RecipeSelected
+        this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
+
+        //StepList
+        try { this.stepList = BD_Operations.getStepsFromRecipeIdOrdered(recipeSelected.getId(), db);
+        } catch (StepException e) { this.stepList = new ArrayList<>(); }
+
+        //IngredientList
+        try { this.ingredientList = BD_Operations.getIngredientsByIdRecipe(recipeSelected.getId(), db);
+        } catch (IngredientException e){ this.ingredientList = new ArrayList<>(); }
 
         isExpanded = false;
         this.ingredientRecyclerView.setVisibility(View.GONE);

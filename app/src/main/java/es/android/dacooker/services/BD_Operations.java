@@ -620,7 +620,7 @@ public class BD_Operations {
 
     public static void addStep(StepModel s, int id_recipe, BBDD_Helper dbHelper) throws StepException {
 
-        updateStepOrdersPlus(s, dbHelper);
+        //updateStepOrdersPlus(s, dbHelper);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -634,14 +634,16 @@ public class BD_Operations {
 
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.STEP_TABLE, null, values);
+
         db.close();
+
         if(row == -1) throw new StepException("Error Ocurred. Not Possible Addition.");
 
     }
 
     public static void updateStep(StepModel s, BBDD_Helper dbHelper) throws StepException {
 
-        updateStepOrdersPlus(s, dbHelper);
+        //updateStepOrdersPlus(s, dbHelper);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -1169,7 +1171,7 @@ public class BD_Operations {
 
     }
 
-    public static void deleteIngredientsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws IngredientException{
+    public static void deleteIngredientsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
