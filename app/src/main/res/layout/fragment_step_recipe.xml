@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,15 +29,36 @@
         android:textColor="@color/black"
         android:textAlignment="center"/>
 
-    <TextView
-        android:id="@+id/step_cooking_chrono"
+    <LinearLayout
+        android:id="@+id/step_fragment_timer_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AQUÍ VA EL CRONO"
-        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/step_fragment_description"
         android:layout_centerInParent="true"
-        android:visibility="gone"
-        android:layout_below="@+id/step_fragment_description"/>
+        android:layout_marginTop="10dp"
+        android:padding="4dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/step_cooking_chrono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"
+            app:drawableTopCompat="@drawable/ic_timer"
+            app:drawableTint="@color/red_500"
+            android:layout_marginEnd="4dp"/>
+
+        <Button
+            android:id="@+id/step_fragment_btn_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/step_cooking_btnTimerStart"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/step_fragment_btnRight"

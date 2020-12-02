@@ -821,7 +821,7 @@ public class BD_Operations {
         db.close();
     }
 
-    public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) throws StepException{
+    public static void deleteStepsFromRecipeId(int id_recipe, BBDD_Helper dbHelper) {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 

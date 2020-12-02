@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcel;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import es.android.dacooker.activities.RecipeDetails;
 import es.android.dacooker.adapters.RecyclerViewAdapter;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
+import es.android.dacooker.models.StepModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.SingletonMap;
@@ -81,15 +83,15 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     private void initListAndRecyclerView() {
-        BBDD_Helper db = new BBDD_Helper(getActivity().getApplicationContext());
+        BBDD_Helper db = new BBDD_Helper(getActivity());
         this.recipeList = BD_Operations.getRecipes(db);
         adapter = new RecyclerViewAdapter(recipeList,this);
 
         if(this.recipeList.isEmpty()){
-            this.recipeRecyclerView.setVisibility(View.GONE);
             //Mostramos Text View (no hay recetas)
             this.tvNoRecipes.setVisibility(View.VISIBLE);
         } else {
+            this.tvNoRecipes.setVisibility(View.GONE);
             recipeRecyclerView.setAdapter(adapter);
             //Set the itemtouchhelper to delete on swipe
             itemTouchHelper = new ItemTouchHelper(simpleCallback);
@@ -108,14 +110,14 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             if(direction == ItemTouchHelper.LEFT){
-                RecipeModel recipetoDelete = recipeList.get(position);
-                deleteRecipe(recipetoDelete, position);
+                RecipeModel recipeToDelete = recipeList.get(position);
+                deleteRecipe(recipeToDelete, position);
             }
         }
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            new RecyclerViewSwipeDecorator.Builder(getActivity(), c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)
                     .create()
@@ -138,10 +140,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
-        this.initListAndRecyclerView();
+        initListAndRecyclerView();
     }
 
     private void deleteRecipe(RecipeModel recipeToDelete, int position){
@@ -153,13 +156,17 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     BBDD_Helper db = new BBDD_Helper(getActivity());
-                    BD_Operations.deleteRecipe(recipeToDelete, db);
                     recipeList.remove(position);
+                    BD_Operations.deleteRecipe(recipeToDelete.getId(), db);
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position, recipeList.size());
+                    if(recipeList.isEmpty()){
+                        tvNoRecipes.setVisibility(View.VISIBLE);
+                    }
                     Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_SHORT).show();
                 } catch (Exception e){
-                    Toast.makeText(getActivity(), "Error on Delete.", Toast.LENGTH_SHORT).show();
+                    initListAndRecyclerView();
+                    Toast.makeText(getActivity(), "Error on Delete", Toast.LENGTH_SHORT).show();
                 }
             }
         });

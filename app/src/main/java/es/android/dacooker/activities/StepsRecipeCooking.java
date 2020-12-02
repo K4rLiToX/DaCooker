@@ -41,7 +41,7 @@ public class StepsRecipeCooking extends AppCompatActivity {
         this.vp = findViewById(R.id.step_cooking_viewPager);
         this.vpAdapter = new StepsCookingPagerAdapter(getSupportFragmentManager());
         for(StepModel s : this.stepList) {
-            StepRecipeFragment srf = new StepRecipeFragment(s, this.stepList.size() - 1);
+            StepRecipeFragment srf = new StepRecipeFragment(s, this.stepList.size());
             vpAdapter.addFragment(srf);
         }
         this.vp.setAdapter(this.vpAdapter);

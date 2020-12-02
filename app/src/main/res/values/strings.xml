@@ -8,6 +8,10 @@
     <string name="recipe_detail_label">Recipe Details</string>
     <string name="add_new_recipe_label">Add Recipe</string>
 
+    <!-- Main Activity Menu Labels -->
+    <string name="main_menu_search_label">Search</string>
+    <string name="main_menu_settings_label">Settings</string>
+
     <!--Bottom Navigation Menu Titles-->
     <string name="bottom_navigation_title_frequently">Most Used</string>
     <string name="bottom_navigation_title_recipes">Recipes</string>
@@ -142,5 +146,8 @@
     <string name="step_cooking_stepDescription">Step Description</string>
     <string name="step_cooking_btnCancel">Cancel Cooking</string>
     <string name="step_cooking_btnFinish">Ready to Serve!</string>
+    <string name="step_cooking_btnTimerStart">Start</string>
+    <string name="step_cooking_btnTimerStop">Stop</string>
+    <string name="step_cooking_btnTimerContinue">Continue</string>
 
 </resources>

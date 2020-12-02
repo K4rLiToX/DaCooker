@@ -5,12 +5,17 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import es.android.dacooker.R;
 import es.android.dacooker.activities.StepsRecipeCooking;
@@ -27,7 +32,10 @@ public class StepRecipeFragment extends Fragment {
     StepsRecipeCooking parentActivity;
     TextView stepOfTotal, stepDescription;
     ImageView arrowBack, arrowNext;
-    Button btnFinish, btnCancel;
+    Button btnFinish, btnCancel, btnTimer;
+    LinearLayout timerLayout;
+    boolean isPaused = false;
+    long timeRemaining = 0;
 
     //Provi
     TextView crono;
@@ -60,12 +68,11 @@ public class StepRecipeFragment extends Fragment {
         this.arrowNext = v.findViewById(R.id.step_fragment_btnRight);
         this.btnCancel = v.findViewById(R.id.step_cooking_btnCancel);
         this.btnFinish = v.findViewById(R.id.step_cooking_btnFinish);
+        this.timerLayout = v.findViewById(R.id.step_fragment_timer_layout);
+        this.btnTimer = v.findViewById(R.id.step_fragment_btn_timer);
+        this.crono = v.findViewById(R.id.step_cooking_chrono);
 
         parentActivity = (StepsRecipeCooking) getActivity();
-
-
-        //CHRONO
-        this.crono = v.findViewById(R.id.step_cooking_chrono);
     }
 
     @SuppressLint("SetTextI18n")
@@ -87,7 +94,76 @@ public class StepRecipeFragment extends Fragment {
         this.stepDescription.setText(this.step.getDescription());
 
         //CHRONO
-        if(this.step.isRequiredTimer()) this.crono.setVisibility(View.VISIBLE);
+        if(this.step.isRequiredTimer()){
+
+            this.timerLayout.setVisibility(View.VISIBLE);
+            long durationHours = TimeUnit.HOURS.toMillis(step.getTimerHour());
+            long durationMinutes = TimeUnit.MINUTES.toMillis(step.getTimerMinute());
+            long duration = durationHours + durationMinutes;
+            btnTimer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(btnTimer.getText().equals("Start")){
+                        isPaused = false;
+                        btnTimer.setText(getString(R.string.step_cooking_btnTimerStop));
+                        new CountDownTimer(duration, 1000){
+
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                if(isPaused){
+                                    cancel();
+                                } else {
+                                    //Convert millis to hours, minutes and seconds
+                                    String time = String.format(Locale.ENGLISH, "%02d : %02d : %02d",
+                                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                                    crono.setText(time);
+                                    timeRemaining = millisUntilFinished;
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                crono.setText("Finished!");
+                                btnTimer.setVisibility(View.GONE);
+                            }
+                        }.start();
+
+                    } else if(btnTimer.getText().equals("Stop")){
+                        isPaused = true;
+                        btnTimer.setText(getString(R.string.step_cooking_btnTimerContinue));
+                    } else { //si es continue
+                        isPaused = false;
+                        btnTimer.setText(getString(R.string.step_cooking_btnTimerStop));
+                        long duration = timeRemaining;
+                        new CountDownTimer(duration , 1000){
+
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                if(isPaused){
+                                    cancel();
+                                } else {
+                                    //Convert millis to hours, minutes and seconds
+                                    String time = String.format(Locale.ENGLISH, "%02d : %02d : %02d",
+                                            TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                                            TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                                            TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                                    crono.setText(time);
+                                    timeRemaining = millisUntilFinished;
+                                }
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                crono.setText("Finished!");
+                                btnTimer.setVisibility(View.GONE);
+                            }
+                        }.start();
+                    }
+                }
+            });
+        }
     }
 
     private void initButtons(){
