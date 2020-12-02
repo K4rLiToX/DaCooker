@@ -149,5 +149,10 @@
     <string name="step_cooking_btnTimerStart">Start</string>
     <string name="step_cooking_btnTimerStop">Stop</string>
     <string name="step_cooking_btnTimerContinue">Continue</string>
+    <string name="step_cooking_timer_pause">Timer Paused</string>
+    <string name="step_cooking_timer_stop">Timer Stopped</string>
+    <string name="step_cooking_timer_start">Timer Begins</string>
+    <string name="step_cooking_timer_resume">Timer Continues</string>
+    <string name="step_cooking_stopped_timers_err">Please, stop all-on timers before serve!</string>
 
 </resources>

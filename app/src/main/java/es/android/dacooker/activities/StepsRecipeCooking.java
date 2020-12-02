@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -45,6 +46,7 @@ public class StepsRecipeCooking extends AppCompatActivity {
             vpAdapter.addFragment(srf);
         }
         this.vp.setAdapter(this.vpAdapter);
+        this.vp.setOffscreenPageLimit(vpAdapter.getCount());
 
     }
 
@@ -67,5 +69,20 @@ public class StepsRecipeCooking extends AppCompatActivity {
     public void goBackStep(){
         int backStep = this.vp.getCurrentItem() - 1;
         this.vp.setCurrentItem(backStep);
+    }
+
+    public boolean checkTimers() {
+        boolean res = true;
+
+        for(StepModel s : stepList){
+            if(s.isRequiredTimer()) {
+                StepRecipeFragment rsf = (StepRecipeFragment) this.vpAdapter.getItem(s.getStepOrder()-1);
+                if(!rsf.isActive()) {
+                    res = false;
+                    break;
+                }
+            }
+        }
+        return res;
     }
 }
