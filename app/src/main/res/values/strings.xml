@@ -39,6 +39,7 @@
     <string name="recipe_detail_ingredientList_empty">No Ingredients!</string>
     <string name="recipe_detail_deleted">Recipe Deleted</string>
     <string name="recipe_detail_deleted_error">Error on Delete</string>
+    <string name="recipe_detail_nosteps_error">There is no steps, so… You can\'t cook this</string>
 
     <!-- Recipe Detail App Bar Menu -->
     <string name="recipe_detail_app_bar_menu_delete">Delete</string>
@@ -133,5 +134,13 @@
     <string name="validation_err_mealtype">Use a MealType</string>
     <string name="err_addition_recipe">Error during Addition</string>
     <string name="err_update_recipe">Error during Update</string>
+
+    <!-- Steps Cooking Fragment -->
+    <string name="step_cooking_stepOfTotal">Step x of N</string>
+    <string name="step_cooking_stepOfTotal_one">Step</string>
+    <string name="step_cooking_stepOfTotal_two">of</string>
+    <string name="step_cooking_stepDescription">Step Description</string>
+    <string name="step_cooking_btnCancel">Cancel Cooking</string>
+    <string name="step_cooking_btnFinish">Ready to Serve!</string>
 
 </resources>

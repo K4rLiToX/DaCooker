@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.StepRecipeFragment">
+
+    <TextView
+        android:id="@+id/step_fragment_orderOfTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/step_cooking_stepOfTotal"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="25sp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:textAlignment="center"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/step_fragment_description"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/step_cooking_stepDescription"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="25sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/black"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/step_cooking_chrono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AQUÍ VA EL CRONO"
+        android:layout_marginTop="15dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:layout_below="@+id/step_fragment_description"/>
+
+    <ImageView
+        android:id="@+id/step_fragment_btnRight"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_arrow_right"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:id="@+id/step_fragment_btnLeft"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:src="@drawable/ic_arrow_left"
+        android:scaleType="fitXY"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/step_cooking_btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/step_cooking_btnCancel"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/step_cooking_btnFinish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/step_cooking_btnFinish"
+            android:layout_marginStart="3dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

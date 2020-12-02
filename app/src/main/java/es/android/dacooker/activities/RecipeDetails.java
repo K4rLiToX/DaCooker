@@ -156,6 +156,17 @@ public class RecipeDetails extends AppCompatActivity {
                 + this.recipeSelected.getExecutionTimeMinute()+"min");
         this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));
         this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
+
+        this.btnStartRecipe.setOnClickListener(view -> {
+
+            if(this.stepList == null || this.stepList.isEmpty())
+                Toast.makeText(this, getString(R.string.recipe_detail_nosteps_error), Toast.LENGTH_SHORT).show();
+            else {
+                SingletonMap.getInstance().put(SHARE_STEPLIST_KEY, stepList);
+                Intent i = new Intent(RecipeDetails.this, StepsRecipeCooking.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void initIngredientRecyclerView(){

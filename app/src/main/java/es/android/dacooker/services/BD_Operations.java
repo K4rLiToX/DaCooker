@@ -149,6 +149,29 @@ public class BD_Operations {
 
     }
 
+    public static void updateTimesCooked(int id_recipe, BBDD_Helper dbHelper) throws Exception {
+
+        RecipeModel r = BD_Operations.getRecipeById(id_recipe, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked() + 1);
+
+        String selection = Struct_BD.RECIPE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        int row = db.update(
+                Struct_BD.RECIPE_TABLE,
+                values,
+                selection,
+                selectionArgs);
+
+        db.close();
+
+        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
+    }
+
     public static void deleteRecipe(RecipeModel r, BBDD_Helper dbHelper) throws Exception {
 
         deleteStepsFromRecipe(r, dbHelper);
