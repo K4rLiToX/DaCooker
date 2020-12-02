@@ -106,6 +106,9 @@ public class StepRecipeFragment extends Fragment {
                 TimeUnit.MILLISECONDS.toSeconds(totalDuration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(totalDuration)));
 
         this.crono.setText(this.stepTimeMillis);
+
+        this.btnTimerPause.setEnabled(false);
+        this.btnTimerStop.setEnabled(false);
     }
 
     private void timerButtons(){
