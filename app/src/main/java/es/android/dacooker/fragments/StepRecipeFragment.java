@@ -1,12 +1,16 @@
 package es.android.dacooker.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import es.android.dacooker.R;
 import es.android.dacooker.activities.StepsRecipeCooking;
 import es.android.dacooker.models.StepModel;
+import es.android.dacooker.services.SoundService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,13 +44,13 @@ public class StepRecipeFragment extends Fragment {
 
     //Chrono
     ImageButton btnTimerPlay, btnTimerStop, btnTimerPause;
+    Vibrator vibrator;
     LinearLayout timerLayout;
     String stepTimeMillis;
     long totalDuration;
     long timeRemaining = 0;
     TextView crono;
-    boolean isPaused;
-    boolean isStopped;
+    boolean isPaused, isStopped, musicOn;
 
 
     public StepRecipeFragment() {
@@ -121,13 +126,18 @@ public class StepRecipeFragment extends Fragment {
         });
 
         btnTimerStop.setOnClickListener(view -> {
-            isStopped = true;
-            isPaused = false;
-            crono.setText(stepTimeMillis);
-            btnTimerPlay.setEnabled(true);
-            btnTimerPause.setEnabled(false);
-            btnTimerStop.setEnabled(false);
-            Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_stop), Toast.LENGTH_SHORT).show();
+
+            if(!isStopped) {    //No ha finalizado el Timer
+                isStopped = true;
+                isPaused = false;
+                crono.setText(stepTimeMillis);
+                btnTimerPlay.setEnabled(true);
+                btnTimerPause.setEnabled(false);
+                btnTimerStop.setEnabled(false);
+                Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_stop), Toast.LENGTH_SHORT).show();
+            } else {    // Timer Finalizado
+                this.stopMusic();
+            }
         });
 
         btnTimerPlay.setOnClickListener(new View.OnClickListener() {
@@ -173,7 +183,11 @@ public class StepRecipeFragment extends Fragment {
                 crono.setText("Finished!");
                 isStopped = true;
                 btnTimerPause.setEnabled(false);
-                btnTimerStop.setEnabled(false);
+                btnTimerPlay.setEnabled(false);
+
+                Intent finished = new Intent(getActivity(), SoundService.class);
+                getActivity().startService(finished);
+                musicOn = true;
             }
         }.start();
     }
@@ -201,21 +215,33 @@ public class StepRecipeFragment extends Fragment {
 
         arrowBack.setOnClickListener(view -> {
             this.parentActivity.goBackStep();
+            this.stopMusic();
         });
 
         arrowNext.setOnClickListener(view -> {
             this.parentActivity.goNextStep();
+            this.stopMusic();
         });
 
         btnCancel.setOnClickListener(view -> {
             parentActivity.finish();
+            this.stopMusic();
         });
 
         btnFinish.setOnClickListener(view -> {
             if(!parentActivity.checkTimers())
                 Toast.makeText(getActivity(), getString(R.string.step_cooking_stopped_timers_err), Toast.LENGTH_SHORT).show();
             else this.parentActivity.finishCooking();
+            this.stopMusic();
         });
+    }
+
+    private void stopMusic(){
+        if(musicOn) {
+            Intent stopMusic = new Intent(getActivity(), SoundService.class);
+            getActivity().stopService(stopMusic);
+            musicOn = false;
+        }
     }
 
     public boolean isActive(){
