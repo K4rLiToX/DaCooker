@@ -45,8 +45,7 @@
             android:theme="@style/Theme.DaCooker.NoActionBar" />
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".services.SoundService"

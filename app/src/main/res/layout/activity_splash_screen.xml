@@ -6,12 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SplashScreenActivity"
-    android:background="@color/red_50">
+    android:background="@color/red_500">
 
     <ImageView
         android:id="@+id/splash_screen_img"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
         android:layout_centerInParent="true"
         android:src="@mipmap/recipe_logo"/>
 
@@ -30,6 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/black"
+            android:fontFamily="sans-serif-condensed"
             android:layout_marginBottom="4dp"
             android:text="@string/splash_screen_title1"/>
 
@@ -37,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:fontFamily="sans-serif-condensed"
             android:text="@string/splash_screen_title2"/>
 
     </LinearLayout>
