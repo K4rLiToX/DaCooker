@@ -175,4 +175,7 @@
     <string name="notify_title">Hey, time to Cook!</string>
     <string name="notify_description">Timeout! It seems your timer has finish, so… Time to turn back!</string>
 
+    <string name="splash_screen_title1">by</string>
+    <string name="splash_screen_title2">Ángel Baeza &amp; Carlos Diestro</string>
+
 </resources>
