@@ -159,7 +159,7 @@ public class CustomDialog extends DialogFragment {
     }
 
     private boolean validateTime(String hour, String minute){
-        return !hour.isEmpty() && !minute.isEmpty() && Integer.parseInt(hour) >= 0 && Integer.parseInt(minute) > 0 && Integer.parseInt(minute) <= 59;
+        return !hour.isEmpty() && !minute.isEmpty() && Integer.parseInt(hour) >= 0 && Integer.parseInt(minute) >= 0 && Integer.parseInt(minute) <= 59;
     }
 
     @Override

@@ -171,7 +171,7 @@
 
     <string name="notification_channel_name">FoodChannel</string>
     <string name="notification_channel_description">Channel For Foods Notifications</string>
-    <string name="cooking_do_not_close">Please, do not close the app. You could lost your progress</string>
+    <string name="cooking_do_not_close">Please, do not close the app. You could loose your progress</string>
     <string name="notify_title">Hey, time to Cook!</string>
     <string name="notify_description">Timeout! It seems your timer has finish, so… Time to turn back!</string>
 
