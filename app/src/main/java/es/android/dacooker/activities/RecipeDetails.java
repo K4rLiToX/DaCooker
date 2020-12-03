@@ -186,6 +186,7 @@ public class RecipeDetails extends AppCompatActivity {
                     try {
                         BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
                         BD_Operations.deleteRecipe(recipeSelected.getId(), db);
+                        SingletonMap.getInstance().put("SHARE_RECETA_ELIMINADA", "true");
                         Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
                         finish();
                     } catch (Exception e){

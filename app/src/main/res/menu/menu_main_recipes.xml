@@ -9,11 +9,6 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/main_menu_undo_search"
-        android:title="@string/main_menu_undo_search"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/main_menu_settings"
         android:title="@string/main_menu_settings_label"
         app:showAsAction="never"/>

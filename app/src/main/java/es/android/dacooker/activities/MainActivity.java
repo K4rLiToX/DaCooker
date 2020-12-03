@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else if(itemID == R.id.main_menu_settings) {
             //Start Setting Activity
             return true;
-        } else if(itemID == R.id.main_menu_undo_search) {
-            undoFilters();
-            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void undoFilters(){
         sendResultList(null, "", "");
-        recipeFragment.onResume();
     }
 
     @Override

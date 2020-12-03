@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcel;
 import android.util.Log;
+import android.view.KeyboardShortcutGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     RecyclerViewAdapter adapter;
     //ItemTouch
     ItemTouchHelper itemTouchHelper;
+    private RecipeModel recipeClicked;
 
 
     public RecipeFragment() {
@@ -90,12 +92,17 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         filterField = view.findViewById(R.id.recipe_fragment_filterApplied);
         btnUndoFilter = view.findViewById(R.id.recipe_fragment_btnUndo);
 
+        this.recipeClicked = new RecipeModel();
+
         btnUndoFilter.setOnClickListener(undo -> {
             recipeList = null;
-            filters = new String[]{"", ""};
+            filters = null;
+            isFilter = false;
+            isFilterMealType = false;
+            isFilterTimer = false;
+            SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
             initListAndRecyclerView();
             layoutFilters.setVisibility(View.GONE);
-
         });
 
         initListAndRecyclerView();
@@ -111,7 +118,10 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         BBDD_Helper db = new BBDD_Helper(getActivity());
 
         filters = (String[]) SingletonMap.getInstance().get(SHARE_FILTER_KEY);
-        if(filters == null) filters = new String[]{"", ""};
+        if(filters == null) {
+            Log.e("Filters","NULL");
+            filters = new String[]{"", ""};
+        }
         if(filters[0].equalsIgnoreCase("")){
             Log.e("Filters: ", "none");
             isFilterMealType = false;
@@ -136,17 +146,17 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
                 Log.e("Filters: ", "mealtype");
                 try { this.recipeList = BD_Operations.getRecipesByMealType(MealType.valueOf(filters[1]), db);
                 } catch (Exception e) {
-                    Toast.makeText(getActivity(), getString(R.string.filters_gone_showing_all), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
                     this.recipeList = BD_Operations.getRecipes(db);
                 }
 
             } else {    //isFilterTimer == true
                 Log.e("Filters: ", "timer");
                 String[] time = filters[1].split(":");
-                filterField.setText(getString(R.string.filters_less) + time[0]+"h " + time[1] + "min");
+                filterField.setText(getString(R.string.filters_less) + " " + time[0]+"h " + time[1] + "min");
                 try { this.recipeList = BD_Operations.getRecipesByLessExecutionTime(Integer.parseInt(time[0]), Integer.parseInt(time[1]), db);
                 } catch (Exception e) {
-                    Toast.makeText(getActivity(), getString(R.string.filters_gone_showing_all), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
                     this.recipeList = BD_Operations.getRecipes(db);
                 }
             }
@@ -207,6 +217,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     @Override
     public void onRecipeClick(int position){
         RecipeModel recipe = recipeList.get(position);
+        this.recipeClicked = recipe;
         SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipe);
         Intent i = new Intent(getActivity(), RecipeDetails.class);
         startActivity(i);
@@ -220,6 +231,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        String isDeleted = (String) SingletonMap.getInstance().get("SHARE_RECETA_ELIMINADA");
+        if(recipeList.contains(recipeClicked) && recipeList.size() == 1 && isDeleted != null){
+            SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
+            layoutFilters.setVisibility(View.GONE);
+        }
         initListAndRecyclerView();
     }
 
@@ -242,9 +258,12 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
                         recipeList = null;
                         isFilterMealType = false;
                         isFilterTimer = false;
+                        isFilter = false;
+                        SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
                         initListAndRecyclerView();
-                        Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_SHORT).show();
+                        layoutFilters.setVisibility(View.GONE);
+                        //Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
+                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
 
                 } catch (Exception e){
                     initListAndRecyclerView();
