@@ -1,6 +1,8 @@
 package es.android.dacooker.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -28,6 +30,7 @@ import es.android.dacooker.R;
 import es.android.dacooker.activities.StepsRecipeCooking;
 import es.android.dacooker.models.StepModel;
 import es.android.dacooker.services.SoundService;
+import es.android.dacooker.utilities.NotificationsPush;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +54,10 @@ public class StepRecipeFragment extends Fragment {
     long timeRemaining = 0;
     TextView crono;
     boolean isPaused, isStopped, musicOn;
+
+    //Notifications
+    AlarmManager am;
+    PendingIntent pending;
 
 
     public StepRecipeFragment() {
@@ -122,6 +129,7 @@ public class StepRecipeFragment extends Fragment {
             isPaused = true;
             btnTimerPause.setEnabled(false);
             btnTimerPlay.setEnabled(true);
+            am.cancel(pending);
             Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_pause), Toast.LENGTH_SHORT).show();
         });
 
@@ -135,6 +143,7 @@ public class StepRecipeFragment extends Fragment {
                 btnTimerPause.setEnabled(false);
                 btnTimerStop.setEnabled(false);
                 Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_stop), Toast.LENGTH_SHORT).show();
+                am.cancel(pending);
             } else {    // Timer Finalizado
                 this.stopMusic();
             }
@@ -150,11 +159,13 @@ public class StepRecipeFragment extends Fragment {
                     Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_start), Toast.LENGTH_SHORT).show();
                     isStopped = false;
                     createNewTimer(totalDuration);
+                    initNotifications(totalDuration);
 
                 } else if (isPaused) {
                     Toast.makeText(getActivity(), getString(R.string.step_cooking_timer_resume), Toast.LENGTH_SHORT).show();
                     isPaused = false;
                     createNewTimer(timeRemaining);
+                    initNotifications(timeRemaining);
                 }
             }
         });
@@ -246,5 +257,22 @@ public class StepRecipeFragment extends Fragment {
 
     public boolean isActive(){
         return isStopped;
+    }
+
+    public void initNotifications(long millis){
+        //Intent
+        Intent intent = new Intent(getContext(), NotificationsPush.class);
+        pending = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
+
+        am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        long nowTime = System.currentTimeMillis();
+        am.set(AlarmManager.RTC_WAKEUP, nowTime + millis, pending);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Toast.makeText(getContext(), getString(R.string.cooking_do_not_close), Toast.LENGTH_LONG).show();
     }
 }

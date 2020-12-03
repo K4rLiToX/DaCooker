@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
+import es.android.dacooker.utilities.NotificationsPush;
 import es.android.dacooker.utilities.SingletonMap;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
         bottomNavigationView.getMenu().getItem(1).setCheckable(true).setChecked(true);
+
+        initNotifications();
     }
 
     @Override
@@ -65,11 +69,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
-
-
     private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
         setTitle(title);
     }
+
+    public void initNotifications(){
+        NotificationsPush.createNotifyChannel(this, getString(R.string.notification_channel_name),
+                getString(R.string.notification_channel_description));
+    }
+
+
 
 }
