@@ -262,8 +262,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
                         SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
                         initListAndRecyclerView();
                         layoutFilters.setVisibility(View.GONE);
-                        //Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
+                        initListAndRecyclerView();
+                    }
 
                 } catch (Exception e){
                     initListAndRecyclerView();

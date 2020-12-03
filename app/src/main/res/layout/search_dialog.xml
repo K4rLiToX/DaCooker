@@ -64,8 +64,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:padding="8dp"
-                android:inputType="none"
-                android:hint="@string/search_dialog_select_mealType"/>
+                android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
