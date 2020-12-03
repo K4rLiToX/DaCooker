@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,10 +17,12 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.RecyclerViewAdapter;
+import es.android.dacooker.dialogManager.CustomDialog;
 import es.android.dacooker.fragments.CustomFragment;
 import es.android.dacooker.fragments.MostUsedFragment;
 import es.android.dacooker.fragments.RecipeFragment;
@@ -30,13 +33,12 @@ import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.NotificationsPush;
 import es.android.dacooker.utilities.SingletonMap;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, CustomDialog.OnDialogInputListener {
 
     //Main Fragments
     private final RecipeFragment recipeFragment = new RecipeFragment();
     private final MostUsedFragment mostUsedFragment = new MostUsedFragment();
     private final CustomFragment customFragment = new CustomFragment();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,31 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_recipes, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemID = item.getItemId();
+        if(itemID == R.id.main_menu_search){
+            //Open Dialog for Filter Searching Recipes
+            showFilterSearchAlertDialog();
+            return true;
+        } else if(itemID == R.id.main_menu_settings) {
+            //Start Setting Activity
+            return true;
+        } else if(itemID == R.id.main_menu_undo_search) {
+            undoFilters();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
 
@@ -61,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else if(itemID == R.id.menu_most_used){
             changeFragment(mostUsedFragment, R.string.most_used_recipes_label);
             return true;
-        } else if(itemID == R.id.menu_custom){
+        } else if(itemID == R.id.menu_custom) {
             changeFragment(customFragment, R.string.custom_recipes_label);
             return true;
         } else {
@@ -80,5 +107,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 
+    private void showFilterSearchAlertDialog(){
+        CustomDialog dialog = new CustomDialog();
+        dialog.show(getSupportFragmentManager(), "CustomDialog");
+    }
 
+    private void undoFilters(){
+        sendResultList(null);
+        recipeFragment.onResume();
+    }
+
+    @Override
+    public void sendResultList(List<RecipeModel> resultList) {
+        SingletonMap.getInstance().put("SHARE_RESULT_LIST_KEY", resultList);
+        recipeFragment.onResume();
+    }
 }

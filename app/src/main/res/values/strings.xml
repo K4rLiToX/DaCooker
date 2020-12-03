@@ -11,6 +11,20 @@
     <!-- Main Activity Menu Labels -->
     <string name="main_menu_search_label">Search</string>
     <string name="main_menu_settings_label">Settings</string>
+    <string name="main_menu_undo_search">Undo Filter</string>
+
+    <!-- Search Dialog -->
+    <string name="search_dialog_mealType_radio">Meal Type</string>
+    <string name="search_dialog_time_radio">Time</string>
+    <string name="search_dialog_input_hour">Hours</string>
+    <string name="search_dialog_input_minutes">Minutes</string>
+    <string name="search_dialog_select_mealType">Meal Types</string>
+    <string name="search_dialog_title">Choose an Option</string>
+    <string name="search_dialog_confirmation">Search</string>
+    <string name="search_dialog_dismiss">Dismiss</string>
+    <string name="search_dialog_no_radio_selected">Please, Select an Option</string>
+    <string name="search_dialog_time_inputs_error">Hour must be at leat 0. Minute must be between 1 and 59</string>
+    <string name="search_dialog_mealType_select_error">Please, Select a MealType</string>
 
     <!--Bottom Navigation Menu Titles-->
     <string name="bottom_navigation_title_frequently">Most Used</string>
@@ -116,8 +130,8 @@
     <string name="add_step_btnUpdate">Update Changes</string>
 
     <!-- AddIngredientFragment -->
-    <string name="addIng_err_name">Name must be between 0-100 characters</string>
-    <string name="addIng_err_quantity">Quantity must be between 0-50 characters</string>
+    <string name="addIng_err_name">Name must be between 0–100 characters</string>
+    <string name="addIng_err_quantity">Quantity must be between 0–50 characters</string>
 
     <!-- AddStepFragment -->
     <string name="addStep_err">Description cannot be empty. Hours, Minutes Must Be Correct</string>

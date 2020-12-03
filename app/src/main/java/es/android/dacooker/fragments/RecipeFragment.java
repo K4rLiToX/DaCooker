@@ -50,10 +50,12 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 public class RecipeFragment extends Fragment implements RecipeClickListener{
 
     //SingletonMap Key
-    private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
+    private static final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
 
     //List to Show
     private List<RecipeModel> recipeList;
+    //Result list from Dialog Search
+    private List<RecipeModel> resultList;
     //Views
     private RecyclerView recipeRecyclerView;
     private TextView tvNoRecipes;
@@ -73,6 +75,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
         recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
         tvNoRecipes = view.findViewById(R.id.tvEmptyRecipes);
+
         initListAndRecyclerView();
         FloatingActionButton btnAddRecipe = view.findViewById(R.id.fabAddRecipe);
         btnAddRecipe.setOnClickListener(click -> {
@@ -84,18 +87,30 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
 
     private void initListAndRecyclerView() {
         BBDD_Helper db = new BBDD_Helper(getActivity());
-        this.recipeList = BD_Operations.getRecipes(db);
-        adapter = new RecyclerViewAdapter(recipeList,this);
 
-        if(this.recipeList.isEmpty()){
-            //Mostramos Text View (no hay recetas)
-            this.tvNoRecipes.setVisibility(View.VISIBLE);
-        } else {
+        this.resultList = (List<RecipeModel>) SingletonMap.getInstance().get("SHARE_RESULT_LIST_KEY");
+
+        if(this.resultList != null ){
+            adapter = new RecyclerViewAdapter(resultList, this);
             this.tvNoRecipes.setVisibility(View.GONE);
             recipeRecyclerView.setAdapter(adapter);
             //Set the itemtouchhelper to delete on swipe
             itemTouchHelper = new ItemTouchHelper(simpleCallback);
             itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
+        } else {
+            this.recipeList = BD_Operations.getRecipes(db);
+            adapter = new RecyclerViewAdapter(recipeList,this);
+
+            if(this.recipeList.isEmpty()){
+                //Mostramos Text View (no hay recetas)
+                this.tvNoRecipes.setVisibility(View.VISIBLE);
+            } else {
+                this.tvNoRecipes.setVisibility(View.GONE);
+                recipeRecyclerView.setAdapter(adapter);
+                //Set the itemtouchhelper to delete on swipe
+                itemTouchHelper = new ItemTouchHelper(simpleCallback);
+                itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
+            }
         }
     }
 
@@ -110,14 +125,19 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             if(direction == ItemTouchHelper.LEFT){
-                RecipeModel recipeToDelete = recipeList.get(position);
+                RecipeModel recipeToDelete;
+                if(resultList != null){
+                    recipeToDelete = resultList.get(position);
+                } else {
+                    recipeToDelete = recipeList.get(position);
+                }
                 deleteRecipe(recipeToDelete, position);
             }
         }
 
         @Override
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            new RecyclerViewSwipeDecorator.Builder(getActivity(), c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)
                     .create()
@@ -136,7 +156,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         startActivity(i);
     }
 
-    public void addRecipe(){
+    private void addRecipe(){
         startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
     }
 
@@ -156,7 +176,10 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
                     BBDD_Helper db = new BBDD_Helper(getActivity());
-                    recipeList.remove(position);
+                    if(resultList != null){
+                        resultList.remove(recipeToDelete);
+                    }
+                    recipeList.remove(recipeToDelete);
                     BD_Operations.deleteRecipe(recipeToDelete.getId(), db);
                     adapter.notifyItemRemoved(position);
                     adapter.notifyItemRangeChanged(position, recipeList.size());
