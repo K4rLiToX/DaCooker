@@ -113,13 +113,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     private void undoFilters(){
-        sendResultList(null);
+        sendResultList(null, "", "");
         recipeFragment.onResume();
     }
 
     @Override
-    public void sendResultList(List<RecipeModel> resultList) {
+    public void sendResultList(List<RecipeModel> resultList, String filter, String search) {
         SingletonMap.getInstance().put("SHARE_RESULT_LIST_KEY", resultList);
+        SingletonMap.getInstance().put("SHARE_FILTER_SEARCH", new String[]{filter, search});
         recipeFragment.onResume();
     }
 }

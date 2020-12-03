@@ -119,7 +119,7 @@ public class CustomDialog extends DialogFragment {
                         Toast.makeText(getActivity(), "No " + meal + " Recipes", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        onDialogInputListener.sendResultList(resultList);
+                        onDialogInputListener.sendResultList(resultList, "1", meal);
                     }
                 } catch (Exception e){
                     Toast.makeText(getActivity(), "Error on Retreiving Data", Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class CustomDialog extends DialogFragment {
                     if(resultList.isEmpty()) Toast.makeText(getActivity(), "No Recipes Matching that Time", Toast.LENGTH_SHORT).show();
                     else {
                         Log.e(TAG, resultList.size()+"");
-                        onDialogInputListener.sendResultList(resultList);
+                        onDialogInputListener.sendResultList(resultList, "2", hour+":"+minute);
                     }
                 } catch (Exception e){
                     Toast.makeText(getActivity(), "Error on Retreiving Data", Toast.LENGTH_SHORT).show();
@@ -173,6 +173,6 @@ public class CustomDialog extends DialogFragment {
     }
 
     public interface OnDialogInputListener {
-        void sendResultList(List<RecipeModel> resultList);
+        void sendResultList(List<RecipeModel> resultList, String filter, String search);
     }
 }

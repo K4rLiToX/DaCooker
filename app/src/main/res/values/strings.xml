@@ -37,6 +37,11 @@
     <string name="recipe_fragment_alert_dialog_confirmation">Delete</string>
     <string name="recipe_fragment_alert_dialog_dismiss">Cancel</string>
     <string name="recipe_fragment.delete_recipe_ok">Recipe Deleted Correctly</string>
+    <string name="recipe_fragment_filters_text">Filtered by</string>
+    <string name="recipe_fragment_undo_search">Undo Filter</string>
+    <string name="filters_gone_showing_all">Error on adding recipe while filter is active. Showing all recipes…</string>
+    <string name="filters_less">Less</string>
+    <string name="recipe_fragment_delete_showing_all">Last recipe in filter deleted. Going back to all Recipes</string>
 
     <!-- Recipe Card-->
     <string name="recipe_card_title">Recipe Card Title</string>

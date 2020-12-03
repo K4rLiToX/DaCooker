@@ -9,11 +9,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
+import es.android.dacooker.models.StepModel;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
@@ -48,6 +50,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return recipeList.size();
+    }
+
+    public void setRecipeList(List<RecipeModel> rList){
+        int prevSize = this.recipeList.size();
+        this.recipeList.clear();
+        if(rList == null) rList = new ArrayList<>();
+        this.recipeList.addAll(rList);
+        notifyItemRangeRemoved(0, prevSize);
+        notifyItemRangeInserted(0, rList.size());
     }
 
     //Intern Class

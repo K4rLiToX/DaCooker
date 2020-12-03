@@ -28,7 +28,45 @@
         android:gravity="center"
         android:visibility="gone"/>
 
+    <LinearLayout
+        android:id="@+id/recipe_fragment_layout_showFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/recipe_fragment_filters_text"
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/recipe_fragment_filterApplied"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            style="@style/TextAppearance.AppCompat.Body2"/>
+
+        <Button
+            android:id="@+id/recipe_fragment_btnUndo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/recipe_fragment_undo_search"
+            android:textAlignment="center"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@+id/recipe_fragment_layout_showFilters"
         android:id="@+id/recipe_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
