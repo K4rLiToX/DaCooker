@@ -48,7 +48,7 @@ public class StepRecipeFragment extends Fragment {
     LinearLayout timerLayout;
     String stepTimeMillis;
     long totalDuration, timeRemaining = 0;
-    boolean isPaused, isStopped, musicOn;
+    boolean isPaused, isStopped, musicOn, isCancel;
 
     //Notifications
     AlarmManager am;
@@ -234,6 +234,7 @@ public class StepRecipeFragment extends Fragment {
         btnCancel.setOnClickListener(view -> {
             parentActivity.finish();
             this.stopMusic();
+            isCancel = true;
         });
 
         btnFinish.setOnClickListener(view -> {
@@ -271,6 +272,6 @@ public class StepRecipeFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        Toast.makeText(getContext(), getString(R.string.cooking_do_not_close), Toast.LENGTH_LONG).show();
+        if(!isCancel) Toast.makeText(getContext(), getString(R.string.cooking_do_not_close), Toast.LENGTH_LONG).show();
     }
 }
