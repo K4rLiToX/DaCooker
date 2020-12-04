@@ -16,7 +16,8 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add"
         app:maxImageSize="32dp"
-        app:tint="@color/white"/>
+        android:backgroundTint="?attr/colorPrimary"
+        app:tint="?attr/colorOnPrimary"/>
 
     <TextView
         android:id="@+id/tvEmptyRecipes"

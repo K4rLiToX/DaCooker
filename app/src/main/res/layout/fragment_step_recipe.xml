@@ -48,7 +48,7 @@
             android:textAlignment="center"
             android:visibility="visible"
             app:drawableTopCompat="@drawable/ic_timer"
-            app:drawableTint="@color/red_500"
+            app:drawableTint="?attr/colorPrimary"
             android:layout_marginEnd="4dp"/>
 
         <LinearLayout

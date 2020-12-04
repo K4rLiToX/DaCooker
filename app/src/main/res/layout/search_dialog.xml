@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         style="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
-        android:textColor="@color/blueGray_700"/>
+        android:textColor="@color/greenBlack"/>
 
     <RadioGroup
         android:id="@+id/search_dialog_radio_group"

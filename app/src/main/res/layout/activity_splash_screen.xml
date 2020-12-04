@@ -7,7 +7,7 @@
     tools:context=".activities.SplashScreenActivity"
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
-    android:background="@color/red_500">
+    android:background="?attr/colorPrimary">
 
     <RelativeLayout
         android:id="@+id/splash_relative_image"
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorOnPrimary"
                 android:fontFamily="sans-serif-condensed"
                 android:text="@string/splash_screen_title1"
                 android:layout_centerHorizontal="true"/>
@@ -52,7 +52,7 @@
                 android:id="@+id/splash_text_developers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorOnPrimary"
                 android:textSize="16dp"
                 android:layout_below="@+id/splash_text_by"
                 android:fontFamily="sans-serif-condensed"
