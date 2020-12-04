@@ -17,8 +17,7 @@ public class RecipeModel implements Serializable {
     private String recipeDescription;
     private int timesCooked;
     private transient Bitmap image;
-    private List<IngredientModel> ingredientsList;
-    private List<StepModel> stepsList;
+    private boolean isFavourite;
 
     /*Constructors*/
 
@@ -26,7 +25,7 @@ public class RecipeModel implements Serializable {
     public RecipeModel(){}
 
     //All Attributes Constructor
-    public RecipeModel(int id, String recipeName, MealType mealType, int executionTime_Hour, int executionTime_Minute, String recipeDescription, int timesCooked, Bitmap image){
+    public RecipeModel(int id, String recipeName, MealType mealType, int executionTime_Hour, int executionTime_Minute, String recipeDescription, int timesCooked, Bitmap image, boolean isFavourite){
         this.id = id;
         this.recipeName = recipeName;
         this.mealType = mealType;
@@ -35,6 +34,7 @@ public class RecipeModel implements Serializable {
         this.recipeDescription = recipeDescription;
         this.timesCooked = timesCooked;
         this.image = image;
+        this.isFavourite = isFavourite;
     }
 
     /* Getter and Setters */
@@ -91,24 +91,14 @@ public class RecipeModel implements Serializable {
 
     public void setImage(Bitmap image) { this.image = image; }
 
-
-    /* List */
-
-    public List<IngredientModel> getIngredientsList() {
-        return this.ingredientsList;
+    public boolean isFavourite(){
+        return this.isFavourite;
     }
 
-    public void setIngredientsList(List<IngredientModel> ingredientsList) {
-        this.ingredientsList = ingredientsList;
+    public void setFavourite(boolean isFavourite){
+        this.isFavourite = isFavourite;
     }
 
-    public List<StepModel> getStepsList() {
-        return this.stepsList;
-    }
-
-    public void setStepsList(List<StepModel> stepsList) {
-        this.stepsList = stepsList;
-    }
 
     /* Equals / Hascode */
     public boolean equals(Object obj){

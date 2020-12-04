@@ -11,7 +11,7 @@
         android:icon="@drawable/ic_home"/>
 
     <item
-        android:id="@+id/menu_custom"
-        android:title="@string/bottom_navigation_title_custom"
-        android:icon="@drawable/ic_custom"/>
+        android:id="@+id/menu_favourites"
+        android:title="@string/bottom_navigation_title_favourites"
+        android:icon="@drawable/ic_favourite"/>
 </menu>

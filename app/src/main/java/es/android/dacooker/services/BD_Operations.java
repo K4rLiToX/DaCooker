@@ -114,6 +114,7 @@ public class BD_Operations {
         values.put(Struct_BD.RECIPE_EXEC_TIME_MINUTE, r.getExecutionTimeMinute());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
         values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
+        values.put(Struct_BD.RECIPE_IS_FAVOURITE, BooleanToInt(r.isFavourite()));
 
         // Insert the new row, returning the primary key value of the new row
         long row = db.insert(Struct_BD.RECIPE_TABLE, null, values);
@@ -134,6 +135,7 @@ public class BD_Operations {
         values.put(Struct_BD.RECIPE_DESCRIPTION, r.getRecipeDescription());
         values.put(Struct_BD.RECIPE_TIMES_COOKED, r.getTimesCooked());
         values.put(Struct_BD.RECIPE_IMAGE, BitmapToArray(r.getImage()));
+        values.put(Struct_BD.RECIPE_IS_FAVOURITE, BooleanToInt(r.isFavourite()));
 
         // Which row to update, based on the title
         String selection = Struct_BD.RECIPE_ID + " LIKE ?";
@@ -147,6 +149,29 @@ public class BD_Operations {
         db.close();
         if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
 
+    }
+
+    public static void updateFavourite(int id_recipe, boolean fav,  BBDD_Helper dbHelper) throws Exception {
+
+        RecipeModel r = BD_Operations.getRecipeById(id_recipe, dbHelper);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Struct_BD.RECIPE_IS_FAVOURITE, BooleanToInt(fav));
+
+        String selection = Struct_BD.RECIPE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(id_recipe) };
+
+        int row = db.update(
+                Struct_BD.RECIPE_TABLE,
+                values,
+                selection,
+                selectionArgs);
+
+        db.close();
+
+        if(row <= 0) throw new Exception("Error Ocurred. Not Possible Edition.");
     }
 
     public static void updateTimesCooked(int id_recipe, BBDD_Helper dbHelper) throws Exception {
@@ -216,7 +241,8 @@ public class BD_Operations {
             Struct_BD.RECIPE_EXEC_TIME_MINUTE,
             Struct_BD.RECIPE_DESCRIPTION,
             Struct_BD.RECIPE_TIMES_COOKED,
-            Struct_BD.RECIPE_IMAGE
+            Struct_BD.RECIPE_IMAGE,
+            Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         Cursor cursor = db.query(
@@ -246,6 +272,10 @@ public class BD_Operations {
                     if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
                 }
 
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
+
 
                 RecipeModel r = new RecipeModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
@@ -255,7 +285,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                        imageSaved
+                        imageSaved,
+                        favourite
                 );
                 recipes.add(r);
             } while(cursor.moveToNext());
@@ -271,14 +302,15 @@ public class BD_Operations {
 
         //Le decimos que queremos obtener de la BD; es decir, qué columnas
         String[] projection = {
-            Struct_BD.RECIPE_ID,
-            Struct_BD.RECIPE_NAME,
-            Struct_BD.RECIPE_MEALTYPE,
-            Struct_BD.RECIPE_EXEC_TIME_HOUR,
-            Struct_BD.RECIPE_EXEC_TIME_MINUTE,
-            Struct_BD.RECIPE_DESCRIPTION,
-            Struct_BD.RECIPE_TIMES_COOKED,
-            Struct_BD.RECIPE_IMAGE
+                Struct_BD.RECIPE_ID,
+                Struct_BD.RECIPE_NAME,
+                Struct_BD.RECIPE_MEALTYPE,
+                Struct_BD.RECIPE_EXEC_TIME_HOUR,
+                Struct_BD.RECIPE_EXEC_TIME_MINUTE,
+                Struct_BD.RECIPE_DESCRIPTION,
+                Struct_BD.RECIPE_TIMES_COOKED,
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         String selection = Struct_BD.RECIPE_ID + " = ?";
@@ -309,6 +341,10 @@ public class BD_Operations {
                 if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
             }
 
+            //Tratamos el isFavourite
+            int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+            boolean favourite = IntToBoolean(favBD);
+
             //Creamos la Receta
             RecipeModel r = new RecipeModel(
                     id_recipe,
@@ -318,7 +354,8 @@ public class BD_Operations {
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                     cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                     cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                    imageSaved
+                    imageSaved,
+                    favourite
             );
 
             cursor.close();
@@ -329,6 +366,84 @@ public class BD_Operations {
             cursor.close();
             db.close();
             throw new Exception("Recipe not Found");
+        }
+
+    }
+
+    public static List<RecipeModel> getFavouritesRecipes(BBDD_Helper dbHelper) throws Exception{
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Le decimos que queremos obtener de la BD; es decir, qué columnas
+        String[] projection = {
+            Struct_BD.RECIPE_ID,
+            Struct_BD.RECIPE_NAME,
+            Struct_BD.RECIPE_MEALTYPE,
+            Struct_BD.RECIPE_EXEC_TIME_HOUR,
+            Struct_BD.RECIPE_EXEC_TIME_MINUTE,
+            Struct_BD.RECIPE_DESCRIPTION,
+            Struct_BD.RECIPE_TIMES_COOKED,
+            Struct_BD.RECIPE_IMAGE,
+            Struct_BD.RECIPE_IS_FAVOURITE
+        };
+
+        String selection = Struct_BD.RECIPE_IS_FAVOURITE + " = ?";
+        String[] selectionArgs = { String.valueOf(1) };
+
+        Cursor cursor = db.query(
+                Struct_BD.RECIPE_TABLE,     // The table to query
+                projection,                 // The array of columns to return (pass null to get all)
+                selection,                  // The columns for the WHERE clause
+                selectionArgs,              // The values for the WHERE clause
+                null,              // don't group the rows
+                null,               // don't filter by row groups
+                null//sortOrder     // The sort order
+        );
+
+        List<RecipeModel> recipes = new ArrayList<>();
+
+        if(cursor.moveToFirst()) {
+            do {
+                //Tratamos la imagen
+                byte[] imageBD = cursor.getBlob(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IMAGE));
+                Bitmap imageSaved;
+                if(imageBD == null || imageBD.length == 0) imageSaved = null;
+                else imageSaved = ArrayToBitmap(imageBD);
+
+                //Tratamos el MealType
+                MealType mt = null;
+                String mtDB = cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_MEALTYPE));
+                for(MealType e : MealType.values()){
+                    if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
+                }
+
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
+
+
+                RecipeModel r = new RecipeModel(
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
+                        mt,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_HOUR)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
+                        imageSaved,
+                        favourite
+                );
+                recipes.add(r);
+            } while(cursor.moveToNext());
+
+            cursor.close();
+            db.close();
+            return recipes;
+
+        } else{
+            cursor.close();
+            db.close();
+            throw new Exception("Recipes Not Found");
         }
 
     }
@@ -345,7 +460,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
-                Struct_BD.RECIPE_IMAGE
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         String selection = Struct_BD.RECIPE_MEALTYPE + " = ?";
@@ -372,6 +488,10 @@ public class BD_Operations {
                 if(imageBD == null || imageBD.length == 0) imageSaved = null;
                 else imageSaved = ArrayToBitmap(imageBD);
 
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
+
                 RecipeModel r = new RecipeModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
@@ -380,7 +500,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                        imageSaved
+                        imageSaved,
+                        favourite
                 );
                 recipes.add(r);
             } while(cursor.moveToNext());
@@ -397,7 +518,6 @@ public class BD_Operations {
 
     }
 
-    //NO SE SI FUNCIONARÁ, LA VERDAD
     public static List<RecipeModel> getRecipesByLessExecutionTime(int executionTimeHour, int executionTimeMinute, BBDD_Helper dbHelper) throws Exception{
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -409,7 +529,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
-                Struct_BD.RECIPE_IMAGE
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         String selection = Struct_BD.RECIPE_EXEC_TIME_HOUR + " <= ? or ("
@@ -446,6 +567,9 @@ public class BD_Operations {
                 for(MealType e : MealType.values()){
                     if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
                 }
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
 
                 RecipeModel r = new RecipeModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
@@ -455,7 +579,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                        imageSaved
+                        imageSaved,
+                        favourite
                 );
                 recipes.add(r);
             } while(cursor.moveToNext());
@@ -483,7 +608,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
-                Struct_BD.RECIPE_IMAGE
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         // How you want the results sorted in the resulting Cursor
@@ -517,6 +643,10 @@ public class BD_Operations {
                     if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
                 }
 
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
+
                 RecipeModel r = new RecipeModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
@@ -525,7 +655,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                        imageSaved
+                        imageSaved,
+                        favourite
                 );
                 recipes.add(r);
             } while(cursor.moveToNext());
@@ -554,7 +685,8 @@ public class BD_Operations {
                 Struct_BD.RECIPE_EXEC_TIME_MINUTE,
                 Struct_BD.RECIPE_DESCRIPTION,
                 Struct_BD.RECIPE_TIMES_COOKED,
-                Struct_BD.RECIPE_IMAGE
+                Struct_BD.RECIPE_IMAGE,
+                Struct_BD.RECIPE_IS_FAVOURITE
         };
 
         String sortOrder = Struct_BD.RECIPE_TIMES_COOKED + " DESC";
@@ -588,6 +720,10 @@ public class BD_Operations {
                     if(mtDB.equalsIgnoreCase(e.toString())) mt = e;
                 }
 
+                //Tratamos el isFavourite
+                int favBD = cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_IS_FAVOURITE));
+                boolean favourite = IntToBoolean(favBD);
+
                 RecipeModel r = new RecipeModel(
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_NAME)),
@@ -596,7 +732,8 @@ public class BD_Operations {
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_EXEC_TIME_MINUTE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_DESCRIPTION)),
                         cursor.getInt(cursor.getColumnIndexOrThrow(Struct_BD.RECIPE_TIMES_COOKED)),
-                        imageSaved
+                        imageSaved,
+                        favourite
                 );
                 recipes.add(r);
                 untilFive--;

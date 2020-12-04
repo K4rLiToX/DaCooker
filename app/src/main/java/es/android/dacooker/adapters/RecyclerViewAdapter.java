@@ -45,6 +45,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.titleRecipeCard.setText(recipe.getRecipeName());
         holder.timeRecipeCard.setText(recipe.getExecutionTimeHour()+"h " + recipe.getExecutionTimeMinute()+"min");
         holder.mealTypeRecipeCard.setText(recipe.getMealType().name());
+        if(recipe.isFavourite()) holder.imgFavRecipeCard.setVisibility(View.VISIBLE);
+        else holder.imgFavRecipeCard.setVisibility(View.GONE);
     }
 
     @Override
@@ -63,12 +65,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //Intern Class
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgRecipeCard;
+        ImageView imgRecipeCard, imgFavRecipeCard;
         TextView titleRecipeCard, timeRecipeCard, mealTypeRecipeCard;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.imgRecipeCard = itemView.findViewById(R.id.img_card_recipe);
+            this.imgFavRecipeCard = itemView.findViewById(R.id.img_fav_card_recipe);
             this.titleRecipeCard = itemView.findViewById(R.id.recipe_card_title);
             this.timeRecipeCard = itemView.findViewById(R.id.recipe_card_time);
             this.mealTypeRecipeCard = itemView.findViewById(R.id.recipe_card_mealType);

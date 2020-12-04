@@ -12,6 +12,7 @@ public class Struct_BD {
     protected static final String RECIPE_EXEC_TIME_MINUTE = "EXECUTION_MINUTE";
     protected static final String RECIPE_DESCRIPTION = "RECIPE_DESCRIPTION";
     protected static final String RECIPE_TIMES_COOKED = "TIMES_COOKED";
+    protected static final String RECIPE_IS_FAVOURITE = "IS_FAVOURITE";
 
     protected static final String SQL_CREATE_RECIPE = "CREATE TABLE " + RECIPE_TABLE + " ("
             + RECIPE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -21,7 +22,8 @@ public class Struct_BD {
             + RECIPE_EXEC_TIME_MINUTE + " INTEGER,"
             + RECIPE_DESCRIPTION + " TEXT,"
             + RECIPE_TIMES_COOKED + " INTEGER,"
-            + RECIPE_IMAGE + " BLOB )";
+            + RECIPE_IMAGE + " BLOB,"
+            + RECIPE_IS_FAVOURITE + " BOOLEAN )";
 
     protected static final String SQL_DELETE_RECIPE = "DROP TABLE IF EXISTS " + RECIPE_TABLE;
 

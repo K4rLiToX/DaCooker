@@ -1,5 +1,6 @@
 package es.android.dacooker.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,7 +10,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +59,9 @@ public class RecipeDetails extends AppCompatActivity {
     //Utilities
     IngredientRecyclerAdapter ingredientAdapter;
     private boolean isExpanded;
+    MenuItem favIcon;
+    boolean isFav;
+    boolean isDeleted;
 
     //Recipe to Show
     private RecipeModel recipeSelected;
@@ -72,6 +78,7 @@ public class RecipeDetails extends AppCompatActivity {
 
         Toolbar detail_toolbar = findViewById(R.id.recipe_detail_app_bar);
         setSupportActionBar(detail_toolbar);
+        detail_toolbar.getNavigationIcon();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -80,28 +87,37 @@ public class RecipeDetails extends AppCompatActivity {
         initParameters();
         setViews();
         initIngredientRecyclerView();
-
-        //detail_toolbar.setNavigationOnClickListener(v -> finish());
-
-        detail_toolbar.setOnMenuItemClickListener(item -> {
-            int itemID = item.getItemId();
-            if(itemID == R.id.recipe_detail_menu_app_bar_delete){
-                deleteRecipe();
-                return true;
-            } else if(itemID == R.id.recipe_detail_menu_app_bar_edit){
-                editRecipe();
-                return true;
-            } else {
-                return super.onOptionsItemSelected(item);
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.recipe_detail_menu_app_bar, menu);
+        favIcon = menu.findItem(R.id.recipe_detail_menu_app_bar_fav);
+        updateFavIcon();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemID = item.getItemId();
+        if(itemID == R.id.recipe_detail_menu_app_bar_delete){
+            deleteRecipe();
+            return true;
+        } else if(itemID == R.id.recipe_detail_menu_app_bar_edit){
+            editRecipe();
+            return true;
+        } else if(itemID == R.id.recipe_detail_menu_app_bar_fav) {
+            Log.e("FAV ICON", "TOCADO EN MENU");
+            fav();
+            return true;
+        } else if(itemID == android.R.id.home){
+            Log.e("NAVIGATION UP", "HOLA PUTO" );
+            this.onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     /*Private Methods*/
@@ -134,6 +150,8 @@ public class RecipeDetails extends AppCompatActivity {
 
         //RecipeSelected
         this.recipeSelected = (RecipeModel) SingletonMap.getInstance().get(SHARE_RECIPE_KEY);
+        this.isFav = recipeSelected.isFavourite();
+        this.isDeleted = false;
 
         //StepList
         try { this.stepList = BD_Operations.getStepsFromRecipeIdOrdered(recipeSelected.getId(), db);
@@ -184,13 +202,20 @@ public class RecipeDetails extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
-                        BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
-                        BD_Operations.deleteRecipe(recipeSelected.getId(), db);
-                        SingletonMap.getInstance().put("SHARE_RECETA_ELIMINADA", "true");
-                        Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
-                        finish();
+                        if(isFav){
+                            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_delete_fav_error, Toast.LENGTH_SHORT).show();
+                            dialogInterface.dismiss();
+                        } else {
+                            BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
+                            BD_Operations.deleteRecipe(recipeSelected.getId(), db);
+                            isDeleted = true;
+                            SingletonMap.getInstance().put("SHARE_RECETA_ELIMINADA", "true");
+                            Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     } catch (Exception e){
                         Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
                     }
                 }
             });
@@ -212,5 +237,37 @@ public class RecipeDetails extends AppCompatActivity {
         Intent i = new Intent(RecipeDetails.this, AddNewRecipeActivity.class);
         i.putExtra("edit", true);
         startActivity(i);
+    }
+
+    private void fav(){
+        Log.e("FAV ICON", isFav+"" );
+        isFav = !isFav;
+        Log.e("FAV ICON", isFav+"" );
+        updateFavIcon();
+    }
+
+    private void updateFavIcon(){
+        if(isFav){
+            favIcon.setIcon(R.drawable.ic_favourite).setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        } else {
+            favIcon.setIcon(R.drawable.ic_no_favourite);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Log.e("BACK BITCHES", "BOMBA NUCLEAR");
+        if(isFav != recipeSelected.isFavourite() && !isDeleted){
+            SingletonMap.getInstance().put("SHARE_FAV_KEY", "true");
+            BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
+            try {
+                BD_Operations.updateFavourite(recipeSelected.getId(), isFav, db);
+                Log.e("ONBACK", isFav+"" );
+                finish();
+            } catch (Exception e){
+                Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

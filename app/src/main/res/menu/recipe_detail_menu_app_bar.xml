@@ -16,4 +16,11 @@
         android:iconTint="@color/white"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/recipe_detail_menu_app_bar_fav"
+        android:title="@string/recipe_detail_app_bar_menu_fav"
+        android:icon="@drawable/ic_favourite"
+        android:iconTint="@color/white"
+        app:showAsAction="ifRoom"/>
+
 </menu>

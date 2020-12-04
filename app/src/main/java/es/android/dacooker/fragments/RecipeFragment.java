@@ -1,26 +1,18 @@
 package es.android.dacooker.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.TypedArrayUtils;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcel;
 import android.util.Log;
-import android.view.KeyboardShortcutGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +23,6 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
@@ -43,7 +33,6 @@ import es.android.dacooker.adapters.RecyclerViewAdapter;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.MealType;
 import es.android.dacooker.models.RecipeModel;
-import es.android.dacooker.models.StepModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 import es.android.dacooker.utilities.SingletonMap;
@@ -85,8 +74,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
+
         recipeRecyclerView = view.findViewById(R.id.recipe_recyclerView);
         tvNoRecipes = view.findViewById(R.id.tvEmptyRecipes);
+
+
 
         layoutFilters = view.findViewById(R.id.recipe_fragment_layout_showFilters);
         filterField = view.findViewById(R.id.recipe_fragment_filterApplied);
@@ -185,7 +177,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     //LEFT is for action on swipe from left to right
-    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -194,10 +186,12 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
+            RecipeModel recipe = recipeList.get(position);
+            BBDD_Helper db = new BBDD_Helper(getActivity());
             if(direction == ItemTouchHelper.LEFT){
-                RecipeModel recipeToDelete;
-                recipeToDelete = recipeList.get(position);
-                deleteRecipe(recipeToDelete, position);
+                deleteRecipe(recipe, position, db);
+            } else {
+                favOrUnFav(recipe, db);
             }
         }
 
@@ -206,6 +200,8 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             new RecyclerViewSwipeDecorator.Builder(getActivity(), c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))
                     .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.amber_500))
+                    .addSwipeRightActionIcon(R.drawable.ic_favourite)
                     .create()
                     .decorate();
 
@@ -232,14 +228,18 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     public void onResume() {
         super.onResume();
         String isDeleted = (String) SingletonMap.getInstance().get("SHARE_RECETA_ELIMINADA");
+        String fav = (String) SingletonMap.getInstance().get("SHARE_FAV_KEY");
         if(recipeList.contains(recipeClicked) && recipeList.size() == 1 && isDeleted != null){
             SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
             layoutFilters.setVisibility(View.GONE);
         }
+        if(fav !=  null){
+            recipeClicked.setFavourite(!recipeClicked.isFavourite());
+        }
         initListAndRecyclerView();
     }
 
-    private void deleteRecipe(RecipeModel recipeToDelete, int position){
+    private void deleteRecipe(RecipeModel recipeToDelete, int position, BBDD_Helper db){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
         alertBuilder.setTitle(R.string.recipe_fragment_alert_dialog_title);
         alertBuilder.setMessage(R.string.recipe_fragment_alert_dialog_message);
@@ -247,8 +247,6 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
-
-                    BBDD_Helper db = new BBDD_Helper(getActivity());
                     recipeList.remove(position);
                     adapter.setRecipeList(recipeList);
                     BD_Operations.deleteRecipe(recipeToDelete.getId(), db);
@@ -283,6 +281,34 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         });
         alertBuilder.create();
         alertBuilder.show();
+    }
+
+    private void favOrUnFav(RecipeModel recipe, BBDD_Helper db){
+        if(!recipe.isFavourite()){
+            try {
+                //Cambiamos en la base de datos el atributo isFavourite a true
+                BD_Operations.updateFavourite(recipe.getId(), true, db);
+                //Llamar initListAndRecyclerView
+                initListAndRecyclerView();
+                //Toast anunciando que se ha añadido a favoritos
+                Toast.makeText(getActivity(), R.string.recipe_fragment_favourite_recipe, Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(getActivity(), "Error on Updating", Toast.LENGTH_SHORT).show();
+                initListAndRecyclerView();
+            }
+        } else {
+            try {
+                //Cambiamos en la base de datos el atributo isFavourite a true
+                BD_Operations.updateFavourite(recipe.getId(), false, db);
+                //Llamar initListAndRecyclerView
+                initListAndRecyclerView();
+                //Toast anunciando que se ha añadido a favoritos
+                Toast.makeText(getActivity(), R.string.recipe_fragment_no_favourite_recipe, Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                Toast.makeText(getActivity(), "Error on Updating", Toast.LENGTH_SHORT).show();
+                initListAndRecyclerView();
+            }
+        }
     }
 
 }

@@ -230,6 +230,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
             try {
                 RecipeModel r = this.getRecipeData();
                 r.setTimesCooked(0);
+                r.setFavourite(false);
                 BBDD_Helper dbHelper = new BBDD_Helper(this);
                 BD_Operations.addRecipe(r, dbHelper);
 
@@ -315,6 +316,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
             try {
                 RecipeModel r = this.getRecipeData();
                 r.setId(rEdit.getId());
+                r.setFavourite(rEdit.isFavourite());
                 BBDD_Helper dbHelper = new BBDD_Helper(this);
                 BD_Operations.updateRecipe(r, dbHelper);
 

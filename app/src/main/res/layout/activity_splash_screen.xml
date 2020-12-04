@@ -1,48 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.SplashScreenActivity"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal"
     android:background="@color/red_500">
 
-    <ImageView
-        android:id="@+id/splash_screen_img"
+    <RelativeLayout
+        android:id="@+id/splash_relative_image"
+        android:layout_marginTop="150dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/recipe_logo"/>
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/splash_screen_img"
+            android:layout_width="330dp"
+            android:layout_height="250dp"
+            android:src="@mipmap/recipe_logo"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/splash_screen_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="4dp"
-        android:layout_marginBottom="10dp"
-        android:layout_centerInParent="true"
-        android:layout_alignParentBottom="true">
+        android:id="@+id/splash_linear_developers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/splash_relative_developers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-condensed"
-            android:layout_marginBottom="4dp"
-            android:text="@string/splash_screen_title1"/>
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="4dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/splash_screen_title2"/>
+            <TextView
+                android:id="@+id/splash_text_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/splash_screen_title1"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/splash_text_developers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_below="@+id/splash_text_by"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/splash_screen_title2"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
-</RelativeLayout>
+
+</LinearLayout>

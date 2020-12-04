@@ -3,9 +3,9 @@
 
     <!--Activity Labels-->
     <string name="recipes_label">Recipes</string>
-    <string name="custom_recipes_label">Custom Recipes</string>
-    <string name="most_used_recipes_label">Most Used Recipes</string>
-    <string name="recipe_detail_label">Recipe Details</string>
+    <string name="favourites_recipes_label">Favourites</string>
+    <string name="most_used_recipes_label">Most Cooked</string>
+    <string name="recipe_detail_label">Details</string>
     <string name="add_new_recipe_label">Add Recipe</string>
 
     <!-- Main Activity Menu Labels -->
@@ -29,7 +29,7 @@
     <!--Bottom Navigation Menu Titles-->
     <string name="bottom_navigation_title_frequently">Most Used</string>
     <string name="bottom_navigation_title_recipes">Recipes</string>
-    <string name="bottom_navigation_title_custom">Custom</string>
+    <string name="bottom_navigation_title_favourites">Favourites</string>
 
     <!-- Recipe Fragment -->
     <string name="recipe_fragment_alert_dialog_title">WARNING!</string>
@@ -42,6 +42,8 @@
     <string name="filters_gone_showing_all">Error on adding recipe while filter is active. Showing all recipes…</string>
     <string name="filters_less">Less</string>
     <string name="recipe_fragment_delete_showing_all">Last recipe in filter deleted. Going back to all Recipes</string>
+    <string name="recipe_fragment_favourite_recipe">Added to Favourites</string>
+    <string name="recipe_fragment_no_favourite_recipe">Removed from Favourites</string>
 
     <!-- Recipe Card-->
     <string name="recipe_card_title">Recipe Card Title</string>
@@ -63,10 +65,12 @@
     <string name="recipe_detail_deleted">Recipe Deleted</string>
     <string name="recipe_detail_deleted_error">Error on Delete</string>
     <string name="recipe_detail_nosteps_error">There is no steps, so… You can\'t cook this</string>
+    <string name="recipe_detail_delete_fav_error">You Cannot Delete a Favourite Recipe</string>
 
     <!-- Recipe Detail App Bar Menu -->
     <string name="recipe_detail_app_bar_menu_delete">Delete</string>
     <string name="recipe_detail_app_bar_menu_edit">Edit</string>
+    <string name="recipe_detail_app_bar_menu_fav">Favourite</string>
 
     <!--Ingredient Card-->
     <string name="ingredient_card_name">Ingredient Name</string>
@@ -78,7 +82,7 @@
 
     <!-- Text Views -->
     <string name="tv_main_no_recipes">No Recipes Yet!</string>
-    <string name="tv_custom_coming_next">Coming Next!</string>
+    <string name="tv_favourites_no_recipes">No Favourites Recipes!</string>
 
     <!-- AddRecipe Activity  -->
     <string name="add_tab_recipe">Recipe</string>
