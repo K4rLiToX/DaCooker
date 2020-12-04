@@ -126,13 +126,13 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         else {  //No Filters
             this.recipeList = BD_Operations.getRecipes(db);
             adapter = new RecyclerViewAdapter(recipeList,this);
+            recipeRecyclerView.setAdapter(adapter);
 
             if(this.recipeList.isEmpty()){
                 //Mostramos Text View (no hay recetas)
                 this.tvNoRecipes.setVisibility(View.VISIBLE);
             } else {
                 this.tvNoRecipes.setVisibility(View.GONE);
-                recipeRecyclerView.setAdapter(adapter);
                 //Set the itemtouchhelper to delete on swipe
                 itemTouchHelper = new ItemTouchHelper(simpleCallback);
                 itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
@@ -237,13 +237,11 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
                         isFilterTimer = false;
                         isFilter = false;
                         SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
-                        initListAndRecyclerView();
                         layoutFilters.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
-                        initListAndRecyclerView();
-                    }
+                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
+
+                    initListAndRecyclerView();
 
                 } catch (Exception e){
                     initListAndRecyclerView();
