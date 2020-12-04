@@ -50,18 +50,23 @@ import es.android.dacooker.models.MealType;
  */
 public class AddRecipeFragment extends Fragment {
 
-    //Constants
+    /*Constantes*/
+
+    //Variables para el código de permiso y la opción de galería utilizados para abrir la galería del dispositivo y escoger una imagen para la receta
     private final static int PERMISSION_CODE = 1000;
     private final int GALLERY_OPTION = 10;
 
+    //Adaptador de la enumeración Mealtype
     MealType[] MEALTYPES = MealType.values();
-    AutoCompleteTextView mealTypeDropdown;
     ArrayAdapter<MealType> adapter;
 
+    //Vistas
     TextInputEditText recipeName, recipeHours, recipeMinutes, recipeDescription;
+    AutoCompleteTextView mealTypeDropdown;
     FloatingActionButton fabChooseRecipePhoto;
     ImageView recipePhoto;
 
+    //Constructor
     public AddRecipeFragment() {
         // Required empty public constructor
     }
@@ -69,7 +74,7 @@ public class AddRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Infla la vista para el fragmento de añadir receta (primera parte de la receta)
         View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
         initView(v);
         initButton();
@@ -77,10 +82,12 @@ public class AddRecipeFragment extends Fragment {
         return v;
     }
 
-    //Init View
+    //Inicializa las vistas
     private void initView(View v){
+        //Crea el adaptador para el select del tipo de comioda
         adapter =  new ArrayAdapter<>(getActivity(), R.layout.meal_type_dropdown_item, MEALTYPES);
         mealTypeDropdown = v.findViewById(R.id.recipe_mealType_dropdown_select);
+        //Setea el adaptador al select del tipo de comida
         mealTypeDropdown.setAdapter(adapter);
 
         recipePhoto = v.findViewById(R.id.recipe_img_input);
@@ -93,9 +100,11 @@ public class AddRecipeFragment extends Fragment {
         ((AddUpdateRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
     }
 
+    //Inicializa el floating action button y le añade funcionalidad
     private void initButton(){
         fabChooseRecipePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Cuando se pulsa abre la galería del dispositivo
             public void onClick(View view) {
                 openGallery();
             }
@@ -103,35 +112,36 @@ public class AddRecipeFragment extends Fragment {
     }
 
     @Override
+    //Método que verifica si se tienen los permisos necesarios para abrir la galería del dispositivo
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case PERMISSION_CODE:   //Se aceptan los permisos -> abrimos cámara
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) { //Permisos conseguidos
-                    openGallery();
-                } else {    //Permisos denegados
-                    Toast.makeText(getActivity(), "Permission Denied...", Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == PERMISSION_CODE) { //Si el código de permiso que me dan son coinciden con el que pido
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) { //Si obtengo los permisos
+                //abro galería
+                openGallery();
+            } else {  //Si no obtengo los permisos o me los deniegan notifico con mensaje
+                Toast.makeText(getActivity(), "Permission Denied...", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
+    //Método para abrir la galería del dispositivo
     private void openGallery(){
-        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            //Sin permisos aún -> se piden
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) { //Si aún no tengo permisos los pido
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_CODE);
-        } else {//Permisos Dados = OK
-
+        } else { //Si me dan los permisos o ya los tengo abro muestro dialog para que el usuario eliga qué aplicación de galería quiere utilizar
             Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
             startActivityForResult(Intent.createChooser(galleryIntent, getActivity().getString(R.string.add_recipe_alert_dialog_choose_gallery_app)), GALLERY_OPTION);
-
         }
     }
 
     @Override
+    //Método que se ejecuta una vez se ha elegido una foto desde la galería del dispositivo
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == this.GALLERY_OPTION) {
+        if (resultCode == Activity.RESULT_OK && requestCode == this.GALLERY_OPTION) { //Si tengo todos los permisos y el código corresponde con la opción de galería
+            //Guardo la URI de la imagen seleccionada
             Uri miPath = Objects.requireNonNull(data).getData();
+            //Seteo la foto de la receta a la imagen que se ha seleccionado desde galería
             recipePhoto.setImageURI(miPath);
         }
     }

@@ -26,13 +26,18 @@ import es.android.dacooker.models.IngredientModel;
  */
 public class AddIngredientFragment extends Fragment {
 
+    //Vistas
     TextInputEditText til_name, til_quantity;
-    List<IngredientModel> ingredientList;
     Button btnAdd;
-
-    AddIngredientRecyclerAdapter rwAdapter;
     RecyclerView rw;
 
+    //Lista de ingredientes
+    List<IngredientModel> ingredientList;
+
+    //Adaptador para el recyclerview de ingredientes
+    AddIngredientRecyclerAdapter rwAdapter;
+
+    //Constructor
     public AddIngredientFragment() {
         // Required empty public constructor
     }
@@ -40,7 +45,7 @@ public class AddIngredientFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //Infla la vista del fragmento añadir ingrediente
         View v = inflater.inflate(R.layout.fragment_add_ingredient, container, false);
 
         initView(v);
@@ -49,53 +54,58 @@ public class AddIngredientFragment extends Fragment {
         return v;
     }
 
-    //Init View
+    //Inicializa las vistas a utilizar
     private void initView(View v){
         til_name = v.findViewById(R.id.ingredient_name_input);
         til_quantity = v.findViewById(R.id.ingredient_quantity_input);
         btnAdd = v.findViewById(R.id.add_ingredient_btnAdd);
         rw = v.findViewById(R.id.add_ingredient_recycler);
 
+        //Inicializa la lista de ingredientes
         ingredientList = new ArrayList<>();
+        //Crea el adaptador
         rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
+        //Setea el adaptador al recyclerview
         rw.setAdapter(rwAdapter);
 
         ((AddUpdateRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
     }
 
+    //Inicializa los botones
     private void initButton(){
+        //Añade funcionalidad al boton de añadir ingrediente
         btnAdd.setOnClickListener(view -> {
-
+            //Creo una variable donde verifico que los valores de los inputs son válidos
             String err = validFields();
-            if(err.equalsIgnoreCase("")) {
+            if(err.equalsIgnoreCase("")) { //Si no hay errores
+                //Creo el ingrediente a añadir
                 IngredientModel ing = new IngredientModel();
+                //Seteo los valores obtenidos de los inputs
                 ing.setIngredientName(til_name.getText().toString());
                 ing.setQuantity(til_quantity.getText().toString());
+                //Añado el ingrediente a la lista (No se añade a la BD porque eso se hace cuando se quiere añadir la receta completa)
                 ingredientList.add(ing);
-
+                //Notifico al adaptador que se ha insertado un ingrediente en la última posición de la lista de ingredientes
                 rwAdapter.notifyItemInserted(ingredientList.size()-1);
+                //Vacio los inputs correspondientes
                 til_name.setText("");
                 til_quantity.setText("");
-
-            } else {
-                //Errores
+            } else { //Si hay errores mando mensaje notificando
                 Toast.makeText(getActivity().getApplicationContext(), err, Toast.LENGTH_SHORT).show();
             }
-
         });
     }
 
-    //Utilities - Validation
+    //Validación de campos
     private String validFields(){
-
+        //Variable donde guardo el error (si lo hay)
         String err = "";
-        if(til_name.getText().toString().trim().equalsIgnoreCase("")
-                || til_name.getText().toString().length() > 100)
-            err = getString(R.string.addIng_err_name);
-        else if(til_quantity.getText().toString().trim().equalsIgnoreCase("")
-                || til_quantity.getText().toString().length() > 50)
-            err = getString(R.string.addIng_err_quantity);
+        //Si el nombre del ingrediente es vacio o supera los 100 caracteres guardo error
+        //Si la cantidad del ingrediente es vacía o supera los 50 caracteres guardo error
+        if(til_name.getText().toString().trim().equalsIgnoreCase("") || til_name.getText().toString().length() > 100) err = getString(R.string.addIng_err_name);
+        else if(til_quantity.getText().toString().trim().equalsIgnoreCase("") || til_quantity.getText().toString().length() > 50)  err = getString(R.string.addIng_err_quantity);
 
+        //Devuelvo el error
         return err;
     }
 }
