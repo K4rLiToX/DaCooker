@@ -29,6 +29,7 @@ public class AddRecipePagerAdapter extends FragmentPagerAdapter {
         fragmentList.add(fragment);
     }
 
+    //Utilities
     @NonNull
     @Override
     public Fragment getItem(int position) {

@@ -45,23 +45,23 @@ import es.android.dacooker.utilities.SingletonMap;
 public class RecipeDetails extends AppCompatActivity {
 
     //SingletonMap Key
-    private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
-    private final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
+    private final String SHARE_DELETED_RECIPE = "SHARE_RECETA_ELIMINADA";
     private final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
+    private final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
+    private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
+    private final String SHARE_FAV_KEY = "SHARE_FAV_KEY";
 
     //Views
-    private ImageView imgRecipeDetail, imgIngredientRecyclerViewIcon;
     private TextView tvRecipeTitleDetail, tvRecipeTimeDetail, tvRecipeMealType, tvRecipeDescription;
+    private ImageView imgRecipeDetail, imgIngredientRecyclerViewIcon;
     private RecyclerView ingredientRecyclerView;
-    Button btnStartRecipe;
     LinearLayout expandableLayout;
+    Button btnStartRecipe;
 
     //Utilities
+    private boolean isExpanded, isFav, isDeleted;
     IngredientRecyclerAdapter ingredientAdapter;
-    private boolean isExpanded;
     MenuItem favIcon;
-    boolean isFav;
-    boolean isDeleted;
 
     //Recipe to Show
     private RecipeModel recipeSelected;
@@ -82,6 +82,7 @@ public class RecipeDetails extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("");
 
         initViews();
         initParameters();
@@ -89,6 +90,7 @@ public class RecipeDetails extends AppCompatActivity {
         initIngredientRecyclerView();
     }
 
+    //Menu Utilities
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -118,7 +120,7 @@ public class RecipeDetails extends AppCompatActivity {
         }
     }
 
-    /*Private Methods*/
+    /*Private Init Methods*/
     private void initViews(){
         this.imgRecipeDetail = findViewById(R.id.img_detail_recipe);
         this.tvRecipeTitleDetail = findViewById(R.id.recipe_detail_title);
@@ -163,15 +165,14 @@ public class RecipeDetails extends AppCompatActivity {
         this.ingredientRecyclerView.setVisibility(View.GONE);
     }
 
-    @SuppressLint("SetTextI18n")
     private void setViews(){
 
         if(this.recipeSelected.getImage() != null) this.imgRecipeDetail.setImageBitmap(this.recipeSelected.getImage());
         else this.imgRecipeDetail.setImageResource(R.mipmap.img_recipe_card_default);
 
         this.tvRecipeTitleDetail.setText(this.recipeSelected.getRecipeName());
-        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTimeHour()+"h "
-                + this.recipeSelected.getExecutionTimeMinute()+"min");
+        this.tvRecipeTimeDetail.setText(this.recipeSelected.getExecutionTimeHour() + getString(R.string.hours) + " "
+                + this.recipeSelected.getExecutionTimeMinute() + getString(R.string.minutes));
         this.tvRecipeMealType.setText(String.valueOf(this.recipeSelected.getMealType()));
         this.tvRecipeDescription.setText(this.recipeSelected.getRecipeDescription());
 
@@ -192,6 +193,7 @@ public class RecipeDetails extends AppCompatActivity {
         ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
 
+    //Utilities Menu
     private void deleteRecipe(){
             AlertDialog.Builder alertBuilder = new AlertDialog.Builder(RecipeDetails.this);
             alertBuilder.setTitle(R.string.recipe_fragment_alert_dialog_title);
@@ -207,7 +209,7 @@ public class RecipeDetails extends AppCompatActivity {
                             BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
                             BD_Operations.deleteRecipe(recipeSelected.getId(), db);
                             isDeleted = true;
-                            SingletonMap.getInstance().put("SHARE_RECETA_ELIMINADA", "true");
+                            SingletonMap.getInstance().put(SHARE_DELETED_RECIPE, "true");
                             Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted, Toast.LENGTH_SHORT).show();
                             finish();
                         }
@@ -243,18 +245,17 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void updateFavIcon(){
-        if(isFav){
-            favIcon.setIcon(R.drawable.ic_favourite).setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-        } else {
-            favIcon.setIcon(R.drawable.ic_no_favourite);
-        }
+        if(isFav) favIcon.setIcon(R.drawable.ic_favourite)
+                .setIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+        else favIcon.setIcon(R.drawable.ic_no_favourite);
     }
 
+    //Navigation
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         if(isFav != recipeSelected.isFavourite() && !isDeleted){
-            SingletonMap.getInstance().put("SHARE_FAV_KEY", "true");
+            SingletonMap.getInstance().put(SHARE_FAV_KEY, "true");
             BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
             try {
                 BD_Operations.updateFavourite(recipeSelected.getId(), isFav, db);

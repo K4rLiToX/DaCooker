@@ -1,9 +1,7 @@
 package es.android.dacooker.utilities;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import java.util.concurrent.TimeUnit;
-
 import es.android.dacooker.R;
-import es.android.dacooker.activities.MainActivity;
 
 public class NotificationsPush extends BroadcastReceiver {
 
@@ -24,16 +18,11 @@ public class NotificationsPush extends BroadcastReceiver {
     }
 
     private static void createNotificationChannel(Context context, String channelName, String channelDescription) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+        // Create NotificationChannel (only API 26+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //CharSequence name = channelName;
-            //String description = channelDescription;
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("notifyEat", channelName, importance);
             channel.setDescription(channelDescription);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }

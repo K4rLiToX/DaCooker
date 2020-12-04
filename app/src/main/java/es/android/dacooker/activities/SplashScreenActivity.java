@@ -15,9 +15,9 @@ import es.android.dacooker.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    Animation image_anim, text_anim;
     private LinearLayout layout;
     RelativeLayout relLogo;
-    Animation image_anim, text_anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,42 +51,4 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     }
 
-    /*
-
-    private LinearLayout layout;
-    ImageView img;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        getSupportActionBar().hide();
-
-        //Set initial animation
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        //Set activity to full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        this.img = findViewById(R.id.splash_screen_img);
-        this.layout = findViewById(R.id.splash_screen_text);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.mytransition);
-
-        this.img.setAnimation(animation);
-        this.layout.setAnimation(animation);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(i);
-                //set animation transition
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }
-        }, 2500);
-
-    }
-
-
-     */
 }

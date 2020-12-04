@@ -23,9 +23,9 @@ import es.android.dacooker.models.StepModel;
 
 public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecyclerAdapter.ViewHolder> {
 
+    AddRecipeStepClickListener addRecipeStepClickListener;
     private final Context context;
     List<StepModel> stepModelList;
-    AddRecipeStepClickListener addRecipeStepClickListener;
 
     public AddStepRecyclerAdapter(Context context, List<StepModel> stepModelList, AddRecipeStepClickListener addRecipeStepClickListener){
         this.context = context;
@@ -36,14 +36,9 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View stepItemView = layoutInflater.inflate(R.layout.add_step_adapter_item, parent, false);
         return new ViewHolder(stepItemView);
-    }
-
-    public List<StepModel> getStepModelList(){
-        return this.stepModelList;
     }
 
     @Override
@@ -59,9 +54,23 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
 
     }
 
+    //Utilities
     @Override
     public int getItemCount() {
         return stepModelList.size();
+    }
+
+    public List<StepModel> getStepModelList(){
+        return this.stepModelList;
+    }
+
+    public void setEditList(List<StepModel> stepList){
+        int prevSize = this.stepModelList.size();
+        this.stepModelList.clear();
+        if(stepList == null) stepList = new ArrayList<>();
+        this.stepModelList.addAll(stepList);
+        notifyItemRangeRemoved(0, prevSize);
+        notifyItemRangeInserted(0, stepList.size());
     }
 
     //Intern Class
@@ -92,15 +101,6 @@ public class AddStepRecyclerAdapter extends RecyclerView.Adapter<AddStepRecycler
                 }
             });
         }
-    }
-
-    public void setEditList(List<StepModel> stepList){
-        int prevSize = this.stepModelList.size();
-        this.stepModelList.clear();
-        if(stepList == null) stepList = new ArrayList<>();
-        this.stepModelList.addAll(stepList);
-        notifyItemRangeRemoved(0, prevSize);
-        notifyItemRangeInserted(0, stepList.size());
     }
 
 }

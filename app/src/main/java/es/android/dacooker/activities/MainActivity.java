@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import androidx.appcompat.widget.Toolbar;
 
@@ -26,10 +24,15 @@ import es.android.dacooker.utilities.SingletonMap;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, CustomDialog.OnDialogInputListener {
 
+    //Singleton Keys
+    private final String SHARE_FILTER_SEARCH_KEY = "SHARE_FILTER_SEARCH";
+    private final String SHARE_RESULT_LIST_KEY = "SHARE_RESULT_LIST_KEY";
+
+
     //Main Fragments
-    private final RecipeFragment recipeFragment = new RecipeFragment();
-    private final MostUsedFragment mostUsedFragment = new MostUsedFragment();
     private final FavouritesFragment favouritesFragment = new FavouritesFragment();
+    private final MostUsedFragment mostUsedFragment = new MostUsedFragment();
+    private final RecipeFragment recipeFragment = new RecipeFragment();
 
     MenuItem searchIcon;
 
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Toolbar toolbar = findViewById(R.id.main_activity_app_bar);
         setSupportActionBar(toolbar);
 
+        //Initialize Bottom NavBar
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.menu_recipes);
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initNotifications();
     }
 
+    //MenuUtilities
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_recipes, menu);
@@ -89,16 +94,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
+    //BottomNavbar
     private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
         setTitle(title);
     }
 
-    public void initNotifications(){
-        NotificationsPush.createNotifyChannel(this, getString(R.string.notification_channel_name),
-                getString(R.string.notification_channel_description));
-    }
-
+    //Utilities
     private void showFilterSearchAlertDialog(){
         CustomDialog dialog = new CustomDialog();
         dialog.show(getSupportFragmentManager(), "CustomDialog");
@@ -106,8 +108,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void sendResultList(List<RecipeModel> resultList, String filter, String search) {
-        SingletonMap.getInstance().put("SHARE_RESULT_LIST_KEY", resultList);
-        SingletonMap.getInstance().put("SHARE_FILTER_SEARCH", new String[]{filter, search});
+        SingletonMap.getInstance().put(SHARE_RESULT_LIST_KEY, resultList);
+        SingletonMap.getInstance().put(SHARE_FILTER_SEARCH_KEY, new String[]{filter, search});
         recipeFragment.onResume();
+    }
+
+    public void initNotifications(){
+        NotificationsPush.createNotifyChannel(this, getString(R.string.notification_channel_name),
+                getString(R.string.notification_channel_description));
     }
 }

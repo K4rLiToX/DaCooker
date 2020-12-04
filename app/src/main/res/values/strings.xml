@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DaCooker</string>
+    <string name="app_name" translatable="false">DaCooker</string>
 
     <!--Activity Labels-->
     <string name="recipes_label">Recipes</string>
@@ -7,6 +7,7 @@
     <string name="most_used_recipes_label">Most Cooked</string>
     <string name="recipe_detail_label">Details</string>
     <string name="add_new_recipe_label">Add Recipe</string>
+    <string name="main_activity_label">Home</string>
 
     <!-- Main Activity Menu Labels -->
     <string name="main_menu_search_label">Search</string>
@@ -22,9 +23,12 @@
     <string name="search_dialog_title">Choose an Option</string>
     <string name="search_dialog_confirmation">Search</string>
     <string name="search_dialog_dismiss">Dismiss</string>
-    <string name="search_dialog_no_radio_selected">Please, Select an Option</string>
-    <string name="search_dialog_time_inputs_error">Hour must be at leat 0. Minute must be between 1 and 59</string>
-    <string name="search_dialog_mealType_select_error">Please, Select a MealType</string>
+    <string name="search_dialog_no_radio_selected">Please, select an option</string>
+    <string name="search_dialog_time_inputs_error">Hour must be at least 0. \n Minute must be between 0 and 59</string>
+    <string name="search_dialog_mealType_select_error">Please, select a meal type</string>
+    <string name="search_dialog_no_recipes_matching">No recipes matching that time</string>
+    <string name="search_dialog_err_retrieving">No results matching. \n Showing all recipes…</string>
+    <string name="search_dialog_err_no_meal_results">No found with this type:</string>
 
     <!--Bottom Navigation Menu Titles-->
     <string name="bottom_navigation_title_frequently">Most Used</string>
@@ -36,36 +40,38 @@
     <string name="recipe_fragment_alert_dialog_message">Are you sure you want to delete this recipe? Changes cannot be undone</string>
     <string name="recipe_fragment_alert_dialog_confirmation">Delete</string>
     <string name="recipe_fragment_alert_dialog_dismiss">Cancel</string>
-    <string name="recipe_fragment.delete_recipe_ok">Recipe Deleted Correctly</string>
+    <string name="recipe_fragment.delete_recipe_ok">Recipe deleted correctly</string>
     <string name="recipe_fragment_filters_text">Filtered by</string>
     <string name="recipe_fragment_undo_search">Undo Filter</string>
-    <string name="filters_gone_showing_all">Error on adding recipe while filter is active. Showing all recipes…</string>
+    <string name="filters_gone_showing_all">Error on adding recipe while filter is active. \n Showing all recipes…</string>
     <string name="filters_less">Less</string>
-    <string name="recipe_fragment_delete_showing_all">Last recipe in filter deleted. Going back to all Recipes</string>
+    <string name="recipe_fragment_delete_showing_all">Last recipe in filter deleted. \n Going back to all Recipes</string>
     <string name="recipe_fragment_favourite_recipe">Added to Favourites</string>
     <string name="recipe_fragment_no_favourite_recipe">Removed from Favourites</string>
 
     <!-- Recipe Card-->
-    <string name="recipe_card_title">Recipe Card Title</string>
-    <string name="recipe_card_time">Recipe Execution Time</string>
-    <string name="recipe_card_hours">Recipe Hour</string>
-    <string name="recipe_card_minutes">Recipe Minute</string>
-    <string name="recipe_card_img_description">Recipe Card Image</string>
-    <string name="recipe_card_mealType">Recipe Card MealType</string>
+    <string name="recipe_card_title" translatable="false">Recipe Card Title</string>
+    <string name="recipe_card_time" translatable="false">Recipe Execution Time</string>
+    <string name="recipe_card_hours" translatable="false">Recipe Hour</string>
+    <string name="recipe_card_minutes" translatable="false">Recipe Minute</string>
+    <string name="recipe_card_img_description" translatable="false">Recipe Card Image</string>
+    <string name="recipe_card_mealType" translatable="false">Recipe Card MealType</string>
 
     <!-- Recipe Detail-->
-    <string name="recipe_detail_default_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean iaculis massa ante, quis viverra risus luctus ut. Proin faucibus mauris sollicitudin felis fermentum pretium. Aliquam venenatis in nunc et vestibulum. Nullam ac egestas sem. In mattis enim felis, vel facilisis nunc placerat non. Aliquam dapibus enim lectus, a dapibus ipsum malesuada sed. Curabitur et cursus justo, sit amet hendrerit neque. Nulla non turpis congue sapien rhoncus finibus ut venenatis dui. Sed eu lacus enim. Proin ornare in augue eget lacinia. Nulla facilisi. Ut vel ligula sit amet sem tincidunt porta in sit amet metus. Nullam congue porttitor velit, ut consequat.</string>
+    <string name="recipe_detail_default_description" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Aenean iaculis massa ante, quis viverra risus luctus ut.
+        Proin faucibus mauris sollicitudin felis fermentum pretium.</string>
     <string name="recipe_detail_ingredient_title">Ingredients</string>
-    <string name="recipe_detail_title">Recipe Detail Title</string>
-    <string name="recipe_detail_time">Recipe Detail Time</string>
-    <string name="recipe_detail_time_hour">Recipe Hour</string>
-    <string name="recipe_detail_time_minute">Recipe Minute</string>
-    <string name="recipe_detail_mealType">Meal Type</string>
+    <string name="recipe_detail_title" translatable="false">Recipe Detail Title</string>
+    <string name="recipe_detail_time" translatable="false">Recipe Detail Time</string>
+    <string name="recipe_detail_time_hour" translatable="false">Recipe Hour</string>
+    <string name="recipe_detail_time_minute" translatable="false">Recipe Minute</string>
+    <string name="recipe_detail_mealType" translatable="false">Meal Type</string>
     <string name="recipe_detail_ingredientList_empty">No Ingredients!</string>
     <string name="recipe_detail_deleted">Recipe Deleted</string>
     <string name="recipe_detail_deleted_error">Error on Delete</string>
-    <string name="recipe_detail_nosteps_error">There is no steps, so… You can\'t cook this</string>
-    <string name="recipe_detail_delete_fav_error">You Cannot Delete a Favourite Recipe</string>
+    <string name="recipe_detail_nosteps_error">There is no steps, so… \n You can\'t cook this</string>
+    <string name="recipe_detail_delete_fav_error">You cannot delete a favourite recipe</string>
 
     <!-- Recipe Detail App Bar Menu -->
     <string name="recipe_detail_app_bar_menu_delete">Delete</string>
@@ -88,9 +94,9 @@
     <string name="add_tab_recipe">Recipe</string>
     <string name="add_tab_ingredient">Ingredients</string>
     <string name="add_tab_step">Steps</string>
-    <string name="title_activity_main2">MainActivity2</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_main2" translatable="false">MainActivity2</string>
+    <string name="tab_text_1" translatable="false">Tab 1</string>
+    <string name="tab_text_2" translatable="false">Tab 2</string>
 
     <!-- Add Recipe - Recipe Inputs -->
     <string name="add_recipe_name_hint">Recipe Name</string>
@@ -116,8 +122,8 @@
     <string name="add_ingredient_name_hint">Ingredient Name</string>
     <string name="add_ingredient_quantity_hint">Quantity</string>
     <string name="add_ingredient_btnAdd">Add Ingredient</string>
-    <string name="add_ingredient_listView_name">ListView Ingredient Name</string>
-    <string name="add_ingredient_listView_quantity">ListView Quantity</string>
+    <string name="add_ingredient_listView_name" translatable="false">ListView Ingredient Name</string>
+    <string name="add_ingredient_listView_quantity" translatable="false">ListView Quantity</string>
 
     <!-- Add Recipe - Step Inputs -->
     <string name="add_step_text">Steps To Follow</string>
@@ -128,12 +134,12 @@
     <string name="add_step_timerTime_minutes_hint">Minutes</string>
     <string name="add_step_order_hint">Order</string>
     <string name="add_step_btnAdd">Add Step</string>
-    <string name="add_step_listView_description">ListView Step Description</string>
-    <string name="add_step_listView_timerTime">ListView Timer</string>
-    <string name="add_step_listView_order">LV Order</string>
+    <string name="add_step_listView_description" translatable="false">ListView Step Description</string>
+    <string name="add_step_listView_timerTime" translatable="false">ListView Timer</string>
+    <string name="add_step_listView_order" translatable="false">LV Order</string>
     <string name="add_step_listView_step">Step</string>
-    <string name="add_step_listView_hours">LV Hours</string>
-    <string name="add_step_listView_minutes">LV Minutes</string>
+    <string name="add_step_listView_hours" translatable="false">LV Hours</string>
+    <string name="add_step_listView_minutes" translatable="false">LV Minutes</string>
     <string name="add_recipe_btnFinish">Finish &amp; Cooking!</string>
     <string name="add_recipe_btnValidate">Validate Fields</string>
     <string name="add_step_btnUpdate">Update Changes</string>
@@ -143,7 +149,7 @@
     <string name="addIng_err_quantity">Quantity must be between 0–50 characters</string>
 
     <!-- AddStepFragment -->
-    <string name="addStep_err">Description cannot be empty. Hours, Minutes Must Be Correct</string>
+    <string name="addStep_err">Description cannot be empty. \n Hours, Minutes Must Be Correct</string>
 
     <!-- Most Used Fragment -->
     <string name="txt_noMost">No Most Used Recipes</string>
@@ -156,8 +162,8 @@
     <string name="add_steps_fragment_title">Steps</string>
     <string name="validation_err_name">Recipe name must be between 0–60 characters</string>
     <string name="validation_err_description">Description must be between 0–140 characters</string>
-    <string name="validation_err_hour">Hours must be a number. If not necessary, put 0 in it</string>
-    <string name="validation_err_minute">Minutes must be a number. Use 0 to 59 to fill</string>
+    <string name="validation_err_hour">Hours must be a number. \n If not necessary, put 0 in it</string>
+    <string name="validation_err_minute">Minutes must be a number. \n Use 0 to 59 to fill</string>
     <string name="validation_err_mealtype">Use a MealType</string>
     <string name="err_addition_recipe">Error during Addition</string>
     <string name="err_update_recipe">Error during Update</string>
@@ -170,7 +176,7 @@
     <string name="step_cooking_btnCancel">Cancel Cooking</string>
     <string name="step_cooking_btnFinish">Ready to Serve!</string>
     <string name="step_cooking_btnTimerStart">Start</string>
-    <string name="step_cooking_btnTimerStop">Stop</string>
+    <string name="step_cooking_btnTimerStop" translatable="false">Stop</string>
     <string name="step_cooking_btnTimerContinue">Continue</string>
     <string name="step_cooking_timer_pause">Timer Paused</string>
     <string name="step_cooking_timer_stop">Timer Stopped</string>
@@ -178,13 +184,20 @@
     <string name="step_cooking_timer_resume">Timer Continues</string>
     <string name="step_cooking_stopped_timers_err">Please, stop all-on timers before serve!</string>
 
-    <string name="notification_channel_name">FoodChannel</string>
-    <string name="notification_channel_description">Channel For Foods Notifications</string>
-    <string name="cooking_do_not_close">Please, do not close the app. You could lose your progress</string>
+    <string name="notification_channel_name" translatable="false">FoodChannel</string>
+    <string name="notification_channel_description" translatable="false">Channel For Foods Notifications</string>
+    <string name="cooking_do_not_close">Please, do not close the app. \n You could lose your progress</string>
     <string name="notify_title">Hey, time to Cook!</string>
     <string name="notify_description">Timeout! It seems your timer has finish, so… Time to turn back!</string>
 
     <string name="splash_screen_title1">by</string>
-    <string name="splash_screen_title2">Ángel Baeza &amp; Carlos Diestro</string>
+    <string name="splash_screen_title2" translatable="false">Ángel Baeza &amp; Carlos Diestro</string>
+
+    <string name="recipe_fragment_err_delete">Error on delete</string>
+    <string name="recipe_fragment_err_addFav">Error on adding favourite</string>
+    <string name="recipe_fragment_err_removeFav">Error on remove favourite</string>
+    <string name="step_recipe_finished">Finished!</string>
+    <string name="hours">h</string>
+    <string name="minutes">min</string>
 
 </resources>

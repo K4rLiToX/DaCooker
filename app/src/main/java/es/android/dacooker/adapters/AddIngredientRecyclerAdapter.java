@@ -49,6 +49,7 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
         });
     }
 
+    //Utilities
     public List<IngredientModel> getList(){
         return ingredientList;
     }
@@ -56,6 +57,15 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
     @Override
     public int getItemCount() {
         return ingredientList.size();
+    }
+
+    public void setEditList(List<IngredientModel> ingredientList){
+        int prevSize = this.ingredientList.size();
+        this.ingredientList.clear();
+        if(ingredientList == null) ingredientList = new ArrayList<>();
+        this.ingredientList.addAll(ingredientList);
+        notifyItemRangeRemoved(0, prevSize);
+        notifyItemRangeInserted(0, ingredientList.size());
     }
 
     //Intern Class
@@ -69,14 +79,5 @@ public class AddIngredientRecyclerAdapter extends RecyclerView.Adapter<AddIngred
             this.nameIngredient = itemView.findViewById(R.id.ingredient_name_add_listView);
             this.quantityIngredient = itemView.findViewById(R.id.ingredient_quantity_add_listView);
         }
-    }
-
-    public void setEditList(List<IngredientModel> ingredientList){
-        int prevSize = this.ingredientList.size();
-        this.ingredientList.clear();
-        if(ingredientList == null) ingredientList = new ArrayList<>();
-        this.ingredientList.addAll(ingredientList);
-        notifyItemRangeRemoved(0, prevSize);
-        notifyItemRangeInserted(0, ingredientList.size());
     }
 }

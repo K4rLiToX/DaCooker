@@ -3,7 +3,6 @@ package es.android.dacooker.models;
 import android.graphics.Bitmap;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class RecipeModel implements Serializable {
@@ -25,7 +24,9 @@ public class RecipeModel implements Serializable {
     public RecipeModel(){}
 
     //All Attributes Constructor
-    public RecipeModel(int id, String recipeName, MealType mealType, int executionTime_Hour, int executionTime_Minute, String recipeDescription, int timesCooked, Bitmap image, boolean isFavourite){
+    public RecipeModel(int id, String recipeName, MealType mealType, int executionTime_Hour,
+                       int executionTime_Minute, String recipeDescription, int timesCooked,
+                       Bitmap image, boolean isFavourite){
         this.id = id;
         this.recipeName = recipeName;
         this.mealType = mealType;
@@ -75,9 +76,7 @@ public class RecipeModel implements Serializable {
         return this.recipeDescription;
     }
 
-    public void setRecipeDescription(String recipeDescription){
-        this.recipeDescription = recipeDescription;
-    }
+    public void setRecipeDescription(String recipeDescription){ this.recipeDescription = recipeDescription; }
 
     public int getTimesCooked() {
         return this.timesCooked;

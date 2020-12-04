@@ -1,40 +1,29 @@
 package es.android.dacooker.fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Objects;
 
 import es.android.dacooker.R;
@@ -51,10 +40,11 @@ public class AddRecipeFragment extends Fragment {
     private final int GALLERY_OPTION = 10;
 
     MealType[] MEALTYPES = MealType.values();
-    ArrayAdapter<MealType> adapter;
     AutoCompleteTextView mealTypeDropdown;
+    ArrayAdapter<MealType> adapter;
 
     TextInputEditText recipeName, recipeHours, recipeMinutes, recipeDescription;
+    FloatingActionButton fabChooseRecipePhoto;
     ImageView recipePhoto;
 
     //Propio
@@ -69,7 +59,14 @@ public class AddRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
+        initView(v);
+        initButton();
 
+        return v;
+    }
+
+    //Init View
+    private void initView(View v){
         adapter =  new ArrayAdapter<>(getActivity(), R.layout.meal_type_dropdown_item, MEALTYPES);
         mealTypeDropdown = v.findViewById(R.id.recipe_mealType_dropdown_select);
         mealTypeDropdown.setAdapter(adapter);
@@ -79,21 +76,21 @@ public class AddRecipeFragment extends Fragment {
         recipeHours = v.findViewById(R.id.recipe_hour_input);
         recipeMinutes = v.findViewById(R.id.recipe_minute_input);
         recipeDescription = v.findViewById(R.id.recipe_description_input);
+        fabChooseRecipePhoto = v.findViewById(R.id.fabChooseRecipePhoto);
 
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
+    }
 
-        FloatingActionButton fabChooseRecipePhoto = v.findViewById(R.id.fabChooseRecipePhoto);
+    private void initButton(){
         fabChooseRecipePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 chooseCameraOrGallery();
             }
         });
-
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
-
-        return v;
     }
 
+    //Utilities_Camera
     private void chooseCameraOrGallery(){
         String camera = getString(R.string.add_recipe_alert_dialog_camera);
         String gallery = getString(R.string.add_recipe_alert_dialog_gallery);

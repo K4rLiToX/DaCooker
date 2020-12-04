@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:layout_alignParentTop="true"
-    app:title="@string/recipe_detail_label"
+    app:title="@string/main_activity_label"
     app:menu="@menu/menu_main_recipes"
     android:elevation="4dp"
     style="@style/Widget.MaterialComponents.Toolbar.Primary"/>

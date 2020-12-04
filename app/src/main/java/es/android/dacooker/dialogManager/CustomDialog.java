@@ -30,8 +30,10 @@ import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
 
 public class CustomDialog extends DialogFragment {
+
     //TAG
     private static final String TAG = "CustomDialog";
+
     //Views
     RadioGroup radioGroup;
     LinearLayout search_dialog_time_layout;
@@ -46,7 +48,6 @@ public class CustomDialog extends DialogFragment {
 
     //Interface
     private OnDialogInputListener onDialogInputListener;
-
 
     @Nullable
     @Override
@@ -115,14 +116,11 @@ public class CustomDialog extends DialogFragment {
                 List<RecipeModel> resultList;
                 try {
                     resultList = BD_Operations.getRecipesByMealType(MealType.valueOf(meal), db);
-                    if(resultList.isEmpty()){
-                        Toast.makeText(getActivity(), "No " + meal + " Recipes", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        onDialogInputListener.sendResultList(resultList, "1", meal);
-                    }
+                    if(resultList.isEmpty()) Toast.makeText(getActivity(),
+                            getString(R.string.search_dialog_err_no_meal_results) + meal, Toast.LENGTH_SHORT).show();
+                    else onDialogInputListener.sendResultList(resultList, "1", meal);
                 } catch (Exception e){
-                    Toast.makeText(getActivity(), "Error on Retreiving Data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.search_dialog_err_retrieving), Toast.LENGTH_SHORT).show();
                 }
                 dismiss();
             } else {
@@ -137,21 +135,14 @@ public class CustomDialog extends DialogFragment {
                 List<RecipeModel> resultList;
                 try {
                     resultList = BD_Operations.getRecipesByLessExecutionTime(Integer.parseInt(hour), Integer.parseInt(minute), db);
-                    if(resultList.isEmpty()) Toast.makeText(getActivity(), "No Recipes Matching that Time", Toast.LENGTH_SHORT).show();
-                    else {
-                        Log.e(TAG, resultList.size()+"");
-                        onDialogInputListener.sendResultList(resultList, "2", hour+":"+minute);
-                    }
+                    if(resultList.isEmpty()) Toast.makeText(getActivity(), getString(R.string.search_dialog_no_recipes_matching), Toast.LENGTH_SHORT).show();
+                    else onDialogInputListener.sendResultList(resultList, "2", hour+":"+minute);
                 } catch (Exception e){
-                    Toast.makeText(getActivity(), "Error on Retreiving Data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.search_dialog_err_retrieving), Toast.LENGTH_SHORT).show();
                 }
                 dismiss();
-            } else {
-                Toast.makeText(getActivity(), R.string.search_dialog_time_inputs_error, Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(getActivity(), R.string.search_dialog_no_radio_selected, Toast.LENGTH_SHORT).show();
-        }
+            } else Toast.makeText(getActivity(), R.string.search_dialog_time_inputs_error, Toast.LENGTH_LONG).show();
+        } else Toast.makeText(getActivity(), R.string.search_dialog_no_radio_selected, Toast.LENGTH_SHORT).show();
     }
 
     private boolean validateMealType(String mealType){
@@ -159,17 +150,15 @@ public class CustomDialog extends DialogFragment {
     }
 
     private boolean validateTime(String hour, String minute){
-        return !hour.isEmpty() && !minute.isEmpty() && Integer.parseInt(hour) >= 0 && Integer.parseInt(minute) >= 0 && Integer.parseInt(minute) <= 59;
+        return !hour.isEmpty() && !minute.isEmpty() && Integer.parseInt(hour) >= 0
+                && Integer.parseInt(minute) >= 0 && Integer.parseInt(minute) <= 59;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        try {
-            onDialogInputListener = (OnDialogInputListener) getActivity();
-        } catch (ClassCastException e){
-            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage());
-        }
+        try { onDialogInputListener = (OnDialogInputListener) getActivity();
+        } catch (ClassCastException e){ Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage()); }
     }
 
     public interface OnDialogInputListener {

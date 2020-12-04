@@ -5,13 +5,10 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -22,7 +19,6 @@ import java.util.List;
 import es.android.dacooker.R;
 import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.adapters.AddIngredientRecyclerAdapter;
-import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.models.IngredientModel;
 
 /**
@@ -31,12 +27,11 @@ import es.android.dacooker.models.IngredientModel;
 public class AddIngredientFragment extends Fragment {
 
     TextInputEditText til_name, til_quantity;
-    Button btnAdd;
     List<IngredientModel> ingredientList;
+    Button btnAdd;
 
     AddIngredientRecyclerAdapter rwAdapter;
     RecyclerView rw;
-
 
     public AddIngredientFragment() {
         // Required empty public constructor
@@ -48,7 +43,14 @@ public class AddIngredientFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_ingredient, container, false);
 
-        //Initialize Elements
+        initView(v);
+        initButton();
+
+        return v;
+    }
+
+    //Init View
+    private void initView(View v){
         til_name = v.findViewById(R.id.ingredient_name_input);
         til_quantity = v.findViewById(R.id.ingredient_quantity_input);
         btnAdd = v.findViewById(R.id.add_ingredient_btnAdd);
@@ -58,6 +60,10 @@ public class AddIngredientFragment extends Fragment {
         rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
         rw.setAdapter(rwAdapter);
 
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
+    }
+
+    private void initButton(){
         btnAdd.setOnClickListener(view -> {
 
             String err = validFields();
@@ -77,12 +83,9 @@ public class AddIngredientFragment extends Fragment {
             }
 
         });
-
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
-
-        return v;
     }
 
+    //Utilities - Validation
     private String validFields(){
 
         String err = "";
@@ -90,7 +93,7 @@ public class AddIngredientFragment extends Fragment {
                 || til_name.getText().toString().length() > 100)
             err = getString(R.string.addIng_err_name);
         else if(til_quantity.getText().toString().trim().equalsIgnoreCase("")
-                || til_quantity.getText().toString().length() > 100)
+                || til_quantity.getText().toString().length() > 50)
             err = getString(R.string.addIng_err_quantity);
 
         return err;

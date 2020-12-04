@@ -5,13 +5,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,24 +39,20 @@ public class StepRecipeFragment extends Fragment {
     int total;
 
     StepsRecipeCooking parentActivity;
-    TextView stepOfTotal, stepDescription;
+    TextView stepOfTotal, stepDescription, crono;
     ImageView arrowBack, arrowNext;
     Button btnFinish, btnCancel;
 
     //Chrono
     ImageButton btnTimerPlay, btnTimerStop, btnTimerPause;
-    Vibrator vibrator;
     LinearLayout timerLayout;
     String stepTimeMillis;
-    long totalDuration;
-    long timeRemaining = 0;
-    TextView crono;
+    long totalDuration, timeRemaining = 0;
     boolean isPaused, isStopped, musicOn;
 
     //Notifications
     AlarmManager am;
     PendingIntent pending;
-
 
     public StepRecipeFragment() {
         // Required empty public constructor
@@ -77,7 +71,7 @@ public class StepRecipeFragment extends Fragment {
         initParameters(v);
         if(step.isRequiredTimer()) {
             initTimerParameters();
-            timerButtons();
+            initTimerButtons();
         }
         setView();
         initButtons();
@@ -103,6 +97,8 @@ public class StepRecipeFragment extends Fragment {
         parentActivity = (StepsRecipeCooking) getActivity();
     }
 
+
+    //CountdownTimer Init
     private void initTimerParameters(){
 
         //Visibilidad y Duracion del Timer
@@ -123,7 +119,7 @@ public class StepRecipeFragment extends Fragment {
         this.btnTimerStop.setEnabled(false);
     }
 
-    private void timerButtons(){
+    private void initTimerButtons(){
 
         btnTimerPause.setOnClickListener(view -> {
             isPaused = true;
@@ -191,7 +187,7 @@ public class StepRecipeFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                crono.setText("Finished!");
+                crono.setText(getString(R.string.step_recipe_finished));
                 isStopped = true;
                 btnTimerPause.setEnabled(false);
                 btnTimerPlay.setEnabled(false);
@@ -203,6 +199,7 @@ public class StepRecipeFragment extends Fragment {
         }.start();
     }
 
+    //View - Button Init
     @SuppressLint({"SetTextI18n"})
     private void setView(){
 
@@ -247,14 +244,7 @@ public class StepRecipeFragment extends Fragment {
         });
     }
 
-    private void stopMusic(){
-        if(musicOn) {
-            Intent stopMusic = new Intent(getActivity(), SoundService.class);
-            getActivity().stopService(stopMusic);
-            musicOn = false;
-        }
-    }
-
+    //Utilities
     public boolean isActive(){
         return isStopped;
     }
@@ -268,6 +258,14 @@ public class StepRecipeFragment extends Fragment {
 
         long nowTime = System.currentTimeMillis();
         am.set(AlarmManager.RTC_WAKEUP, nowTime + millis, pending);
+    }
+
+    private void stopMusic(){
+        if(musicOn) {
+            Intent stopMusic = new Intent(getActivity(), SoundService.class);
+            getActivity().stopService(stopMusic);
+            musicOn = false;
+        }
     }
 
     @Override

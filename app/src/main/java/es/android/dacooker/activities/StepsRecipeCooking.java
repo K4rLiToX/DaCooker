@@ -4,16 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.List;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.StepsCookingPagerAdapter;
 import es.android.dacooker.fragments.StepRecipeFragment;
-import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.models.StepModel;
 import es.android.dacooker.services.BBDD_Helper;
 import es.android.dacooker.services.BD_Operations;
@@ -24,18 +20,17 @@ public class StepsRecipeCooking extends AppCompatActivity {
     private final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
     private List<StepModel> stepList;
 
-    ViewPager vp;
     StepsCookingPagerAdapter vpAdapter;
+    ViewPager vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps_recipe_cooking);
-
         initParameters();
-
     }
 
+    //Init Buttons - View
     private void initParameters(){
         this.stepList = (List<StepModel>) SingletonMap.getInstance().get(SHARE_STEPLIST_KEY);
 
@@ -71,6 +66,7 @@ public class StepsRecipeCooking extends AppCompatActivity {
         this.vp.setCurrentItem(backStep);
     }
 
+    //Check if any timer is active before FinishRecipe
     public boolean checkTimers() {
         boolean res = true;
 

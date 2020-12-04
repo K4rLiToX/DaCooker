@@ -20,7 +20,8 @@ public class StepModel implements Serializable {
     public StepModel() {}
 
     //All Attributes Constructor
-    public StepModel(int id, String description, boolean requiredTimer, int timer_hour, int timer_minute, int stepOrder, int recipe_id) {
+    public StepModel(int id, String description, boolean requiredTimer, int timer_hour,
+                     int timer_minute, int stepOrder, int recipe_id) {
         this.id = id;
         this.stepOrder = stepOrder;
         this.description = description;

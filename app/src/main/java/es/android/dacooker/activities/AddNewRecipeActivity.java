@@ -8,7 +8,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -38,25 +37,27 @@ import es.android.dacooker.utilities.SingletonMap;
 
 public class AddNewRecipeActivity extends AppCompatActivity {
 
+    //View
+    private Button btnFinish, btnValidate;
+    AddRecipePagerAdapter pagerAdapter;
     private TabLayout tabsLayout;
     private ViewPager viewPager;
-    AddRecipePagerAdapter pagerAdapter;
-    private Button btnFinish, btnValidate;
 
-    private Fragment add_recipe;
+    //Tabs - Fragments
     private Fragment add_ingredients;
+    private Fragment add_recipe;
     private Fragment add_steps;
 
     //Edition Mode
-    boolean forEdit;
-    private RecipeModel rEdit;
     List<IngredientModel> ingList;
     List<StepModel> stepList;
+    private RecipeModel rEdit;
+    boolean forEdit;
 
     //SingletonMap Keys
-    private static final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
-    private static final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
     private static final String SHARE_STEPLIST_KEY = "SHARED_STEPLIST_KEY";
+    private static final String SHARE_INGLIST_KEY = "SHARED_INGLIST_KEY";
+    private static final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +68,32 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b != null) this.forEdit = b.getBoolean("edit");
 
-        // Initialize View Elements
-        initializeElements();
-
-        //Initialize Adapter
+        initializeView();
         initializeViewPager();
+        initializeTabLayout();
+        initButtons();
 
+    }
+
+    //Init Views - Buttons
+    private void initializeView(){
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        btnFinish = findViewById(R.id.btnFinish_activity);
+        btnValidate = findViewById(R.id.btnValidate_activity);
+        btnFinish.setVisibility(View.INVISIBLE);
+        tabsLayout = findViewById(R.id.add_recipe_tab_layout);
+        viewPager = findViewById(R.id.add_recipe_viewPager);
+
+        if(forEdit) {
+            btnFinish.setText(getString(R.string.btnUpdate));
+            setTitle(R.string.edit_title);
+        }
+
+    }
+
+    private void initializeTabLayout(){
         tabsLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -99,34 +120,6 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
             }
         });
-
-        //Buttons onClick
-        btnValidate.setOnClickListener(view -> {
-            this.validateRecipeFields();
-        });
-
-        btnFinish.setOnClickListener(view -> {
-            if(!forEdit) this.finishRecipe();
-            else this.updateRecipe();
-        });
-
-    }
-
-    private void initializeElements(){
-
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
-        btnFinish = findViewById(R.id.btnFinish_activity);
-        btnValidate = findViewById(R.id.btnValidate_activity);
-        btnFinish.setVisibility(View.INVISIBLE);
-        tabsLayout = findViewById(R.id.add_recipe_tab_layout);
-        viewPager = findViewById(R.id.add_recipe_viewPager);
-
-        if(forEdit) {
-            btnFinish.setText(getString(R.string.btnUpdate));
-            setTitle(R.string.edit_title);
-        }
-
     }
 
     private void initializeViewPager(){
@@ -145,16 +138,28 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         tabsLayout.setupWithViewPager(viewPager);
     }
 
+    private void initButtons(){
+        //Buttons onClick
+        btnValidate.setOnClickListener(view -> {
+            this.validateRecipeFields();
+        });
+
+        btnFinish.setOnClickListener(view -> {
+            if(!forEdit) this.finishRecipe();
+            else this.updateRecipe();
+        });
+    }
+
+    //Utilities CheckFields Add - Update Fields
     private RecipeModel getRecipeData(){
-        String name, description, hours, minutes;
-        String mtSelection;
+        String name, description, hours, minutes, mtSelection;
         MealType mt = null;
         ImageView image;
         BitmapDrawable bitmapDrawable;
         Bitmap bitmap;
         View v = add_recipe.getView();
 
-        //Get Information
+        //Get Information From Fields
         name = ((EditText) v.findViewById(R.id.recipe_name_input)).getText().toString();
         image = v.findViewById(R.id.recipe_img_input);
         bitmapDrawable = (BitmapDrawable) image.getDrawable();
@@ -164,6 +169,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         minutes = ((EditText) v.findViewById(R.id.recipe_minute_input)).getText().toString();
         mtSelection = ((AutoCompleteTextView) v.findViewById(R.id.recipe_mealType_dropdown_select)).getText().toString();
 
+        //Check SpecialFields : Enum MealType, Integer Time
         if(!mtSelection.trim().equals("") && mtSelection != null)
             mt = MealType.valueOf(mtSelection);
 
@@ -225,6 +231,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
 
     }
 
+    //Add Recipe
     private void finishRecipe() {
         if(this.validateRecipeFields()) {
             try {
@@ -257,8 +264,7 @@ public class AddNewRecipeActivity extends AppCompatActivity {
         }
     }
 
-
-    //Edition
+    //Edition Recipe
     public void callFromEditFragment(View vRecipe, View vIng, View vStep){
         if(forEdit) {
             if(vRecipe != null) prepareEditionRecipe(vRecipe);
@@ -323,19 +329,16 @@ public class AddNewRecipeActivity extends AppCompatActivity {
                 if(r.getId() == -1) throw new Exception();
 
                 BD_Operations.deleteIngredientsFromRecipeId(r.getId(), dbHelper);
-                Log.e("ingSize: ", this.getIngredientsData().size()+"");
                 for(IngredientModel ing : this.getIngredientsData()){
                     ing.setIdRecipe(r.getId());
                     BD_Operations.addIngredient(ing, r.getId(), dbHelper);
                 }
 
                 BD_Operations.deleteStepsFromRecipeId(r.getId(), dbHelper);
-                Log.e("stepsSize: ", this.getStepsData().size()+"");
                 int o = 1;
                 for(StepModel s : this.getStepsData()){
                     s.setStepOrder(o);
                     s.setRecipe_ID(r.getId());
-                    Log.e("Step: ", o+"");
                     BD_Operations.addStep(s, r.getId(), dbHelper);
                     o++;
                 }

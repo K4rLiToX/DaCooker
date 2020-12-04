@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
-import es.android.dacooker.activities.MainActivity;
 import es.android.dacooker.activities.RecipeDetails;
 import es.android.dacooker.adapters.RecyclerViewAdapter;
 import es.android.dacooker.interfaces.RecipeClickListener;
@@ -31,16 +29,18 @@ import es.android.dacooker.utilities.SingletonMap;
 public class MostUsedFragment extends Fragment implements RecipeClickListener {
 
     //SingletonMap Key
+    private static final String SHARE_DELETED_RECIPE = "SHARE_RECETA_ELIMINADA";
+    private static final String SHARE_FAV_KEY = "SHARE_FAV_KEY";
     private final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
 
-    //List to Show
+    //Variables
     private List<RecipeModel> recipeList;
-    //Views
+    private RecipeModel recipeClicked;
+
+    //Views_Recycler
     private RecyclerView recipeRecyclerView;
+    private RecyclerViewAdapter adapter;
     TextView errMostCooked;
-    //Adapters
-    RecyclerViewAdapter adapter;
-    RecipeModel recipeClicked;
 
     public MostUsedFragment() {
         // Required empty public constructor
@@ -52,12 +52,17 @@ public class MostUsedFragment extends Fragment implements RecipeClickListener {
 
         View view = inflater.inflate(R.layout.fragment_most_used, container, false);
 
-        this.errMostCooked = view.findViewById(R.id.txt_noMost);
-        recipeRecyclerView = view.findViewById(R.id.most_recipe_recyclerView);
-        this.recipeClicked = new RecipeModel();
+        initView(view);
         initListAndRecyclerView();
 
         return view;
+    }
+
+    //Init Views
+    private void initView(View view){
+        this.errMostCooked = view.findViewById(R.id.txt_noMost);
+        recipeRecyclerView = view.findViewById(R.id.most_recipe_recyclerView);
+        this.recipeClicked = new RecipeModel();
     }
 
     private void initListAndRecyclerView() {
@@ -73,26 +78,26 @@ public class MostUsedFragment extends Fragment implements RecipeClickListener {
         }
     }
 
+    //Utilities
     @Override
     public void onRecipeClick(int position){
-        RecipeModel recipe = recipeList.get(position);
-        recipeClicked = recipe;
-        SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipe);
+        recipeClicked = recipeList.get(position);
+        SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeClicked);
         Intent i = new Intent(getActivity(), RecipeDetails.class);
         startActivity(i);
     }
 
+    //Navigation
     @Override
     public void onResume() {
         super.onResume();
-        String isDeleted = (String) SingletonMap.getInstance().get("SHARE_RECETA_ELIMINADA");
-        String fav = (String) SingletonMap.getInstance().get("SHARE_FAV_KEY");
+        String isDeleted = (String) SingletonMap.getInstance().get(SHARE_DELETED_RECIPE);
+        String fav = (String) SingletonMap.getInstance().get(SHARE_FAV_KEY);
         if(recipeList.contains(recipeClicked) && recipeList.size() == 1 && isDeleted != null){
             errMostCooked.setVisibility(View.VISIBLE);
         }
-        if(fav != null){
-            recipeClicked.setFavourite(!recipeClicked.isFavourite());
-        }
+        if(fav != null) recipeClicked.setFavourite(!recipeClicked.isFavourite());
+
         initListAndRecyclerView();
     }
 }

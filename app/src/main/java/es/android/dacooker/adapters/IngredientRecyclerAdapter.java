@@ -16,8 +16,7 @@ import es.android.dacooker.models.IngredientModel;
 
 public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRecyclerAdapter.IngredientViewHolder>{
 
-    //List to Show
-    List<IngredientModel> ingredientList;
+    List<IngredientModel> ingredientList; //List to Show
 
     public IngredientRecyclerAdapter(List<IngredientModel> ingredientList){
         this.ingredientList = ingredientList;
@@ -38,6 +37,7 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
         holder.ingredientCardQuantity.setText(ingredient.getQuantity());
     }
 
+    //Utilities
     @Override
     public int getItemCount() {
         return ingredientList.size();

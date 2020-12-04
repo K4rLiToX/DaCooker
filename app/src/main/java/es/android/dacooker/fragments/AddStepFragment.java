@@ -1,6 +1,5 @@
 package es.android.dacooker.fragments;
 
-import android.content.ClipData;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,15 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +26,6 @@ import es.android.dacooker.R;
 import es.android.dacooker.activities.AddNewRecipeActivity;
 import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.interfaces.AddRecipeStepClickListener;
-import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.StepModel;
 
 /**
@@ -38,13 +33,17 @@ import es.android.dacooker.models.StepModel;
  */
 public class AddStepFragment extends Fragment implements AddRecipeStepClickListener {
 
-    CheckBox cb_timer;
-    TextInputLayout til_hours, til_minute;
+    //View
     TextInputEditText til_description, input_hours, input_minute;
+    TextInputLayout til_hours, til_minute;
     Button btnAddOrUpdate;
-    Button btnFinish;
-    RecyclerView rw;
+    CheckBox cb_timer;
+
+    //Recycler_Adapter
     AddStepRecyclerAdapter rwAdapter;
+    RecyclerView rw;
+
+    //Variables
     List<StepModel> stepsList;
     int stepToUpdatePosition;
 
@@ -65,23 +64,33 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_step, container, false);
 
-        //Initialize Elements
-        btnAddOrUpdate = v.findViewById(R.id.add_step_btnAdd);
+        initView(v);
+        initButtons();
 
+        return v;
+    }
+
+    //View
+    private void initView(View v){
+        btnAddOrUpdate = v.findViewById(R.id.add_step_btnAdd);
         cb_timer = v.findViewById(R.id.checkbox_requiredTimer);
         til_description = v.findViewById(R.id.step_description_input);
-
         til_hours = v.findViewById(R.id.til_stepTimer_hours);
         til_minute = v.findViewById(R.id.til_stepTimer_minutes);
         input_hours = v.findViewById(R.id.step_timerTime_hours_input);
         input_minute = v.findViewById(R.id.step_timerTime_minutes_input);
 
+        //RecyclerView
         rw = v.findViewById(R.id.add_step_recyclerView);
         rw.setAdapter(rwAdapter);
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rw);
 
+        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, null, v);
+
+    }
+
+    private void initButtons(){
         cb_timer.setOnClickListener(view -> {
             boolean timerOn = cb_timer.isChecked();
             til_hours.setEnabled(timerOn);
@@ -101,12 +110,9 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
                 }
             }
         });
-
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, null, v);
-
-        return v;
     }
 
+    //Utilities
     private void addOrUpdate(StepModel step, int position){
         boolean timerOn = cb_timer.isChecked();
 
@@ -199,7 +205,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         }
 
         @Override
-       public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
            int fromPosition = viewHolder.getAdapterPosition();
            int toPosition = target.getAdapterPosition();
 
@@ -211,8 +217,8 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
            return false;
        }
 
-       @Override
-       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
        }
     };

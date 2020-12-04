@@ -1,5 +1,6 @@
 package es.android.dacooker.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,11 @@ import java.util.List;
 import es.android.dacooker.R;
 import es.android.dacooker.interfaces.RecipeClickListener;
 import es.android.dacooker.models.RecipeModel;
-import es.android.dacooker.models.StepModel;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    //List to Show
-    List<RecipeModel> recipeList;
-    //Interface for OnClick
-    RecipeClickListener recipeClickListener;
+    RecipeClickListener recipeClickListener; //Interface for OnClick
+    List<RecipeModel> recipeList; //List to Show
 
     public RecyclerViewAdapter(List<RecipeModel> recipeList, RecipeClickListener recipeClickListener) {
         this.recipeList = recipeList;
@@ -37,18 +35,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return new ViewHolder(recipeCardView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         RecipeModel recipe = recipeList.get(position);
         if(recipe.getImage() != null) holder.imgRecipeCard.setImageBitmap(recipe.getImage());
         else holder.imgRecipeCard.setImageResource(R.mipmap.img_recipe_card_default);
         holder.titleRecipeCard.setText(recipe.getRecipeName());
-        holder.timeRecipeCard.setText(recipe.getExecutionTimeHour()+"h " + recipe.getExecutionTimeMinute()+"min");
+        holder.timeRecipeCard.setText(recipe.getExecutionTimeHour() + "h " + recipe.getExecutionTimeMinute()+"min");
         holder.mealTypeRecipeCard.setText(recipe.getMealType().name());
         if(recipe.isFavourite()) holder.imgFavRecipeCard.setVisibility(View.VISIBLE);
         else holder.imgFavRecipeCard.setVisibility(View.GONE);
     }
 
+    //Utilities
     @Override
     public int getItemCount() {
         return recipeList.size();
