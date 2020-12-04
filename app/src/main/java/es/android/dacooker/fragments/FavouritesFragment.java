@@ -74,9 +74,6 @@ public class FavouritesFragment extends Fragment implements RecipeClickListener 
         BBDD_Helper db = new BBDD_Helper(getActivity());
         try {
             this.favouritesList = BD_Operations.getFavouritesRecipes(db);
-            for(RecipeModel r : favouritesList){
-                Log.e("FAV_LIST", r.getId() + ", " + r.isFavourite() + "");
-            }
             adapter = new RecyclerViewAdapter(favouritesList,this);
             this.noFavourites.setVisibility(View.GONE);
             rv_fav.setAdapter(adapter);

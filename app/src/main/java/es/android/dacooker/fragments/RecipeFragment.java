@@ -111,18 +111,15 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
 
         filters = (String[]) SingletonMap.getInstance().get(SHARE_FILTER_KEY);
         if(filters == null) {
-            Log.e("Filters","NULL");
             filters = new String[]{"", ""};
         }
         if(filters[0].equalsIgnoreCase("")){
-            Log.e("Filters: ", "none");
             isFilterMealType = false;
             isFilterTimer = false;
             isFilter = false;
             this.recipeList = null;
         } else {
             isFilter = true;
-            Log.e("Filters: ", "Active");
             if(filters[0].equals("1")) isFilterMealType = true;
             else isFilterTimer = true;
 
@@ -135,7 +132,6 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             layoutFilters.setVisibility(View.VISIBLE);
             if(isFilterMealType){
                 filterField.setText(filters[1]);
-                Log.e("Filters: ", "mealtype");
                 try { this.recipeList = BD_Operations.getRecipesByMealType(MealType.valueOf(filters[1]), db);
                 } catch (Exception e) {
                     Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
@@ -143,7 +139,6 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
                 }
 
             } else {    //isFilterTimer == true
-                Log.e("Filters: ", "timer");
                 String[] time = filters[1].split(":");
                 filterField.setText(getString(R.string.filters_less) + " " + time[0]+"h " + time[1] + "min");
                 try { this.recipeList = BD_Operations.getRecipesByLessExecutionTime(Integer.parseInt(time[0]), Integer.parseInt(time[1]), db);

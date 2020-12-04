@@ -108,11 +108,9 @@ public class RecipeDetails extends AppCompatActivity {
             editRecipe();
             return true;
         } else if(itemID == R.id.recipe_detail_menu_app_bar_fav) {
-            Log.e("FAV ICON", "TOCADO EN MENU");
             fav();
             return true;
         } else if(itemID == android.R.id.home){
-            Log.e("NAVIGATION UP", "HOLA PUTO" );
             this.onBackPressed();
             return true;
         } else {
@@ -240,9 +238,7 @@ public class RecipeDetails extends AppCompatActivity {
     }
 
     private void fav(){
-        Log.e("FAV ICON", isFav+"" );
         isFav = !isFav;
-        Log.e("FAV ICON", isFav+"" );
         updateFavIcon();
     }
 
@@ -257,13 +253,11 @@ public class RecipeDetails extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.e("BACK BITCHES", "BOMBA NUCLEAR");
         if(isFav != recipeSelected.isFavourite() && !isDeleted){
             SingletonMap.getInstance().put("SHARE_FAV_KEY", "true");
             BBDD_Helper db = new BBDD_Helper(RecipeDetails.this);
             try {
                 BD_Operations.updateFavourite(recipeSelected.getId(), isFav, db);
-                Log.e("ONBACK", isFav+"" );
                 finish();
             } catch (Exception e){
                 Toast.makeText(RecipeDetails.this, R.string.recipe_detail_deleted_error, Toast.LENGTH_SHORT).show();
