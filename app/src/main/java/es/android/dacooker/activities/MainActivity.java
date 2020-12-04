@@ -57,6 +57,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initNotifications();
     }
 
+    @Override
+    //Método para enviar los resultados de la búsqueda por filtros realizada en el dialogo personalizado al fragmento de recetas
+    public void sendResultList(List<RecipeModel> resultList, String filter, String search) {
+        SingletonMap.getInstance().put(SHARE_RESULT_LIST_KEY, resultList);
+        SingletonMap.getInstance().put(SHARE_FILTER_SEARCH_KEY, new String[]{filter, search});
+        //Ejecutamos el onResume del fragmento de recetas para actualizar el recyclerview
+        recipeFragment.onResume();
+    }
+
     /*Métodos de la toolbar*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,6 +87,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    //Crea un dialogo personalizado y lo muestra
+    private void showFilterSearchAlertDialog(){
+        CustomDialog dialog = new CustomDialog();
+        dialog.show(getSupportFragmentManager(), "CustomDialog");
     }
 
     /*Metodos de la navegación inferior*/
@@ -108,25 +123,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
-    //BottomNavbar
+    //Cambia de fragmento y cambia el título de la appbar según el fragmento que se muestra
     private void changeFragment(Fragment fragmentToChange, int title){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentToChange).commit();
         setTitle(title);
     }
 
-    //Utilities
-    private void showFilterSearchAlertDialog(){
-        CustomDialog dialog = new CustomDialog();
-        dialog.show(getSupportFragmentManager(), "CustomDialog");
-    }
 
-    @Override
-    public void sendResultList(List<RecipeModel> resultList, String filter, String search) {
-        SingletonMap.getInstance().put(SHARE_RESULT_LIST_KEY, resultList);
-        SingletonMap.getInstance().put(SHARE_FILTER_SEARCH_KEY, new String[]{filter, search});
-        recipeFragment.onResume();
-    }
-
+    //Crea un canal para las notificaciones
     public void initNotifications(){
         NotificationsPush.createNotifyChannel(this, getString(R.string.notification_channel_name),
                 getString(R.string.notification_channel_description));

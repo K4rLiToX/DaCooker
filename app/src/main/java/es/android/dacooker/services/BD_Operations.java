@@ -1507,7 +1507,7 @@ public class BD_Operations {
             byte[] solved = null;
             return solved;
         }
-        bmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/4, bmp.getHeight()/4, true);
+        bmp = Bitmap.createScaledBitmap(bmp, bmp.getWidth()/5, bmp.getHeight()/5, true);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();

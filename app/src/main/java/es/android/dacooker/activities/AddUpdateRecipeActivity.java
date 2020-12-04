@@ -75,6 +75,8 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
 
     }
 
+    /*Métodos de inicialización de vistas*/
+
     //Inicializar las vistas
     private void initializeView(){
         //Habilitamos marcha atrás en la app bar
@@ -157,6 +159,8 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
         });
     }
 
+    /*Métodos para añadir una receta nueva*/
+
     //Obtener y validar los datos de la primera parte de la receta
     private RecipeModel getRecipeData(){
         //Creamos las variables necesarias para añadir/actualizar la primera parte de la receta
@@ -223,34 +227,6 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
         return rwA.getStepModelList();
     }
 
-    //Valida los datos de la primera parte de la receta
-    private boolean validateRecipeFields(){
-        //Obtenemos la receta
-        RecipeModel r = this.getRecipeData();
-
-        String error = "";
-
-        //Validamos campos
-        //En caso contrario mostramos error
-        if(r.getRecipeName().trim().equalsIgnoreCase("") || r.getRecipeName().length() > 60)
-            error = getString(R.string.validation_err_name);
-        else if(r.getRecipeDescription().length() > 140)
-            error = getString(R.string.validation_err_description);
-        else if(r.getExecutionTimeHour() < 0)
-            error = getString(R.string.validation_err_hour);
-        else if(r.getExecutionTimeMinute() < 0 || r.getExecutionTimeMinute() > 59)
-            error = getString(R.string.validation_err_minute);
-        else if(r.getMealType() == null) error = getString(R.string.validation_err_mealtype);
-
-        //Si el mensaje de error no es vacio lo mostramos y retornamos false (validación incorrecta)
-        //En caso contrario retornamos true (validación correcta)
-        if(error.trim().length() != 0) {
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-            return false;
-        } else return true;
-
-    }
-
     //Añade la receta
     private void finishRecipe() {
         //Si todos los campos son válidos
@@ -288,6 +264,8 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
             }
         }
     }
+
+    /*Métodos para modificar y actualizar una receta*/
 
     //Obtener los datos de la receta a modificar
     public void callFromEditFragment(View vRecipe, View vIng, View vStep){
@@ -358,6 +336,13 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
                 //Mantenemos el estado de fav
                 r.setFavourite(rEdit.isFavourite());
 
+                //Comprobamos si la imagen ha cambiado o no
+                if(rEdit.getImage().equals(r.getImage())){
+                    Bitmap img = r.getImage();
+                    img = Bitmap.createScaledBitmap(img, img.getWidth()*5, img.getHeight()*5, true);
+                    r.setImage(img);
+                }
+
                 BBDD_Helper dbHelper = new BBDD_Helper(this);
                 //Actualizamos la primera parte de la receta
                 BD_Operations.updateRecipe(r, dbHelper);
@@ -391,6 +376,34 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
                 showException(e, R.string.err_update_recipe);
             }
         }
+    }
+
+    /*Métodos auxiiares*/
+
+    //Valida los datos de la primera parte de la receta
+    private boolean validateRecipeFields(){
+        //Obtenemos la receta
+        RecipeModel r = this.getRecipeData();
+        String error = "";
+
+        //Validamos campos
+        //En caso contrario mostramos error
+        if(r.getRecipeName().trim().equalsIgnoreCase("") || r.getRecipeName().length() > 60)
+            error = getString(R.string.validation_err_name);
+        else if(r.getRecipeDescription().length() > 140)
+            error = getString(R.string.validation_err_description);
+        else if(r.getExecutionTimeHour() < 0)
+            error = getString(R.string.validation_err_hour);
+        else if(r.getExecutionTimeMinute() < 0 || r.getExecutionTimeMinute() > 59)
+            error = getString(R.string.validation_err_minute);
+        else if(r.getMealType() == null) error = getString(R.string.validation_err_mealtype);
+
+        //Si el mensaje de error no es vacio lo mostramos y retornamos false (validación incorrecta)
+        //En caso contrario retornamos true (validación correcta)
+        if(error.trim().length() != 0) {
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            return false;
+        } else return true;
     }
 
     //Añade un ingrediente de una receta a la base de datos
