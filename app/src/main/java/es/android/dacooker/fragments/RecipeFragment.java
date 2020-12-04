@@ -26,7 +26,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import es.android.dacooker.R;
-import es.android.dacooker.activities.AddNewRecipeActivity;
+import es.android.dacooker.activities.AddUpdateRecipeActivity;
 import es.android.dacooker.activities.RecipeDetails;
 import es.android.dacooker.adapters.RecyclerViewAdapter;
 import es.android.dacooker.interfaces.RecipeClickListener;
@@ -215,7 +215,7 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     private void addRecipe(){
-        startActivity(new Intent(getActivity(), AddNewRecipeActivity.class));
+        startActivity(new Intent(getActivity(), AddUpdateRecipeActivity.class));
     }
 
     private void deleteRecipe(RecipeModel recipeToDelete, int position, BBDD_Helper db){

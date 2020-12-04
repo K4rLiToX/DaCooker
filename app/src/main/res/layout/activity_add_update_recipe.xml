@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddNewRecipeActivity">
+    tools:context=".activities.AddUpdateRecipeActivity">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/add_recipe_tab_layout"

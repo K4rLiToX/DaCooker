@@ -85,7 +85,7 @@
     <string name="addIng_err_name">El nombre debe estar entre 0–100 caracteres</string>
     <string name="addIng_err_quantity">La cantidad debe ser entre 0–50 caracteres</string>
     <string name="txt_noMost">No hay recetas frecuentes</string>
-    <string name="btnUpdate">Actualiizar y Cambiar</string>
+    <string name="btnUpdate">Actualizar y Cambiar</string>
     <string name="edit_title">Actualizar Receta</string>
     <string name="add_recipe_fragment_title">Receta</string>
     <string name="add_ingredients_fragment_title">Ingredientes</string>

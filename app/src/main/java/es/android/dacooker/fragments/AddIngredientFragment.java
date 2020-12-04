@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.android.dacooker.R;
-import es.android.dacooker.activities.AddNewRecipeActivity;
+import es.android.dacooker.activities.AddUpdateRecipeActivity;
 import es.android.dacooker.adapters.AddIngredientRecyclerAdapter;
 import es.android.dacooker.models.IngredientModel;
 
@@ -60,7 +60,7 @@ public class AddIngredientFragment extends Fragment {
         rwAdapter = new AddIngredientRecyclerAdapter(getActivity().getApplicationContext(), ingredientList);
         rw.setAdapter(rwAdapter);
 
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
+        ((AddUpdateRecipeActivity)getActivity()).callFromEditFragment(null, v, null);
     }
 
     private void initButton(){

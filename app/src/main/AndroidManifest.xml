@@ -2,16 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.android.dacooker">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
+    <!--Permisos necesarios para las funcionalidades totales de la aplicación-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- La aplicación se ha desarrollado de tal manera que solo permite orientación vertical-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +21,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,7 +28,7 @@
             android:name=".activities.StepsRecipeCooking"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.AddNewRecipeActivity"
+            android:name=".activities.AddUpdateRecipeActivity"
             android:label="@string/add_new_recipe_label"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"

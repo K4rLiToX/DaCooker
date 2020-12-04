@@ -1,33 +1,48 @@
 package es.android.dacooker.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 import es.android.dacooker.R;
-import es.android.dacooker.activities.AddNewRecipeActivity;
+import es.android.dacooker.activities.AddUpdateRecipeActivity;
 import es.android.dacooker.models.MealType;
 
 /**
@@ -36,7 +51,7 @@ import es.android.dacooker.models.MealType;
 public class AddRecipeFragment extends Fragment {
 
     //Constants
-    private final int CAMERA_OPTION = 20;
+    private final static int PERMISSION_CODE = 1000;
     private final int GALLERY_OPTION = 10;
 
     MealType[] MEALTYPES = MealType.values();
@@ -46,9 +61,6 @@ public class AddRecipeFragment extends Fragment {
     TextInputEditText recipeName, recipeHours, recipeMinutes, recipeDescription;
     FloatingActionButton fabChooseRecipePhoto;
     ImageView recipePhoto;
-
-    //Propio
-    private Uri photoURI;
 
     public AddRecipeFragment() {
         // Required empty public constructor
@@ -78,75 +90,50 @@ public class AddRecipeFragment extends Fragment {
         recipeDescription = v.findViewById(R.id.recipe_description_input);
         fabChooseRecipePhoto = v.findViewById(R.id.fabChooseRecipePhoto);
 
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
+        ((AddUpdateRecipeActivity)getActivity()).callFromEditFragment(v, null, null);
     }
 
     private void initButton(){
         fabChooseRecipePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chooseCameraOrGallery();
+                openGallery();
             }
         });
     }
 
-    //Utilities_Camera
-    private void chooseCameraOrGallery(){
-        String camera = getString(R.string.add_recipe_alert_dialog_camera);
-        String gallery = getString(R.string.add_recipe_alert_dialog_gallery);
-        final String[] options = {camera, gallery};
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case PERMISSION_CODE:   //Se aceptan los permisos -> abrimos cámara
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) { //Permisos conseguidos
+                    openGallery();
+                } else {    //Permisos denegados
+                    Toast.makeText(getActivity(), "Permission Denied...", Toast.LENGTH_SHORT).show();
+                }
+        }
 
-        buildAlertDialog(options);
     }
 
-    private void buildAlertDialog(String[] options){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle(R.string.add_recipe_alert_dialog_title);
-        alertDialog.setItems(options, (dialogInterface, i) -> {
-            //Open Camera
-            if(options[i].equalsIgnoreCase(getString(R.string.add_recipe_alert_dialog_camera))){
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,CAMERA_OPTION);
-            } else { //Open Gallery
-                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(Intent.createChooser(galleryIntent, String.valueOf(R.string.add_recipe_alert_dialog_choose_gallery_app)), GALLERY_OPTION);
-            }
-        });
-        alertDialog.setNegativeButton(R.string.add_recipe_alert_dialog_dismiss, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        alertDialog.create();
-        alertDialog.show();
+    private void openGallery(){
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            //Sin permisos aún -> se piden
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_CODE);
+        } else {//Permisos Dados = OK
+
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            startActivityForResult(Intent.createChooser(galleryIntent, getActivity().getString(R.string.add_recipe_alert_dialog_choose_gallery_app)), GALLERY_OPTION);
+
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK){
-
-            switch (requestCode){
-                case GALLERY_OPTION:
-                    Uri miPath = Objects.requireNonNull(data).getData();
-                    recipePhoto.setImageURI(miPath);
-                    break;
-                case CAMERA_OPTION:
-                    Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-
-                    // convert byte array to Bitmap
-
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-                            byteArray.length);
-
-                    recipePhoto.setImageBitmap(bitmap);
-                    break;
-            }
+        if (resultCode == Activity.RESULT_OK && requestCode == this.GALLERY_OPTION) {
+            Uri miPath = Objects.requireNonNull(data).getData();
+            recipePhoto.setImageURI(miPath);
         }
     }
+
 }

@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,17 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.appbar.MaterialToolbar;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import es.android.dacooker.R;
 import es.android.dacooker.adapters.IngredientRecyclerAdapter;
 import es.android.dacooker.exceptions.IngredientException;
 import es.android.dacooker.exceptions.StepException;
-import es.android.dacooker.fragments.RecipeFragment;
 import es.android.dacooker.models.IngredientModel;
 import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.models.StepModel;
@@ -234,7 +228,7 @@ public class RecipeDetails extends AppCompatActivity {
         SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeSelected);
         SingletonMap.getInstance().put(SHARE_INGLIST_KEY, ingredientList);
         SingletonMap.getInstance().put(SHARE_STEPLIST_KEY, stepList);
-        Intent i = new Intent(RecipeDetails.this, AddNewRecipeActivity.class);
+        Intent i = new Intent(RecipeDetails.this, AddUpdateRecipeActivity.class);
         i.putExtra("edit", true);
         startActivity(i);
     }

@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import es.android.dacooker.R;
-import es.android.dacooker.activities.AddNewRecipeActivity;
+import es.android.dacooker.activities.AddUpdateRecipeActivity;
 import es.android.dacooker.adapters.AddStepRecyclerAdapter;
 import es.android.dacooker.interfaces.AddRecipeStepClickListener;
 import es.android.dacooker.models.StepModel;
@@ -86,7 +86,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rw);
 
-        ((AddNewRecipeActivity)getActivity()).callFromEditFragment(null, null, v);
+        ((AddUpdateRecipeActivity)getActivity()).callFromEditFragment(null, null, v);
 
     }
 
