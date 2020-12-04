@@ -11,14 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StepsCookingPagerAdapter extends FragmentStatePagerAdapter {
-
+    //Listas de fragmentos a mostrar
     List<Fragment> fragmentList = new ArrayList<>();
 
+    //Constructor
     public StepsCookingPagerAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }
 
-
+    //Añade un fragmento pasado por parámetro a la lista de fragmentos
     public void addFragment(Fragment fragment){
         fragmentList.add(fragment);
     }

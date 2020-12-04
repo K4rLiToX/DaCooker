@@ -16,8 +16,10 @@ import es.android.dacooker.models.IngredientModel;
 
 public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRecyclerAdapter.IngredientViewHolder>{
 
-    List<IngredientModel> ingredientList; //List to Show
+    //Lista de ingredientas a mostrar
+    List<IngredientModel> ingredientList;
 
+    //Constructor
     public IngredientRecyclerAdapter(List<IngredientModel> ingredientList){
         this.ingredientList = ingredientList;
     }
@@ -25,6 +27,7 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
     @NonNull
     @Override
     public IngredientRecyclerAdapter.IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //Inflo la vista de la card de ingrediente
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View ingredientCardView = layoutInflater.inflate(R.layout.ingredient_dropdown_card, parent, false);
         return new IngredientViewHolder(ingredientCardView);
@@ -32,23 +35,25 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
 
     @Override
     public void onBindViewHolder(@NonNull IngredientRecyclerAdapter.IngredientViewHolder holder, int position) {
+        //Obtengo el ingrediente de la posición position
         IngredientModel ingredient = ingredientList.get(position);
+        //Seteo las vistas con los valores del ingrediente obtenido
         holder.ingredientCardName.setText(ingredient.getIngredientName());
         holder.ingredientCardQuantity.setText(ingredient.getQuantity());
     }
 
-    //Utilities
     @Override
     public int getItemCount() {
         return ingredientList.size();
     }
 
-    //Intern Class
+    //Clase interna
     static class IngredientViewHolder extends RecyclerView.ViewHolder {
-
+        //Vista a utilizar
         TextView ingredientCardName, ingredientCardQuantity;
         LinearLayout expandableLayout;
 
+        //Inicializo las vistas que va a utlizar el método onBindViewHolder
         public IngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             this.ingredientCardName = itemView.findViewById(R.id.ingredient_card_name);
