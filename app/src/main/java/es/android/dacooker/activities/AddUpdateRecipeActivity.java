@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -336,8 +337,9 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
                 //Mantenemos el estado de fav
                 r.setFavourite(rEdit.isFavourite());
 
-                //Si la imagen original es la por defecto y al editar añado una imagen o si ambas tienen imagen pero la original es distinta a la que cambio en el editar, entonces cambio la original por la editada
-                if((r.getImage() == null && rEdit.getImage() != null) || (r.getImage() != null && rEdit.getImage() != null && !r.getImage().equals(rEdit.getImage()))){
+                //Miramos si ha cambiado la imagen o no
+                if(r.getImage() != null && r.getImage().equals(rEdit.getImage())){
+                    Log.e("TAG", "updateRecipe");
                     Bitmap img = r.getImage();
                     img = Bitmap.createScaledBitmap(img, img.getWidth()*5, img.getHeight()*5, true);
                     r.setImage(img);
