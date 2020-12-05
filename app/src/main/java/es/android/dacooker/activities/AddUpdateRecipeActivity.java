@@ -336,8 +336,8 @@ public class AddUpdateRecipeActivity extends AppCompatActivity {
                 //Mantenemos el estado de fav
                 r.setFavourite(rEdit.isFavourite());
 
-                //Comprobamos si la imagen ha cambiado o no
-                if(rEdit.getImage().equals(r.getImage())){
+                //Si la imagen original es la por defecto y al editar añado una imagen o si ambas tienen imagen pero la original es distinta a la que cambio en el editar, entonces cambio la original por la editada
+                if((r.getImage() == null && rEdit.getImage() != null) || (r.getImage() != null && rEdit.getImage() != null && !r.getImage().equals(rEdit.getImage()))){
                     Bitmap img = r.getImage();
                     img = Bitmap.createScaledBitmap(img, img.getWidth()*5, img.getHeight()*5, true);
                     r.setImage(img);
