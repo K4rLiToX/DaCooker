@@ -21,7 +21,7 @@
     <string name="search_dialog_mealType_select_error">Por favor, selecciona una comida</string>
     <string name="search_dialog_no_recipes_matching">No se han encontrado recetas</string>
     <string name="search_dialog_err_no_meal_results">No hay comidas de este horario:</string>
-    <string name="bottom_navigation_title_frequently">Más Frecuentes</string>
+    <string name="bottom_navigation_title_frequently">Más Cocinadas</string>
     <string name="bottom_navigation_title_recipes">Recetas</string>
     <string name="bottom_navigation_title_favourites">Favoritas</string>
     <string name="recipe_fragment_alert_dialog_title">¡Cuidado!</string>
@@ -84,7 +84,7 @@
     <string name="add_step_btnUpdate">Actualizar Cambios</string>
     <string name="addIng_err_name">El nombre debe estar entre 0–100 caracteres</string>
     <string name="addIng_err_quantity">La cantidad debe ser entre 0–50 caracteres</string>
-    <string name="txt_noMost">No hay recetas frecuentes</string>
+    <string name="txt_noMost">No hay recetas más cocinadas</string>
     <string name="btnUpdate">Actualizar y Cambiar</string>
     <string name="edit_title">Actualizar Receta</string>
     <string name="add_recipe_fragment_title">Receta</string>

@@ -535,7 +535,7 @@ public class BD_Operations {
                 Struct_BD.RECIPE_IS_FAVOURITE
         };
 
-        String selection = Struct_BD.RECIPE_EXEC_TIME_HOUR + " <= ? or ("
+        String selection = Struct_BD.RECIPE_EXEC_TIME_HOUR + " < ? or ("
                 + Struct_BD.RECIPE_EXEC_TIME_HOUR + " == ? AND " + Struct_BD.RECIPE_EXEC_TIME_MINUTE + " <= ? )";
         String[] selectionArgs = { executionTimeHour+"", executionTimeHour+"", executionTimeMinute+""};
 
