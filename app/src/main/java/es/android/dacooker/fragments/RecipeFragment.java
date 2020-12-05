@@ -260,26 +260,28 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
-                    recipeList.remove(position);    //Eliminamos la receta de la lista
-                    adapter.setRecipeList(recipeList);  //seteamos la lista en el adapter
-                    BD_Operations.deleteRecipe(recipeToDelete.getId(), db); //eliminamos la receta de la BD
-                    recipeRecyclerView.setAdapter(adapter); //Seteamos el adapter
+                    if(recipeToDelete.isFavourite()){ //Si la recta es favorita mandamos mensaje de error
+                        Toast.makeText(getActivity(),  R.string.recipe_detail_delete_fav_error, Toast.LENGTH_SHORT).show();
+                    } else { //En caso contrario
+                        recipeList.remove(position);    //Eliminamos la receta de la lista
+                        adapter.setRecipeList(recipeList);  //seteamos la lista en el adapter
+                        BD_Operations.deleteRecipe(recipeToDelete.getId(), db); //eliminamos la receta de la BD
+                        recipeRecyclerView.setAdapter(adapter); //Seteamos el adapter
 
-                    if(recipeList.isEmpty() && isFilter) { //Si habia filtro activo y la lista de ese filtro ahora esta vacia (no resultados del filtro)...
-                        recipeList = null;
+                        if(recipeList.isEmpty() && isFilter) { //Si habia filtro activo y la lista de ese filtro ahora esta vacia (no resultados del filtro)...
+                            recipeList = null;
 
-                        //Desactivamos filtros
-                        isFilterMealType = false;
-                        isFilterTimer = false;
-                        isFilter = false;
-                        SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
-                        layoutFilters.setVisibility(View.GONE); //ocultamos el layout de filtros
-                        //Avisamos con un toast de que se mostraran todas las recetas
-                        Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();  //Si aun quedan elementos, avisamos del eliminado
-
+                            //Desactivamos filtros
+                            isFilterMealType = false;
+                            isFilterTimer = false;
+                            isFilter = false;
+                            SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
+                            layoutFilters.setVisibility(View.GONE); //ocultamos el layout de filtros
+                            //Avisamos con un toast de que se mostraran todas las recetas
+                            Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
+                        } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();  //Si aun quedan elementos, avisamos del eliminado
+                    }
                     initListAndRecyclerView();  //Seteamos el recyclerview
-
                 } catch (Exception e){
                     initListAndRecyclerView();  //Si no se ha podido eliminar...
                     Toast.makeText(getActivity(), getString(R.string.recipe_fragment_err_delete), Toast.LENGTH_SHORT).show();   //Avisamos del fallo
