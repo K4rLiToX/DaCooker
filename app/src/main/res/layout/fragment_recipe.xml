@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add"
         app:maxImageSize="32dp"
-        android:backgroundTint="?attr/colorPrimary"
+        android:backgroundTint="?attr/colorSecondary"
         app:tint="?attr/colorOnPrimary"/>
 
     <TextView
