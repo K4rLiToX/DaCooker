@@ -40,6 +40,10 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 /**
  * A simple {@link Fragment} subclass.
  */
+
+    /*
+        Fragmento de la pantalla principal en el que se muestran todas las recetas añadidas
+     */
 public class RecipeFragment extends Fragment implements RecipeClickListener{
 
     //SingletonMap Key
@@ -49,12 +53,12 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     private static final String SHARE_RECIPE_KEY = "SHARED_RECIPE_KEY";
     private static final String SHARE_FAV_KEY = "SHARE_FAV_KEY";
 
-    //Filters
-    boolean isFilterMealType, isFilterTimer, isFilter;
-    String[] filters;
+    //Filters posibles para las listas
+    boolean isFilterMealType, isFilterTimer, isFilter;  //Filtro por tipo de comida, timer o filtros en general
+    String[] filters;   //Filtros recibidos por el customDialog
 
     //List to Show
-    private List<RecipeModel> recipeList;
+    private List<RecipeModel> recipeList;   //Lista de recetas
 
     //Views
     private FloatingActionButton btnAddRecipe;
@@ -74,14 +78,15 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
         // Required empty public constructor
     }
 
+    //Creacion de los elementos de la vista
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
 
-        initView(view);
-        initButtons();
-        initListAndRecyclerView();
+        initView(view); //Inicializar elementos de la view
+        initButtons(); //Inicializar botones del fragment
+        initListAndRecyclerView(); //Inicializar reycler view y la propia lista
 
         return view;
     }
@@ -98,42 +103,50 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     private void initButtons(){
+
+        //Deshacer filtros (si los hay)
         btnUndoFilter.setOnClickListener(undo -> {
             recipeList = null;
-            filters = null;
+            filters = null; //seteamos los filtros a null para la comprobacion al inicialziar el recyclerView
+
+            //Filtros a false ya que los queremos quitar
             isFilter = false;
             isFilterMealType = false;
             isFilterTimer = false;
+
+            //Creamos una instancia null para los filtros (al volver a iniciar, mantenga el null)
             SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
-            initListAndRecyclerView();
-            layoutFilters.setVisibility(View.GONE);
+            initListAndRecyclerView();  //volvemos a cargar todas las recetas, sin filtros
+            layoutFilters.setVisibility(View.GONE); //Desaparece ellayout de filtros
         });
 
+        //Si queremos añadir una receta (floatingButton)
         btnAddRecipe.setOnClickListener(click -> {
             addRecipe();
         });
     }
 
-    @SuppressLint("SetTextI18n")
-    private void initListAndRecyclerView() {
+    private void initListAndRecyclerView() {    //Inicializar la lista y el recycler view
         BBDD_Helper db = new BBDD_Helper(getActivity());
 
-        checkFilters();
+        checkFilters(); //Comprobamos los filtros que estan activos
 
+        //Sipor algun casual el recycler view es null, lo volvemos a identificar
         if(recipeRecyclerView == null) { recipeRecyclerView = getView().findViewById(R.id.recipe_recyclerView); }
 
-        if(isFilter) chargeFilterList(db);
-        else {  //No Filters
-            this.recipeList = BD_Operations.getRecipes(db);
-            adapter = new RecyclerViewAdapter(recipeList,this);
-            recipeRecyclerView.setAdapter(adapter);
+        if(isFilter) chargeFilterList(db);  //Si hay algun filtro activo, cargamos la lista con dichos filtros
+        else {  //Si no hay filtros
+            this.recipeList = BD_Operations.getRecipes(db); //Sacamos todas las recetas
+            adapter = new RecyclerViewAdapter(recipeList,this); //Seteamos en el adapter
+            recipeRecyclerView.setAdapter(adapter); //Seteamos el recyclerView
 
-            if(this.recipeList.isEmpty()){
+            if(this.recipeList.isEmpty()){  //Si la lista obtenida de la BD es vacia...
                 //Mostramos Text View (no hay recetas)
                 this.tvNoRecipes.setVisibility(View.VISIBLE);
-            } else {
-                this.tvNoRecipes.setVisibility(View.GONE);
-                //Set the itemtouchhelper to delete on swipe
+            } else {    //Si tiene elementos...
+                this.tvNoRecipes.setVisibility(View.GONE);  //Ocultamos no hay recetas
+
+                //Iniciamos el ItemTouch para permitir el Swipe en las cards de recetas
                 itemTouchHelper = new ItemTouchHelper(simpleCallback);
                 itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
             }
@@ -141,181 +154,202 @@ public class RecipeFragment extends Fragment implements RecipeClickListener{
     }
 
     //Utilities Filters
-    private void checkFilters(){
-        filters = (String[]) SingletonMap.getInstance().get(SHARE_FILTER_KEY);
-        if(filters == null) filters = new String[]{"", ""};
+    private void checkFilters(){    //Comprobacion de los filtros que estan activos
 
-        if(filters[0].equalsIgnoreCase("")){
+        filters = (String[]) SingletonMap.getInstance().get(SHARE_FILTER_KEY);  //Consultamos la instancia de los filtros (enviada por el dialog o por la propia activity)
+        if(filters == null) filters = new String[]{"", ""}; //Si no hay filtros aplicados, inicializamos a cadena vacia
+
+        if(filters[0].equalsIgnoreCase("")){    //Si es vacia (no filtros)...
+
+            //Filtros a false
             isFilterMealType = false;
             isFilterTimer = false;
             isFilter = false;
-            this.recipeList = null;
-        } else {
-            isFilter = true;
-            if(filters[0].equals("1")) isFilterMealType = true;
-            else isFilterTimer = true;
+            this.recipeList = null; //Lista nula (con intencion de cargarla entera)
+        } else {    //Si no es cadena vacia es que hay filtros activos
+            isFilter = true;    //Hay filtro
+            if(filters[0].equals("1")) isFilterMealType = true; //Si recibimos un 1 indica que es filtro de mealtype
+            else isFilterTimer = true;  //En otro caso (un 2), es un filtro por tiempo
 
+            //La instancia que recogemos de la lista es enviada desde el customDialog
             this.recipeList = (List<RecipeModel>) SingletonMap.getInstance().get(SHARE_RESULT_LIST_KEY);
         }
     }
 
-    private void chargeFilterList(BBDD_Helper db){
+    //Si hay filtros activos, cargamos la lista en base al filtro usado
+    private void chargeFilterList(BBDD_Helper db){  //Recibe una instancia de BBDD_Helper para poder conseguir las busquedas en la BD
 
-        layoutFilters.setVisibility(View.VISIBLE);
-        if(isFilterMealType){
-            filterField.setText(filters[1]);
-            try { this.recipeList = BD_Operations.getRecipesByMealType(MealType.valueOf(filters[1]), db);
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                this.recipeList = BD_Operations.getRecipes(db);
+        layoutFilters.setVisibility(View.VISIBLE);  //Mostramos el layout con la informacion de filtros
+        if(isFilterMealType){   //Si el filtro es por mealtype...
+            filterField.setText(filters[1]);    //Mostramos el mealtype por el que se ha filtrado
+            try { this.recipeList = BD_Operations.getRecipesByMealType(MealType.valueOf(filters[1]), db);   //Obtenemos los correspondientes datos de la BD
+            } catch (Exception e) { //Si no hay datos en la BD correspondientes con el filtro...
+                Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();    //Avisamos de que no hay disponibles
+                this.recipeList = BD_Operations.getRecipes(db); //Cargamos todas las recetas
             }
 
-        } else {    //isFilterTimer == true
-            String[] time = filters[1].split(":");
-            filterField.setText(getString(R.string.filters_less) + " " + time[0]+ getString(R.string.hours) + " " + time[1] + getString(R.string.minutes));
-            try { this.recipeList = BD_Operations.getRecipesByLessExecutionTime(Integer.parseInt(time[0]), Integer.parseInt(time[1]), db);
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                this.recipeList = BD_Operations.getRecipes(db);
+        } else {    //El filtro es por tiempo
+            String[] time = filters[1].split(":");  //Obtenemos la hora y minutos por los que se ha filtrado
+            filterField.setText(getString(R.string.filters_less) + " " + time[0]+ getString(R.string.hours) + " " + time[1] + getString(R.string.minutes)); //Seteamos la infromacion del filtro
+            try { this.recipeList = BD_Operations.getRecipesByLessExecutionTime(Integer.parseInt(time[0]), Integer.parseInt(time[1]), db);  //Obtenemos los datos de BD
+            } catch (Exception e) { //Si no hay datos en la BD correspondientes con el filtro...
+                Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show(); //Avisamos de que no hay disponibles
+                this.recipeList = BD_Operations.getRecipes(db); //Cargamos todas las recetas
             }
         }
 
+        //Si el adapter es nulo (un no creado), lo creamos
         if(adapter == null) adapter = new RecyclerViewAdapter(recipeList,this);
-        else adapter.setRecipeList(this.recipeList);
+        else adapter.setRecipeList(this.recipeList);    //Si ya lo esta, le actualizamos la lista de recetas que mostrara
 
-        recipeRecyclerView.setAdapter(adapter);
+        recipeRecyclerView.setAdapter(adapter); //Seteamos el adapter
+
+        //Inicializamos itemTouch para permitir el Swipe
         itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recipeRecyclerView);
 
     }
 
-    @Override
+    @Override //Cuando volvemos al fragment dede la acivty de details...
     public void onResume() {
         super.onResume();
+
+        //Obtenemos los singleton que manda details al cerrarse
+            //Si la receta ha sido borrada o si ha cambiado de fav a unfav (viceversa)
         String isDeleted = (String) SingletonMap.getInstance().get(SHARE_DELETED_RECIPE);
         String fav = (String) SingletonMap.getInstance().get(SHARE_FAV_KEY);
+
+        //Si la receta ha sido eliminada y era la unica que quedaba (ya sea con filtros o no)...
         if(recipeList.contains(recipeClicked) && recipeList.size() == 1 && isDeleted != null){
-            SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
-            layoutFilters.setVisibility(View.GONE);
+            SingletonMap.getInstance().put(SHARE_FILTER_KEY, null); //Mandamos una instancia null para resetear filtros
+            layoutFilters.setVisibility(View.GONE); //Ocultamos el layout de filtros
         }
-        if(fav !=  null){
-            recipeClicked.setFavourite(!recipeClicked.isFavourite());
-        }
-        initListAndRecyclerView();
+
+        //Si fav != null, significa que ha cambiado dede que entro, luego lo modificamos en la receta
+        if(fav !=  null) recipeClicked.setFavourite(!recipeClicked.isFavourite());
+
+        initListAndRecyclerView(); //Volvemos a cargar la lista
     }
 
     //Utilities - Navigation
-    @Override
+    @Override   //Cuando una receta es presionada...
     public void onRecipeClick(int position){
-        RecipeModel recipe = recipeList.get(position);
-        this.recipeClicked = recipe;
-        SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipe);
+        this.recipeClicked = recipeList.get(position);  //Iniciamos la receta clickada
+        //Guardamos esta en un singleton que se recibira en la activity siguiente: Details
+        SingletonMap.getInstance().put(SHARE_RECIPE_KEY, recipeClicked);
         Intent i = new Intent(getActivity(), RecipeDetails.class);
-        startActivity(i);
+        startActivity(i);   //Nos vamos a la Activity
     }
 
+    //Iniciamos la activity para añadir recetas
     private void addRecipe(){
         startActivity(new Intent(getActivity(), AddUpdateRecipeActivity.class));
     }
 
+    //Metodo para eliminar recetas cuadno deslizamos hacia la izquierda una card en el fragment
     private void deleteRecipe(RecipeModel recipeToDelete, int position, BBDD_Helper db){
+
+        //Creacion de un Dialos de alerta que nos avise de lo que estamos haciendo : Borrar una receta
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
         alertBuilder.setTitle(R.string.recipe_fragment_alert_dialog_title);
         alertBuilder.setMessage(R.string.recipe_fragment_alert_dialog_message);
+
+        //Definimos el comportamiento del dialog
+        //Si presionamos aceptar : eliminar...
         alertBuilder.setPositiveButton(R.string.recipe_fragment_alert_dialog_confirmation, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 try {
-                    recipeList.remove(position);
-                    adapter.setRecipeList(recipeList);
-                    BD_Operations.deleteRecipe(recipeToDelete.getId(), db);
-                    recipeRecyclerView.setAdapter(adapter);
+                    recipeList.remove(position);    //Eliminamos la receta de la lista
+                    adapter.setRecipeList(recipeList);  //seteamos la lista en el adapter
+                    BD_Operations.deleteRecipe(recipeToDelete.getId(), db); //eliminamos la receta de la BD
+                    recipeRecyclerView.setAdapter(adapter); //Seteamos el adapter
 
-                    if(recipeList.isEmpty() && isFilter) { //Mostramos todas las recetas de la BD
+                    if(recipeList.isEmpty() && isFilter) { //Si habia filtro activo y la lista de ese filtro ahora esta vacia (no resultados del filtro)...
                         recipeList = null;
+
+                        //Desactivamos filtros
                         isFilterMealType = false;
                         isFilterTimer = false;
                         isFilter = false;
                         SingletonMap.getInstance().put(SHARE_FILTER_KEY, null);
-                        layoutFilters.setVisibility(View.GONE);
+                        layoutFilters.setVisibility(View.GONE); //ocultamos el layout de filtros
+                        //Avisamos con un toast de que se mostraran todas las recetas
                         Toast.makeText(getActivity(), getString(R.string.recipe_fragment_delete_showing_all), Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();
+                    } else Toast.makeText(getActivity(), R.string.recipe_fragment_delete_recipe_ok, Toast.LENGTH_LONG).show();  //Si aun quedan elementos, avisamos del eliminado
 
-                    initListAndRecyclerView();
+                    initListAndRecyclerView();  //Seteamos el recyclerview
 
                 } catch (Exception e){
-                    initListAndRecyclerView();
-                    Toast.makeText(getActivity(), getString(R.string.recipe_fragment_err_delete), Toast.LENGTH_SHORT).show();
+                    initListAndRecyclerView();  //Si no se ha podido eliminar...
+                    Toast.makeText(getActivity(), getString(R.string.recipe_fragment_err_delete), Toast.LENGTH_SHORT).show();   //Avisamos del fallo
                 }
             }
         });
+
+        //Si presionamos el boton cancelar : no eliminar
         alertBuilder.setNegativeButton(R.string.recipe_fragment_alert_dialog_dismiss, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                initListAndRecyclerView();
+                dialogInterface.dismiss();  //Cerramos el dialog
+                initListAndRecyclerView();  //Volvemos a cargar la vista
             }
         });
-        alertBuilder.create();
-        alertBuilder.show();
+
+        alertBuilder.create();  //Creamos el dialog
+        alertBuilder.show();    //Mostramos el dialog
     }
 
+    //Comprobar si a una receta se le ha dado o quitado el favoritos -> haciendo swipe a la derecha de la card
     private void favOrUnFav(RecipeModel recipe, BBDD_Helper db){
-        if(!recipe.isFavourite()){
+        if(!recipe.isFavourite()){  //Si no estaba en favoritos...
             try {
                 //Cambiamos en la base de datos el atributo isFavourite a true
                 BD_Operations.updateFavourite(recipe.getId(), true, db);
-                //Llamar initListAndRecyclerView
-                initListAndRecyclerView();
                 //Toast anunciando que se ha añadido a favoritos
                 Toast.makeText(getActivity(), R.string.recipe_fragment_favourite_recipe, Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
+            } catch (Exception e){  //Si se ha producido un error, avisamos del mismo
                 Toast.makeText(getActivity(), getString(R.string.recipe_fragment_err_addFav), Toast.LENGTH_SHORT).show();
-                initListAndRecyclerView();
             }
-        } else {
+        } else {    //Si estaba en favoritos, la quitamos de ahi
             try {
-                //Cambiamos en la base de datos el atributo isFavourite a true
+                //Cambiamos en la base de datos el atributo isFavourite a false
                 BD_Operations.updateFavourite(recipe.getId(), false, db);
-                //Llamar initListAndRecyclerView
-                initListAndRecyclerView();
                 //Toast anunciando que se ha añadido a favoritos
                 Toast.makeText(getActivity(), R.string.recipe_fragment_no_favourite_recipe, Toast.LENGTH_SHORT).show();
             } catch (Exception e){
                 Toast.makeText(getActivity(), getString(R.string.recipe_fragment_err_removeFav), Toast.LENGTH_SHORT).show();
-                initListAndRecyclerView();
             }
         }
+        //Llamar initListAndRecyclerView
+        initListAndRecyclerView();
     }
 
-    //LEFT is for action on swipe from left to right
+    //Definimos el comportamiento del Swipe, es decir, del desplaazmiento a izq y dcha de las cards en el recycler view
     ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
+        @Override   //No permitimos movimiento de las cards
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
         }
 
-        @Override
+        @Override   //Si las deslizamos...
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            RecipeModel recipe = recipeList.get(position);
+            int position = viewHolder.getAdapterPosition(); //Obtenemos la posicion de la que hemos deslizado
+            RecipeModel recipe = recipeList.get(position);  //Obtenemos la receta que hay en esa posicion
             BBDD_Helper db = new BBDD_Helper(getActivity());
-            if(direction == ItemTouchHelper.LEFT){
-                deleteRecipe(recipe, position, db);
-            } else {
-                favOrUnFav(recipe, db);
-            }
+            if(direction == ItemTouchHelper.LEFT) deleteRecipe(recipe, position, db);   //Si es a la izquierda, eliminamos la receta
+            else favOrUnFav(recipe, db);    //Si es a la derecha, revisamos si es fav o unFav
         }
 
-        @Override
+        @Override   //Segun el lado para el que se deslice la card...
         public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
             new RecyclerViewSwipeDecorator.Builder(getActivity(), c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))
-                    .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)
-                    .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.amber_500))
-                    .addSwipeRightActionIcon(R.drawable.ic_favourite)
-                    .create()
-                    .decorate();
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_500))    //Si es a la izquierda, el fondo sera negro
+                    .addSwipeLeftActionIcon(R.drawable.ic_delete_app_bar)   //El logo sera la papelera
+                    .addSwipeRightBackgroundColor(ContextCompat.getColor(getActivity(), R.color.amber_500)) //Si es a la derecha, el fondo sera amarillo
+                    .addSwipeRightActionIcon(R.drawable.ic_favourite)   //El logo sera un fav
+                    .create()   //Creamos el swipe
+                    .decorate();    //Seteamos los colores e iconos
 
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }

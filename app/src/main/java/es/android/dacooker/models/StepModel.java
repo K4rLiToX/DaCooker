@@ -3,16 +3,18 @@ package es.android.dacooker.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+//CRUD para los pasos con los diferentes atributos que incluyen en la BD
+// así como los getters y setters de los mismos
 public class StepModel implements Serializable {
 
     /*Attributes*/
-    private int id;
-    private String description;
-    private boolean requiredTimer;
-    private int timer_hour;
-    private int timer_minute;
-    private int stepOrder;
-    private int recipe_id;
+    private int id;                 //id del paso en la bd
+    private String description;     //descripción del paso
+    private boolean requiredTimer;  //comprobacion de si el paso requiere timer
+    private int timer_hour;         //horas de duracion del timer
+    private int timer_minute;       //minutos de duracion del timer
+    private int stepOrder;          //orden del paso dentro de la receta
+    private int recipe_id;          //id de la receta a la que se asocia el paso
 
     /*Constructors*/
 

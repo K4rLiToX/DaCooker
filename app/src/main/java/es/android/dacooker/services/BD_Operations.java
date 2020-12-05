@@ -17,6 +17,9 @@ import es.android.dacooker.models.RecipeModel;
 import es.android.dacooker.models.StepModel;
 
 /*
+    Clase con metodos estaticos que permiten ejecutar als consultas, adiciones, borrados y actualizaciones
+        de datos sobre la BD para las diferentes tablas creadas : Recipes, Steps, Ingredients
+
     IMPLEMENTED METHODS
     * Almost All Methods Require BBDD_Helper instance as their last parameter
 
@@ -33,7 +36,7 @@ import es.android.dacooker.models.StepModel;
      - getRecipesOrderByLessExecutionTime: Get Recipes With Less Execution Time Than Introduced
      - getRecipesOrderByTimesCooked: Get 5 or Less Recipes Most Cooked
 
-        > STEPS
+    > STEPS
      - addStep: Add Step
      - updateStep: Updated Step
      - updateStepOrdersPlus: Re-order steps from a Recipe
@@ -68,7 +71,6 @@ public class BD_Operations {
     //
     // RECIPES METHODS
     //
-
     public static int getLastID(BBDD_Helper dbHelper){
         // Gets the data repository in write mode
         SQLiteDatabase db = dbHelper.getReadableDatabase();

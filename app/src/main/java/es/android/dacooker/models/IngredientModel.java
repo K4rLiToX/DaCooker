@@ -3,13 +3,15 @@ package es.android.dacooker.models;
 import java.io.Serializable;
 import java.util.Objects;
 
+//CRUD para los ingredientes con los diferentes atributos que incluyen en la BD
+// así como los getters y setters de los mismos
 public class IngredientModel implements Serializable {
 
     /*Attributes*/
-    private int id;
-    private String ingredientName;
-    private String quantity;
-    private int idRecipe;
+    private int id;                 //Id del ingrediente
+    private String ingredientName;  //nombre del ingrediente
+    private String quantity;        //cantidad del ingrediente
+    private int idRecipe;           //receta a la que se asocia el ingrediente
 
     /*Constructors*/
 
@@ -48,8 +50,7 @@ public class IngredientModel implements Serializable {
 
     public void setIdRecipe(int idRecipe){ this.idRecipe = idRecipe; }
 
-    /* Equals / Hashcode */
-
+    /* Equals / Hashcode */ //Realizados en base al id del ingrediente
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

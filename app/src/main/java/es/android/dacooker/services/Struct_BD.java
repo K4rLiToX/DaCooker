@@ -1,5 +1,8 @@
 package es.android.dacooker.services;
 
+//Clase usada para definir las diferentes tablas de la BD
+// asi como atributos y tipo de ellos
+//Contiene las sentencias de creacion y borrado de tablas
 public class Struct_BD {
 
     //Recipes Table

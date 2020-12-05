@@ -1,7 +1,8 @@
 package es.android.dacooker.models;
 
+//Enumeracion usada para definir los tipos de comida
 public enum MealType {
-    LAUNCH,
-    DINNER,
-    OTHER
+    LAUNCH, //Comida
+    DINNER, //Cena
+    OTHER   //Otros -> Desayuno, Merienda, postre...
 }

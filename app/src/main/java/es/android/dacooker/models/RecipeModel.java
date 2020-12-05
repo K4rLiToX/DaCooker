@@ -5,18 +5,20 @@ import android.graphics.Bitmap;
 import java.io.Serializable;
 import java.util.Objects;
 
+//CRUD para las recetas con los diferentes atributos que incluyen en la BD
+// así como los getters y setters de los mismos
 public class RecipeModel implements Serializable {
 
     /*Attributes*/
-    private int id;
-    private String recipeName;
-    private MealType mealType;
-    private int executionTime_Hour;
-    private int executionTime_Minute;
-    private String recipeDescription;
-    private int timesCooked;
-    private transient Bitmap image;
-    private boolean isFavourite;
+    private int id;             //Id de la receta
+    private String recipeName;  //Nombre de la receta
+    private MealType mealType;  //Horario de comida -> es un enumerado
+    private int executionTime_Hour; //Horas de ejecución de la receta
+    private int executionTime_Minute;   //Minutos de ejecución de la receta
+    private String recipeDescription;   //Descripción de la receta
+    private int timesCooked;    //Veces que se ha cocinado la receta
+    private transient Bitmap image; //Imagen asociada a la receta
+    private boolean isFavourite;    //Comprobacion de si la receta está en favoritos o no
 
     /*Constructors*/
 
@@ -99,7 +101,7 @@ public class RecipeModel implements Serializable {
     }
 
 
-    /* Equals / Hascode */
+    /* Equals / Hascode */ //Realizados en torno al ID de la receta
     public boolean equals(Object obj){
         if(obj instanceof RecipeModel) {
             RecipeModel r = (RecipeModel) obj;
