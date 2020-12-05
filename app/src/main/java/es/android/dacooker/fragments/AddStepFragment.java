@@ -196,7 +196,7 @@ public class AddStepFragment extends Fragment implements AddRecipeStepClickListe
         //Muestro la descripción del paso seleccionado
         til_description.setText(stepsList.get(position).getDescription());
 
-        if(stepsList.get(position).getTimerHour() != 0 && stepsList.get(position).getTimerMinute() != 0) { //Si el paso tiene tiempo asignado
+        if(stepsList.get(position).isRequiredTimer()) { //Si el paso tiene tiempo asignado
             //Activo el check box de timer, habilito los inputs de horas y minutos y muestro los valores que tiene el paso
             cb_timer.setChecked(true);
             input_hours.setEnabled(true);
