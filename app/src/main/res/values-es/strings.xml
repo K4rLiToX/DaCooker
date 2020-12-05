@@ -73,7 +73,7 @@
     <string name="add_step_text">Pasos a Seguir</string>
     <string name="add_step_text2">Pasos Añadidos</string>
     <string name="add_step_description_hint">Descripción</string>
-    <string name="add_step_requiredTimer_hint">¿Quieres Temporizador?</string>
+    <string name="add_step_requiredTimer_hint">¿Temporizador?</string>
     <string name="add_step_timerTime_hours_hint">Horas</string>
     <string name="add_step_timerTime_minutes_hint">Minutos</string>
     <string name="add_step_order_hint">Orden</string>

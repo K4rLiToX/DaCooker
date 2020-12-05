@@ -9,8 +9,9 @@
 
     <TextView
         android:id="@+id/txt_noFav"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/tv_favourites_no_recipes"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_centerInParent="true"
